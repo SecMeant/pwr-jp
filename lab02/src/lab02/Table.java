@@ -1,11 +1,11 @@
 package lab02;
 
-public class Stolik {
-	public int nrStolika;
-	public int iloscMiejsc;
+public class Table {
+	public int number;
+	public int size;
 	
-	public Stolik(int ns, int im) {
-		this.nrStolika = ns;
-		this.iloscMiejsc = im;
+	public Table(int n, int s) {
+		this.number = n;
+		this.size= s;
 	}
 }

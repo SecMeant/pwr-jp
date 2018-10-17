@@ -1,14 +1,14 @@
 package lab02;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-public class Osoba {
-	public Vector<Osoba> przyjaciele;
-	public String imie;
-	public int numer;
+public class Person {
+	public ArrayList<Person> friends;
+	public String name;
+	public int number;
 
-	Osoba(String im, ){
-		imie = im;
-		przyjaciele = new Vector<Osoba>();
+	Osoba(String nm, ArrayList<Osoba> fs){
+		name = nm;
+		friends = fs;
 	}
 }

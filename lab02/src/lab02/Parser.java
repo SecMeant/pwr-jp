@@ -3,26 +3,26 @@ package lab02;
 import java.io.File;
 import java.util.ArrayList;
 
-// Uzywana przy zwracaniu wyniku parsowania
-class WynikParsowania{
-	Vector<Osoba> osoby;
-	Vector<Stolik> stoliki;
+// Used to return result of prasing
+class ParsingResult{
+	ArrayList<Person> people;
+	ArrayList<Table> tables;
 
-	WynikParsowania(){
-		osoby = new Vector<>();
-		stoliki = new Vector<>();
+	ParsingResult(){
+		people = new ArrayList<>();
+		tables = new ArrayList<>();
 	}
 }
 
 public class Parser {
-	// Parsuje plik ze stolikami, zwraca tablice stolikow
-	public static Stolik[] wczytajStoliki(String filePath){
+	// Parses file with tables, returns table of tables
+	public static Table[] loadTables(String filePath){
 
 		return null;
 	}
-
-	// Parsuje plik z osobami, zwraca tablice osob
-	public static Osoba[] wczytajOsoby(String filePath){
+	
+	// Parses file with people, returns table of people
+	public static Person[] loadPeople(String filePath){
 
 		return null;
 	}
