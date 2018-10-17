@@ -8,21 +8,8 @@ public class Main {
 
 	private static String fakeArgs = "1 2 3\nKoniec\n";
 	
-	private void rozwiazanie() {
-		List<Osoba> osoby = new ArrayList<Osoba>();
-		
-		Osoba jan = new Osoba("Jan");
-		osoby.add(jan);
-		
-		Osoba ewa = new Osoba("Ewa");
-		jan.przyjaciele.add(ewa);
-		
-		Osoba adam = new Osoba("Adam");
-		jan.przyjaciele.add(adam);
-		
-	}
-	
+	static Parser parser = new Parser();
+
 	public static void main(String[] args) {
-		
 	}
 }

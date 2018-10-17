@@ -4,7 +4,8 @@ public class Stolik {
 	public int nrStolika;
 	public int iloscMiejsc;
 	
-	public static Stolik(int ns, int im) {
-		
+	public Stolik(int ns, int im) {
+		this.nrStolika = ns;
+		this.iloscMiejsc = im;
 	}
 }
