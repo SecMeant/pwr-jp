@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.lang.Integer;
 
-public class Parser
+class Parser
 {
-	public ParsingResult parse(String peopleFilePath, String tablesFilePath)
+	public static ParsingResult parse
+	(String peopleFilePath, String tablesFilePath)
 	throws FileNotFoundException
 	{
 		ParsingResult pr = new ParsingResult();
@@ -37,17 +38,20 @@ public class Parser
 		sc.close();
 		return ar;
 	}
-
-	// Used to find person in ArrayList of people by its number
-	// Returns Person object if found, null otherwise
-	private static Person getPersonByNumber(int pn, ArrayList<Person> ppl)
+	
+	static public class Utils
 	{
-		for(Person p : ppl)
+		// Used to find person in ArrayList of people by its number
+		// Returns Person object if found, null otherwise
+		public static Person getPersonByNumber(int pn, ArrayList<Person> ppl)
 		{
-			if(p.number == pn)
-				return p;	
+			for(Person p : ppl)
+			{
+				if(p.number == pn)
+					return p;	
+			}
+			return null;
 		}
-		return null;
 	}
 
 	// Parses file with people, returns table of people
@@ -64,8 +68,8 @@ public class Parser
 			String friends = sc.next();
 
 			// Check if new person is already present in array
-			// If not create new person, otherwise make changes on exisitng
-			Person newp = getPersonByNumber(nm, ar);
+			// If not create new person, otherwise make changes on existing
+			Person newp = Utils.getPersonByNumber(nm, ar);
 			if(newp == null)
 			{
 				newp = new Person(nm, new ArrayList<Person>());
@@ -78,7 +82,7 @@ public class Parser
 			for(String s : friends.split(","))
 			{
 				int personNumber = Integer.parseInt(s);
-				Person p = getPersonByNumber(personNumber, ar);
+				Person p = Utils.getPersonByNumber(personNumber, ar);
 				
 				if(p == null)
 				{

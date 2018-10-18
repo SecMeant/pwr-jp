@@ -2,9 +2,9 @@ package lab02;
 
 import java.util.ArrayList;
 import java.lang.Integer;
-import java.lang.StringBuffer;
+import java.lang.StringBuilder;
 
-public class Person
+class Person
 {
 	public ArrayList<Person> friends;
 	public int number;
@@ -18,7 +18,7 @@ public class Person
 	@Override
 	public String toString()
 	{
-		StringBuffer ret = new StringBuffer();
+		StringBuilder ret = new StringBuilder();
 		ret.append(Integer.toString(this.number));
 		ret.append(": {");
 		for( Person f : this.friends)

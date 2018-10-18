@@ -1,12 +1,10 @@
 package lab02;
 
+import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
-public class Main
+class Main
 {
-
-	static Parser parser = new Parser();
-
 	private static void usage(String[] args)
 	{
 		System.out.println
@@ -22,9 +20,18 @@ public class Main
 			return;
 		}
 
-		ParsingResult pr = parser.parse(args[0],args[1]);
+		ParsingResult pr = Parser.parse(args[0],args[1]);
+
+		Person p2 = Parser.Utils.getPersonByNumber(3, pr.people);
+
+		if(p2 != null)
+		{
+			p2.friends.add(new Person(13, new ArrayList<Person>()));
+		}
 
 		System.out.println(pr.people);
 		System.out.println(pr.tables);
+
+		System.out.println(Solver.solve(pr.people, pr.tables));
 	}
 }

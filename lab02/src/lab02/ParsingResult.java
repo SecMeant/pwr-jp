@@ -3,7 +3,7 @@ package lab02;
 import java.util.ArrayList;
 
 // Used to return result of prasing
-public class ParsingResult
+class ParsingResult
 {
 	ArrayList<Person> people;
 	ArrayList<Table> tables;
