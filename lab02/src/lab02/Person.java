@@ -9,10 +9,16 @@ class Person
 	public ArrayList<Person> friends;
 	public int number;
 
-	Person(int nm, ArrayList<Person> fs)
+	Person(int number, ArrayList<Person> friends)
 	{
-		number = nm;
-		friends = fs;
+		this.number = number;
+		this.friends = friends;
+	}
+
+	Person(int number)
+	{
+		this.number = number;
+		this.friends = new ArrayList<Person>();
 	}
 
 	@Override
