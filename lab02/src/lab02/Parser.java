@@ -54,7 +54,7 @@ class Parser
 
 			// Check if new person is already present in array
 			// If not create new person, otherwise make changes on existing
-			Person newp = Utils.getPersonByNumber(nm, ar);
+			Person newp = ParserUtils.getPersonByNumber(nm, ar);
 			if(newp == null)
 			{
 				newp = new Person(nm, new ArrayList<Person>());
@@ -67,7 +67,7 @@ class Parser
 			for(String s : friends.split(","))
 			{
 				int personNumber = Integer.parseInt(s);
-				Person p = Utils.getPersonByNumber(personNumber, ar);
+				Person p = ParserUtils.getPersonByNumber(personNumber, ar);
 				
 				if(p == null)
 				{
@@ -80,20 +80,5 @@ class Parser
 
 		sc.close();
 		return ar;
-	}
-	
-	static public class Utils
-	{
-		// Used to find person in ArrayList of people by its number
-		// Returns Person object if found, null otherwise
-		public static Person getPersonByNumber(int pn, ArrayList<Person> ppl)
-		{
-			for(Person p : ppl)
-			{
-				if(p.number == pn)
-					return p;	
-			}
-			return null;
-		}
 	}
 }

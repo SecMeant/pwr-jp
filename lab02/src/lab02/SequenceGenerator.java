@@ -11,6 +11,12 @@ class SequenceGenerator
 	{
 		int data[] = new int[returnSetSize];
 		sequences = new ArrayList<int[]>();
+
+		if(returnSetSize >= sourceSet.length)
+		{
+			sequences.add(sourceSet);
+			return sequences;
+		}
 		
 		generateCombinations(sourceSet, data, 0, sourceSet.length-1, 0, returnSetSize);
 
@@ -18,7 +24,7 @@ class SequenceGenerator
 	}
 
 	void generateCombinations(int arr[], int data[], int start,
-                                   int end, int index, int r)
+                            int end, int index, int r)
 	{
 			// Current combination has appropriate size
 			if (index == r)
