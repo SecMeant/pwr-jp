@@ -3,7 +3,7 @@ package lab02;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
-class Main
+public class Main
 {
 	private static void usage(String[] args)
 	{
@@ -33,5 +33,20 @@ class Main
 		System.out.println(pr.tables);
 
 		System.out.println(Solver.solve(pr.people, pr.tables));
+		System.out.print("\n\n\n");
+		
+		SequenceGenerator s = new SequenceGenerator();
+		ArrayList<int[]> ans = s.getCombinations(new int[] {1,2,3,4,5}, 3);
+
+		for (int[] a : ans)
+		{
+			System.out.print("{");
+			for (int it : a)
+			{
+				System.out.print(it);
+				System.out.print(", ");
+			}
+			System.out.println("}");
+		}
 	}
 }
