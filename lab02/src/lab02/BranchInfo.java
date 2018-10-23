@@ -1,11 +1,12 @@
 package lab02;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 class BranchInfo
 {
 	public boolean[] swapInfo;
-	public ArrayList<SeatPair> currentState;
+	public ArrayList<Integer> currentState;
 	public Integer root;
 	
 	private BranchInfo()
@@ -14,7 +15,10 @@ class BranchInfo
 	public BranchInfo(Integer peopleCount, Integer root)
 	{
 		this.swapInfo = new boolean[peopleCount];
-		this.currentState = new ArrayList<SeatPair>();
+		this.currentState = new ArrayList<>();
+		IntStream.range(0, peopleCount).forEach(id->{
+			this.currentState.add(id);
+		});
 		this.root = root;
 	}
 	
@@ -27,8 +31,8 @@ class BranchInfo
 		for(int i = 0; i < bi.swapInfo.length; i++) ret.swapInfo[i] = bi.swapInfo[i];
 		
 		//Copy current state
-		ret.currentState = new ArrayList<SeatPair>();
-		for(int i = 0; i < bi.currentState.size(); i++) ret.currentState.set(i, bi.currentState.get(i).copy());
+		ret.currentState = new ArrayList<Integer>();
+		for(int i = 0; i < bi.currentState.size(); i++) ret.currentState.add(bi.currentState.get(i));
 		
 		//Copy root
 		ret.root = bi.root;

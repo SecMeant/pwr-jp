@@ -1,8 +1,6 @@
 package lab02;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.IntStream;
 
 class Solver
 {
@@ -114,6 +112,7 @@ class Solver
 	
 	private int calculate(BranchInfo bi)
 	{
+		
 		return 0;
 	}
 	
@@ -148,10 +147,9 @@ class Solver
 					nbi.root = id;
 					
 					// Update current state
-					Integer tmp = nbi.currentState.get(id).tableID;
-					nbi.currentState.get(id).tableID = nbi.currentState.get(swapPossibility).tableID;
-					nbi.currentState.get(swapPossibility).tableID = tmp;
-					
+					Integer tmp = nbi.currentState.get(id);
+					nbi.currentState.set(id, nbi.currentState.get(swapPossibility));
+					nbi.currentState.set(swapPossibility, tmp);
 					branch(nbi);
 				}
 			}
