@@ -1,6 +1,7 @@
 package lab02;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -36,6 +37,11 @@ class Parser
 		}
 
 		sc.close();
+		
+		// I know I should use Collection that does this
+		// when inserting elements, but I have no time and code depends on ArrayList type ;/
+		// Sorted array is useful for Solver class
+		Collections.sort(ar, new TableComparator());
 		return ar;
 	}
 
@@ -47,7 +53,7 @@ class Parser
 
 		ArrayList<Person> ar = new ArrayList<>();
 
-		while(sc.hasNextLine())
+		while(sc.hasNextInt())
 		{
 			int nm = sc.nextInt();
 			String friends = sc.next();

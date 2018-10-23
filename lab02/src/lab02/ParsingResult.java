@@ -2,7 +2,7 @@ package lab02;
 
 import java.util.ArrayList;
 
-// Used to return result of prasing
+// Used to return result of parsing
 class ParsingResult
 {
 	ArrayList<Person> people;

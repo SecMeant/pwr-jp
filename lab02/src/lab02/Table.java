@@ -14,6 +14,6 @@ class Table
 	@Override
 	public String toString()
 	{
-		return "{Number: " + this.number + ", size: " + this.size;
+		return "{Number: " + this.number + ", size: " + this.size + "}";
 	}
 }
