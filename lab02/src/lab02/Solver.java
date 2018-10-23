@@ -9,6 +9,7 @@ class Solver
 	private ArrayList<Person> people;
 	private ArrayList<Table> tables;
 	private ArrayList<Integer> startState;
+	private Solution bestSolution = new Solution();
 	private boolean isset;
 	
 	private ArrayList<ArrayList<Integer>> swapConnections;
@@ -73,13 +74,15 @@ class Solver
 		this.isset = true;
 	}
 	
-	public ArrayList<SolvePair> solve() throws Exception
+	public Solution solve() throws Exception
 	{
 		if(this.isset == false)
 			throw new Exception("You need to correctly setup Solver by calling setup(...) before calling solve!");
 		
+		BranchInfo bi = new BranchInfo(this.people.size(), 0);
+		branch(bi);
 		
-		return null;
+		return this.bestSolution;
 	}
 	
 	private boolean shouldBreak(boolean[] bitfield)
@@ -109,15 +112,49 @@ class Solver
 		return true;
 	}
 	
+	private int calculate(BranchInfo bi)
+	{
+		return 0;
+	}
+	
 	private void branch(BranchInfo bi)
 	{
 		if(this.shouldBreak(bi.swapInfo)) return;
 		
+		this.calculate(bi);
+		
 		for(int id=bi.root+1; id<this.swapConnections.size(); id++)
 		{
+			/* Cannot be done that way, cannot capture id
 			this.swapConnections.get(id).forEach(swapPossibility->{
-				if()
+				if(canSwap(bi.swapInfo, id, swapPossibility))
+				{
+					
+				}
 			});
+			*/
+			
+			for(Integer swapPossibility : this.swapConnections.get(id))
+			{
+				if(canSwap(bi.swapInfo, id, swapPossibility))
+				{
+					BranchInfo nbi = bi.copy();
+					
+					// Set info about this swap
+					nbi.swapInfo[id] = true;
+					nbi.swapInfo[swapPossibility] = true;
+					
+					// Change to new root if any
+					nbi.root = id;
+					
+					// Update current state
+					Integer tmp = nbi.currentState.get(id).tableID;
+					nbi.currentState.get(id).tableID = nbi.currentState.get(swapPossibility).tableID;
+					nbi.currentState.get(swapPossibility).tableID = tmp;
+					
+					branch(nbi);
+				}
+			}
 		}
 	}
 }

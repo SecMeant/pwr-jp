@@ -8,7 +8,7 @@ class BranchInfo
 	public ArrayList<SeatPair> currentState;
 	public Integer root;
 	
-	public BranchInfo()
+	private BranchInfo()
 	{}
 	
 	public BranchInfo(Integer peopleCount, Integer root)
@@ -34,5 +34,10 @@ class BranchInfo
 		ret.root = bi.root;
 		
 		return ret;
+	}
+	
+	public BranchInfo copy()
+	{
+		return copy(this);
 	}
 }
