@@ -8,6 +8,7 @@ public class Main
 	{
 		System.out.println
 			("Usage: java main <people_file_path> <tables_file_path>\n");
+		System.out.println("Sample data files can be found in ./data directory");
 	}
 	
 	private static void printSolution(Solution s, ArrayList<Person> people)
