@@ -21,7 +21,7 @@ class Solver
 		this.isset = false;
 	}
 	
-	Solver(ArrayList<Person> people, ArrayList<Table> tables) throws Exception
+	Solver(ArrayList<Person> people, ArrayList<Table> tables)
 	{
 		this.setup(people, tables);
 	}
@@ -55,7 +55,7 @@ class Solver
 			}
 		});
 		if(this.startState.size() != this.people.size())
-			throw new Exception("There is not enough space for people to sit!");
+			throw new Error("There is not enough space for people to sit!");
 		
 		// Generates swapConnections table
 		for(int i=0; i<this.startState.size(); i++)
@@ -73,10 +73,10 @@ class Solver
 		this.isset = true;
 	}
 	
-	public Solution solve() throws Exception
+	public Solution solve()
 	{
 		if(this.isset == false)
-			throw new Exception("You need to correctly setup Solver by calling setup(...) before calling solve!");
+			throw new Error("You need to correctly setup Solver by calling setup(...) before calling solve!");
 		
 		BranchInfo bi = new BranchInfo(this.people.size(), this.tables, this.startState, 0);
 		branch(bi);
