@@ -53,8 +53,8 @@ class Solver
 		this.tables = tables;
 		this.startState = new ArrayList<Integer>();
 		this.swapConnections = new ArrayList<ArrayList<Integer>>();
-		this.bestSolution = new Solution(startState, 0);
 		this.evaluator = evaluatorFunction;
+		this.bestSolution = new Solution(startState, -1337);
 		
 		// Creates StartState of people with assigned tables like this:
 		// |1|2|3|4|5|6| <--- People
@@ -204,7 +204,21 @@ class Solver
 	
 	public static int evaluatorLessUnhappy(BranchInfo bi, ArrayList<Person> people)
 	{
-		return 0;
+		int sum = 0;
+		
+		for(int id=0; id<bi.currentState.size(); id++)
+		{
+			for(int jd=0; jd<bi.currentState.size(); jd++)
+			{
+				if(id == jd) continue;
+				
+				// If two people share same table and id person likes jd person
+				if(bi.currentState.get(id) == bi.currentState.get(jd) && notFriends(people, id, jd))
+					sum--;
+			}
+		}
+		
+		return sum;
 	}
 	
 	private static boolean hasFriend(ArrayList<Person> people, Integer person, Integer possibleFriend)
@@ -217,7 +231,7 @@ class Solver
 		return false;
 	}
 	
-	private static boolean hasOnlyFriends(ArrayList<Person> people, Integer person, Integer possibleUnknown)
+	private static boolean notFriends(ArrayList<Person> people, Integer person, Integer possibleUnknown)
 	{
 		for(Person friend : people.get(person).friends)
 		{
