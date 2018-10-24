@@ -128,24 +128,7 @@ class Solver
 	
 	private int calculate(BranchInfo bi)
 	{
-		int sum = 0;
-		
-		for(int id=0; id<bi.currentState.size(); id++)
-		{
-			for(int jd=0; jd<bi.currentState.size(); jd++)
-			{
-				if(id == jd) continue;
-				
-				// If two people share same table and id person likes jd person
-				if(bi.currentState.get(id) == bi.currentState.get(jd) && this.evaluator.evaluate(this.people, id, jd))
-				{
-					sum++;
-				}
-			}
-		}
-		
-		
-		return sum;
+		return this.evaluator.evaluate(bi, this.people);
 	}
 	
 	private void branch(BranchInfo bi)
@@ -195,13 +178,33 @@ class Solver
 	}
 	
 	@FunctionalInterface
-    public static interface EvaluatorInterface{
-        boolean evaluate(ArrayList<Person> people, Integer personID1, Integer personID2);
+    public static interface EvaluatorInterface
+    {
+        int evaluate(BranchInfo bi, ArrayList<Person> people);
     }
 	
-	public static boolean evaluatorMostHappy(ArrayList<Person> people, Integer personID1, Integer personID2)
+	public static int evaluatorMostHappy(BranchInfo bi, ArrayList<Person> people)
 	{
-		return hasFriend(people, personID1, personID2);
+		int sum = 0;
+		
+		for(int id=0; id<bi.currentState.size(); id++)
+		{
+			for(int jd=0; jd<bi.currentState.size(); jd++)
+			{
+				if(id == jd) continue;
+				
+				// If two people share same table and id person likes jd person
+				if(bi.currentState.get(id) == bi.currentState.get(jd) && hasFriend(people, id, jd))
+					sum++;
+			}
+		}
+		
+		return sum;
+	}
+	
+	public static int evaluatorLessUnhappy(BranchInfo bi, ArrayList<Person> people)
+	{
+		return 0;
 	}
 	
 	private static boolean hasFriend(ArrayList<Person> people, Integer person, Integer possibleFriend)
@@ -212,5 +215,15 @@ class Solver
 		}
 	
 		return false;
+	}
+	
+	private static boolean hasOnlyFriends(ArrayList<Person> people, Integer person, Integer possibleUnknown)
+	{
+		for(Person friend : people.get(person).friends)
+		{
+			if(possibleUnknown == friend.number) return false;
+		}
+	
+		return true;
 	}
 }
