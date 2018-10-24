@@ -35,7 +35,7 @@ public class Main
 
 		ParsingResult pr = Parser.parse(args[0],args[1]);
 		Solver solver = new Solver();
-		solver.setup(pr.people, pr.tables);
+		solver.setup(pr.people, pr.tables, Solver::evaluatorMostHappy);
 		Solution s = solver.solve();
 		printSolution(s, pr.people);
 	}

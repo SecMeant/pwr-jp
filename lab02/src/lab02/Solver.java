@@ -4,13 +4,27 @@ import java.util.ArrayList;
 
 class Solver
 {
+	// Data structures of people and tables
 	private ArrayList<Person> people;
 	private ArrayList<Table> tables;
-	private ArrayList<Integer> startState;
-	private Solution bestSolution;
-	private boolean isset;
 	
+	// Used to store best solution from branches
+	// If recurring branch find better solution than current it changes it
+	private Solution bestSolution;
+	
+	// Evaluator that is called to decide if given connection 
+	// should earn point when given combination is evaluated
+	private EvaluatorInterface evaluator;
+	
+	// Starting state of branching algorithm
+	private ArrayList<Integer> startState;
+	
+	// Structure that describes possible swap connections between people
+	// There is no need to swap people around same table
 	private ArrayList<ArrayList<Integer>> swapConnections;
+	
+	// Flag that indicates if solver is properly configured
+	private boolean isset;
 	
 	Solver()
 	{
@@ -21,13 +35,13 @@ class Solver
 		this.isset = false;
 	}
 	
-	Solver(ArrayList<Person> people, ArrayList<Table> tables)
+	Solver(ArrayList<Person> people, ArrayList<Table> tables, EvaluatorInterface evaluatorFunction)
 	{
-		this.setup(people, tables);
+		this.setup(people, tables, evaluatorFunction);
 	}
 	
 	// Need to be called before solve is called
-	public void setup(ArrayList<Person> people, ArrayList<Table> tables) throws Exception
+	public void setup(ArrayList<Person> people, ArrayList<Table> tables, EvaluatorInterface evaluatorFunction)
 	{
 		if(people == null || tables == null)
 		{
@@ -40,6 +54,7 @@ class Solver
 		this.startState = new ArrayList<Integer>();
 		this.swapConnections = new ArrayList<ArrayList<Integer>>();
 		this.bestSolution = new Solution(startState, 0);
+		this.evaluator = evaluatorFunction;
 		
 		// Creates StartState of people with assigned tables like this:
 		// |1|2|3|4|5|6| <--- People
@@ -111,16 +126,6 @@ class Solver
 		return true;
 	}
 	
-	private boolean hasFriend(Integer person, Integer possibleFriend)
-	{
-		for(Person friend : this.people.get(person).friends)
-		{
-			if(possibleFriend == friend.number) return true;
-		}
-	
-		return false;
-	}
-	
 	private int calculate(BranchInfo bi)
 	{
 		int sum = 0;
@@ -132,7 +137,7 @@ class Solver
 				if(id == jd) continue;
 				
 				// If two people share same table and id person likes jd person
-				if(bi.currentState.get(id) == bi.currentState.get(jd) && hasFriend(id, jd))
+				if(bi.currentState.get(id) == bi.currentState.get(jd) && this.evaluator.evaluate(this.people, id, jd))
 				{
 					sum++;
 				}
@@ -187,5 +192,25 @@ class Solver
 				}
 			}
 		}
+	}
+	
+	@FunctionalInterface
+    public static interface EvaluatorInterface{
+        boolean evaluate(ArrayList<Person> people, Integer personID1, Integer personID2);
+    }
+	
+	public static boolean evaluatorMostHappy(ArrayList<Person> people, Integer personID1, Integer personID2)
+	{
+		return hasFriend(people, personID1, personID2);
+	}
+	
+	private static boolean hasFriend(ArrayList<Person> people, Integer person, Integer possibleFriend)
+	{
+		for(Person friend : people.get(person).friends)
+		{
+			if(possibleFriend == friend.number) return true;
+		}
+	
+		return false;
 	}
 }
