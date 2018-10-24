@@ -1,7 +1,6 @@
 package lab02;
 
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 class BranchInfo
 {
@@ -12,13 +11,10 @@ class BranchInfo
 	private BranchInfo()
 	{}
 	
-	public BranchInfo(Integer peopleCount, Integer root)
+	public BranchInfo(Integer peopleCount, ArrayList<Table> tables, ArrayList<Integer> currentState, Integer root)
 	{
 		this.swapInfo = new boolean[peopleCount];
-		this.currentState = new ArrayList<>();
-		IntStream.range(0, peopleCount).forEach(id->{
-			this.currentState.add(id);
-		});
+		this.currentState = currentState;
 		this.root = root;
 	}
 	

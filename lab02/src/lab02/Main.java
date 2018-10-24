@@ -1,7 +1,5 @@
 package lab02;
 
-import java.io.FileNotFoundException;
-
 public class Main
 {
 	private static void usage(String[] args)
@@ -22,6 +20,8 @@ public class Main
 		ParsingResult pr = Parser.parse(args[0],args[1]);
 		Solver solver = new Solver();
 		solver.setup(pr.people, pr.tables);
-		solver.solve();
+		Solution s = solver.solve();
+		System.out.println(s.seatInfo);
+		System.out.println(s.points);
 	}
 }
