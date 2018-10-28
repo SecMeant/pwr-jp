@@ -178,10 +178,10 @@ class Solver
 	}
 	
 	@FunctionalInterface
-    public static interface EvaluatorInterface
-    {
-        int evaluate(BranchInfo bi, ArrayList<Person> people);
-    }
+	public static interface EvaluatorInterface
+	{
+			int evaluate(BranchInfo bi, ArrayList<Person> people);
+	}
 	
 	public static int evaluatorMostHappy(BranchInfo bi, ArrayList<Person> people)
 	{
