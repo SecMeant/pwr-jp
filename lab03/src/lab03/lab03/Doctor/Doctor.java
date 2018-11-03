@@ -39,5 +39,9 @@ class Doctor{
 		return true;
 	}
 
+	public String toString(){
+		return this.firstName + " " + this.lastName + " " + this.speciality;
+	}
+
 }
 
