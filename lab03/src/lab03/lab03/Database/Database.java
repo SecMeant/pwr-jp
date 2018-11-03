@@ -28,6 +28,27 @@ class Database
 				String[] pacientFields = sc.next().split(";");
 				Pacient pacient = new Pacient(pacientFields[0],pacientFields[1],
 				                              Integer.valueOf(pacientFields[2]));
+
+				for(int i = 3; i < pacientFields.length; i++)
+				{
+					String[] visitInfo = pacientFields[i].split(",");
+					Event visit = new Event();
+					visit.roomNumber = Integer.valueOf(visitInfo[0]);
+					visit.timeRange =
+						new TimeRange(new Time(Integer.valueOf(visitInfo[1]),
+						                       Integer.valueOf(visitInfo[2])),
+					                new Time(Integer.valueOf(visitInfo[3]),
+													         Integer.valueOf(visitInfo[4])));
+					try
+					{
+						pacient.addVisit(visit);
+					}
+					catch(Exception e)
+					{
+						System.err.println("Visits intersects!");
+					}
+				}
+
 				pacients.add(pacient);
 			}
 
@@ -62,6 +83,27 @@ class Database
 				String[] doctorFields = sc.next().split(";");
 				Doctor doctor = new Doctor(Integer.valueOf(doctorFields[0]),doctorFields[1],
 				                           doctorFields[2], doctorFields[3]);
+
+				for(int i = 4; i < doctorFields.length; i++)
+				{
+					String[] dutyInfo = doctorFields[i].split(",");
+					Event duty = new Event();
+					duty.roomNumber = Integer.valueOf(dutyInfo[0]);
+					duty.timeRange =
+						new TimeRange(new Time(Integer.valueOf(dutyInfo[1]),
+						                       Integer.valueOf(dutyInfo[2])),
+					                new Time(Integer.valueOf(dutyInfo[3]),
+													         Integer.valueOf(dutyInfo[4])));
+					try
+					{
+						doctor.addDuty(duty);
+					}
+					catch(Exception e)
+					{
+						System.err.println("Duties intersects!");
+					}
+				}
+
 				this.doctors.add(doctor);
 			}
 

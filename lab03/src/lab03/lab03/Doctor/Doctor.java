@@ -1,11 +1,14 @@
 package lab03;
 
+import java.util.ArrayList;
+
 class Doctor
 {
 	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String speciality; // TODO enumtype ?
+	private ArrayList<Event> duties = new ArrayList<>();
 
 	Doctor(Integer id, String firstName, String lastName, String speciality)
 	{
@@ -53,9 +56,18 @@ class Doctor
 		return true;
 	}
 
+	public void addDuty(Event duty) throws Exception
+	{
+		// TODO check if visits doesnt intersects
+		this.duties.add(duty);
+	}
+
 	public String toString()
 	{
-		return this.id + " " + this.firstName + " " + this.lastName + " " + this.speciality;
+		String ret = this.id + " " + this.firstName + " " + this.lastName + " " + this.speciality + " ";
+		for(Event duty : this.duties)
+			ret += duty.toString() + " ";
+		return ret;
 	}
 
 }

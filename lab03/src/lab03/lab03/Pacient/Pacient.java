@@ -1,10 +1,13 @@
 package lab03;
 
+import java.util.ArrayList;
+
 class Pacient
 {
 	private String firstName;
 	private String lastName;
 	private Integer pesel;
+	private ArrayList<Event> visits = new ArrayList<>();
 
 	Pacient(String firstName, String lastName, Integer pesel)
 	{
@@ -46,8 +49,17 @@ class Pacient
 		return true;
 	}
 
+	public void addVisit(Event visit) throws Exception
+	{
+		// TODO check if visits doesnt intersects
+		this.visits.add(visit);
+	}
+
 	public String toString()
 	{
-		return this.firstName + " " + this.lastName + " " + this.pesel;
+		String ret = this.firstName + " " + this.lastName + " " + this.pesel + " ";
+		for(Event visit : this.visits)
+			ret += visit.toString() + " ";
+		return ret;
 	}
 }
