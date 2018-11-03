@@ -1,11 +1,13 @@
 package lab03;
 
-class Pacient{
+class Pacient
+{
 	private String firstName;
 	private String lastName;
 	private Integer pesel;
 
-	Pacient(String firstName, String lastName, Integer pesel){
+	Pacient(String firstName, String lastName, Integer pesel)
+	{
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.pesel = pesel;
@@ -15,7 +17,8 @@ class Pacient{
 	public String getLastName(){return this.lastName;}
 	public Integer getPesel(){return this.pesel;}
 
-	public boolean setFristName(String firstName){
+	public boolean setFristName(String firstName)
+	{
 		if(firstName == null)
 			return false;
 
@@ -23,7 +26,8 @@ class Pacient{
 		return true;
 	}
 
-	public boolean setLastName(String lastName){
+	public boolean setLastName(String lastName)
+	{
 		if(lastName == null)
 			return false;
 
@@ -31,8 +35,10 @@ class Pacient{
 		return true;
 	}
 
-	public boolean setPesel(Integer pesel){
-		if(pesel < 100000000 || pesel > 999999999){
+	public boolean setPesel(Integer pesel)
+	{
+		if(pesel < 100000000 || pesel > 999999999)
+		{
 			return false;
 		}
 
@@ -40,7 +46,8 @@ class Pacient{
 		return true;
 	}
 
-	public String toString(){
+	public String toString()
+	{
 		return this.firstName + " " + this.lastName + " " + this.pesel;
 	}
 }

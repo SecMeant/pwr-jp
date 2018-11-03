@@ -4,41 +4,130 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.NumberFormatException;
+import java.lang.Exception;
 
-class Database{
+class Database
+{
 	public ArrayList<Pacient> pacients = new ArrayList<>();
 	public ArrayList<Doctor> doctors = new ArrayList<>();
 	public ArrayList<Room> rooms = new ArrayList<>();
 
-	public void loadPacients(String filepath) throws FileNotFoundException{
+	private Integer currentID = Integer.valueOf(0);
+
+	public void loadPacients(String filepath) 
+	throws FileNotFoundException, NumberFormatException
+	{
 		Scanner sc = new Scanner(new File(filepath)).useDelimiter("\n");
 		Integer line = Integer.valueOf(1); // For debug
 
-		while(sc.hasNext()){
-			try{
+		while(sc.hasNext())
+		{
+			try
+			{
 				String[] pacientFields = sc.next().split(";");
-				Pacient pacient = new Pacient(pacientFields[0],pacientFields[1],Integer.valueOf(pacientFields[2]));
+				Pacient pacient = new Pacient(pacientFields[0],pacientFields[1],
+				                              Integer.valueOf(pacientFields[2]));
 				pacients.add(pacient);
-			}catch(IndexOutOfBoundsException e){
+			}
+
+			catch(IndexOutOfBoundsException e)
+			{
 				System.err.println("Parsing error occured when parsing Pacients from file on line " + line);
 			}
+
+			catch(NumberFormatException e)
+			{
+				System.err.println("Parsing error occured when parsing Pacients from file on line " + line);
+			}
+
 			line++;
 		}
 	}
 
-	public void loadDoctors(String filepath) throws FileNotFoundException{
+	public void loadDoctors
+	(String filepath)
+	throws FileNotFoundException
+	{
 		Scanner sc = new Scanner(new File(filepath)).useDelimiter("\n");
 		Integer line = Integer.valueOf(1); // for debug
 
-		while(sc.hasNext()){
-			try{
+		// First value in file is currentID, restore it
+		this.currentID = Integer.valueOf(sc.next());
+
+		while(sc.hasNext())
+		{
+			try
+			{
 				String[] doctorFields = sc.next().split(";");
-				Doctor doctor = new Doctor(doctorFields[0], doctorFields[1], doctorFields[2]);
-				doctors.add(doctor);
-			}catch(IndexOutOfBoundsException e){
+				Doctor doctor = new Doctor(Integer.valueOf(doctorFields[0]),doctorFields[1],
+				                           doctorFields[2], doctorFields[3]);
+				this.doctors.add(doctor);
+			}
+
+			catch(IndexOutOfBoundsException e)
+			{
 				System.err.println("Parsing error occured when parsing Doctors from file on line " + line);
 			}
 		}
+	}
+
+	public void addPacient
+	(String firstName, String lastName, Integer pesel)
+	throws Exception
+	{
+		for(Pacient p : this.pacients)
+			if(p.getPesel() == pesel)
+				throw new Exception("Another pacient with this pesel already exists");
+
+		this.pacients.add(new Pacient(firstName, lastName, pesel));
+	}
+
+	public void addDoctor
+	(String firstName, String lastName, String speciality)
+	{	
+		this.doctors.add(new Doctor(this.currentID, firstName, lastName, speciality));
+		this.currentID++;
+	}
+
+	public void removePacient
+	(Integer pesel)
+	{
+		for(Pacient p : this.pacients)
+			if(p.getPesel() == pesel)
+				this.pacients.remove(p); // This might be slow, maybe i should delete by index
+
+		// If not in db just ignore
+	}
+
+	public void removePacient
+	(Pacient pacient)
+	{
+		// TODO remove from visits
+
+		this.pacients.remove(pacient); // This might be slow, maybe i should delete by index
+
+		// If not in db just ignore
+	}
+
+	public void removeDoctor
+	(Integer id)
+	{
+		for(Doctor d : this.doctors)
+			if(d.getId() == id)
+				this.doctors.remove(d); // This might be slow, maybe i should delete by index
+
+		// If not in db just ignore
+	}
+
+	public void removeDoctor
+	(Doctor doctor)
+	{
+		// TODO Remove from visits
+
+		this.doctors.remove(doctor); // This might be slow, maybe i should delete by index
+
+		// If not in db just ignore
 	}
 }
 

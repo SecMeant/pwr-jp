@@ -1,21 +1,33 @@
 package lab03;
 
-class Doctor{
+class Doctor
+{
+	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String speciality; // TODO enumtype ?
 
-	Doctor(String firstName, String lastName, String speciality){
+	Doctor(Integer id, String firstName, String lastName, String speciality)
+	{
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.speciality = speciality;
 	}
 
+	public Integer getId(){return this.id;}
 	public String getFirstName(){return this.firstName;}
 	public String getLastName(){return this.lastName;}
 	public String getSpeciality(){return this.speciality;}
 
-	public boolean setFristName(String firstName){
+	public boolean setId(Integer id)
+	{
+		this.id = id;
+		return true;
+	}
+
+	public boolean setFristName(String firstName)
+	{
 		if(firstName == null)
 			return false;
 
@@ -23,7 +35,8 @@ class Doctor{
 		return true;
 	}
 
-	public boolean setLastName(String lastName){
+	public boolean setLastName(String lastName)
+	{
 		if(lastName == null)
 			return false;
 
@@ -31,7 +44,8 @@ class Doctor{
 		return true;
 	}
 
-	public boolean setSpeciality(String speciality){
+	public boolean setSpeciality(String speciality)
+	{
 		if(speciality == null)
 			return false;
 
@@ -39,8 +53,9 @@ class Doctor{
 		return true;
 	}
 
-	public String toString(){
-		return this.firstName + " " + this.lastName + " " + this.speciality;
+	public String toString()
+	{
+		return this.id + " " + this.firstName + " " + this.lastName + " " + this.speciality;
 	}
 
 }
