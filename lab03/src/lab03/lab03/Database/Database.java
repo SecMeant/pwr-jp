@@ -20,6 +20,7 @@ class Database
 	{
 		this.loadPacients(pacientFilePath);
 		this.loadDoctors(doctorsFilePath);
+		this.updateRoomVisits();
 	}
 
 	private void loadPacients(String filepath) 
@@ -119,6 +120,15 @@ class Database
 				System.err.println("Parsing error occured when parsing Doctors from file on line " + line);
 			}
 		}
+	}
+
+	private void updateRoomVisits()
+	{
+		this.pacients.forEach(p->{
+			p.visits.forEach(v->{
+				
+			});
+		});
 	}
 
 	public void addPacient

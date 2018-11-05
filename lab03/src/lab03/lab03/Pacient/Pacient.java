@@ -7,7 +7,7 @@ class Pacient
 	private String firstName;
 	private String lastName;
 	private Integer pesel;
-	private ArrayList<Event> visits = new ArrayList<>();
+	public ArrayList<Event> visits = new ArrayList<>();
 
 	Pacient(String firstName, String lastName, Integer pesel)
 	{
@@ -51,7 +51,6 @@ class Pacient
 
 	public void addVisit(Event visit) throws Exception
 	{
-		// TODO check if visits doesnt intersects
 		this.visits.add(visit);
 	}
 
