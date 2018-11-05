@@ -15,7 +15,14 @@ class Database
 
 	private Integer currentID = Integer.valueOf(0);
 
-	public void loadPacients(String filepath) 
+	public void open(String pacientFilePath, String doctorsFilePath)
+	throws FileNotFoundException
+	{
+		this.loadPacients(pacientFilePath);
+		this.loadDoctors(doctorsFilePath);
+	}
+
+	private void loadPacients(String filepath) 
 	throws FileNotFoundException, NumberFormatException
 	{
 		Scanner sc = new Scanner(new File(filepath)).useDelimiter("\n");
@@ -66,7 +73,7 @@ class Database
 		}
 	}
 
-	public void loadDoctors
+	private void loadDoctors
 	(String filepath)
 	throws FileNotFoundException
 	{

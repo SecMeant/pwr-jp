@@ -16,8 +16,7 @@ class Main
 	{
 		Database db = new Database();
 
-		db.loadPacients(pacientsPath);
-		db.loadDoctors(doctorsPath);
+		db.open(pacientsPath, doctorsPath);
 
 		db.addDoctor("Patryk","Wlazlyn","Programista");
 		db.addPacient("Adam","Waleczny", 997998991);
