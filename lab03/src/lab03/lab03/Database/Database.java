@@ -25,7 +25,7 @@ class Database
 		{
 			try
 			{
-				String[] pacientFields = sc.next().split(";");
+				String[] pacientFields = sc.next().trim().split(";");
 				Pacient pacient = new Pacient(pacientFields[0],pacientFields[1],
 				                              Integer.valueOf(pacientFields[2]));
 
@@ -74,13 +74,14 @@ class Database
 		Integer line = Integer.valueOf(1); // for debug
 
 		// First value in file is currentID, restore it
-		this.currentID = Integer.valueOf(sc.next());
+		System.out.println(Integer.valueOf(sc.next().trim()));
+		//this.currentID = Integer.valueOf(sc.next());
 
 		while(sc.hasNext())
 		{
 			try
 			{
-				String[] doctorFields = sc.next().split(";");
+				String[] doctorFields = sc.next().trim().split(";");
 				Doctor doctor = new Doctor(Integer.valueOf(doctorFields[0]),doctorFields[1],
 				                           doctorFields[2], doctorFields[3]);
 

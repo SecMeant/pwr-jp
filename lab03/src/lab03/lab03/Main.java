@@ -1,14 +1,15 @@
 package lab03;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 
 class Main
 {
 	private final static String pacientsPath = 
-		System.getProperty("user.dir") + "\\data\\pacients.txt";
+		Paths.get(System.getProperty("user.dir"), "data", "pacients.txt").toString();
 
 	private final static String doctorsPath = 
-		System.getProperty("user.dir") + "\\data\\doctors.txt";
+		Paths.get(System.getProperty("user.dir"), "data", "doctors.txt").toString();
 
 	private static void test()
 	throws FileNotFoundException, Exception
@@ -31,7 +32,6 @@ class Main
 	public static void main(String[] args)
 	throws FileNotFoundException, Exception
 	{
-		System.out.println(pacientsPath);
 		test();
 	}
 }
