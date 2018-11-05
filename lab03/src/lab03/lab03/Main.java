@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 class Main
 {
 	private final static String pacientsPath = 
-		"/home/holz/etc/github/pwr-jp/lab03/src/lab03/data/pacients.txt";
+		System.getProperty("user.dir") + "\\data\\pacients.txt";
 
 	private final static String doctorsPath = 
-		"/home/holz/etc/github/pwr-jp/lab03/src/lab03/data/doctors.txt";
+		System.getProperty("user.dir") + "\\data\\doctors.txt";
 
 	private static void test()
 	throws FileNotFoundException, Exception
@@ -31,6 +31,7 @@ class Main
 	public static void main(String[] args)
 	throws FileNotFoundException, Exception
 	{
+		System.out.println(pacientsPath);
 		test();
 	}
 }
