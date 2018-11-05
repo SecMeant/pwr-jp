@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 class Room
 {
+	// Room number
+	Integer number;
+
 	ArrayList<Event> duties;
 	ArrayList<Event> visits;
 

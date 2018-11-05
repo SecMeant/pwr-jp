@@ -124,11 +124,36 @@ class Database
 
 	private void updateRoomVisits()
 	{
-		this.pacients.forEach(p->{
-			p.visits.forEach(v->{
-				
+		this.rooms = new ArrayList<>();
+		
+		this.doctors.forEach(doc->{
+			doc.duties.forEach(duty->{
+				Room r = this.getRoomByNumber(duty.roomNumber);
+				if(r != null)
+					r.addDuty(duty);
+				else
+					System.err.println("Just tried to add duty to room that doesnt exists");
 			});
 		});
+
+		this.pacients.forEach(p->{
+			p.visits.forEach(v->{
+				Room r = this.getRoomByNumber(v.roomNumber);
+				if(r != null)
+					r.addVisit(v);
+				else
+					System.err.println("Just tried to add visit to room that doesnt exists");
+			});
+		});
+	}
+
+	public Room getRoomByNumber(Integer number)
+	{
+		for(Room r : this.rooms)
+			if(r.number == number)
+				return r;
+
+		return null;
 	}
 
 	public void addPacient

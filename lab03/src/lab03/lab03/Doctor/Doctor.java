@@ -8,7 +8,7 @@ class Doctor
 	private String firstName;
 	private String lastName;
 	private String speciality; // TODO enumtype ?
-	private ArrayList<Event> duties = new ArrayList<>();
+	public ArrayList<Event> duties = new ArrayList<>();
 
 	Doctor(Integer id, String firstName, String lastName, String speciality)
 	{
