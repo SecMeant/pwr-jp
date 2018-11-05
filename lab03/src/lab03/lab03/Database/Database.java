@@ -75,7 +75,6 @@ class Database
 
 		// First value in file is currentID, restore it
 		System.out.println(Integer.valueOf(sc.next().trim()));
-		//this.currentID = Integer.valueOf(sc.next());
 
 		while(sc.hasNext())
 		{
