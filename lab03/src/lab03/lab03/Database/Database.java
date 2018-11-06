@@ -237,7 +237,7 @@ class Database
 	public Room getRoomByNumber(Integer number)
 	{
 		for(Room r : this.rooms)
-			if(r.number == number)
+			if(r.getNumber() == number)
 				return r;
 
 		Room room = new Room(number);
@@ -276,13 +276,31 @@ class Database
 				ret.add(d);
 		});
 
-		System.out.println(ret.size());
 		return ret;
+	}
+
+	public Doctor getDoctorByName(String firstName, String lastName)
+	{
+		for(Doctor doc : this.doctors)
+			if(doc.getFirstName().equals(firstName) && doc.getLastName().equals(lastName))
+				return doc;
+		return null;
 	}
 
 	public ArrayList<Event> getAvailableVisitsByDoctor(Doctor doctor)
 	{
-		return null;
+		ArrayList<Event> visits = new ArrayList<>();
+		
+		for(Room r : this.rooms)
+		{
+			for(int i=0; i < r.duties.length; i++)
+			{
+				if(r.duties[i] == doctor && r.visits[i] == null)
+					visits.add(new Event(r.getNumber(), i));
+			}
+		}
+
+		return visits;
 	}
 
 	private void flushDoctorsToFile()

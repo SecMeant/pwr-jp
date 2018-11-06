@@ -7,15 +7,18 @@ class Room
 	public static final int meetingCountPerRoom = 10;
 
 	// Room number
-	Integer number;
+	private Integer number;
 
-	Doctor[] duties = new Doctor[meetingCountPerRoom];
-	Pacient[] visits = new Pacient[meetingCountPerRoom];
+	public Doctor[] duties = new Doctor[meetingCountPerRoom];
+	public Pacient[] visits = new Pacient[meetingCountPerRoom];
 
 	Room(Integer roomNumber)
 	{
 		this.number = roomNumber;
 	}
+
+	public Integer getNumber()
+	{return this.number;}
 
 	public boolean signPacient(Pacient pacient, int timeOffset)
 	{	

@@ -21,33 +21,11 @@ class Main
 		db.addDoctor("Patryk","Wlazlyn","Programista");
 		db.addPacient("Adam","Waleczny", 997998991);
 
-		for(Pacient p : db.pacients)
-			System.out.println(p);
-
-		for(Doctor d : db.doctors)
-			System.out.println(d);
-
 		for(Doctor d2 : db.getDoctorsBySpeciality("Dentist"))
 			System.out.println(d2);
 
-		System.out.println(db.rooms.size());
-		for(Room r : db.rooms)
-			System.out.println(r);
-
-		db.removePacient(605037909);
-
-		db.removeDoctor(1);
-
-		for(Room r : db.rooms)
-			System.out.println(r);
-
-		for(Pacient p2 : db.pacients)
-			System.out.println(p2);
-
-		for(Doctor d2 : db.doctors)
-			System.out.println(d2);
-
-		db.save();
+		ConsoleInterface ci = new ConsoleInterface(db);
+		ci.run();
 	}
 
 	public static void main(String[] args)
