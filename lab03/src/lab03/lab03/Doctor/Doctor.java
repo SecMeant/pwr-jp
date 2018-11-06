@@ -58,13 +58,13 @@ class Doctor
 
 	public void addDuty(Event duty) throws Exception
 	{
-		// TODO check if visits doesnt intersects
 		this.duties.add(duty);
 	}
 
 	public String toString()
 	{
-		String ret = this.id + " " + this.firstName + " " + this.lastName + " " + this.speciality + " ";
+		String ret = this.id + " " + this.firstName + " " + this.lastName + 
+		             " " + this.speciality + " ";
 		for(Event duty : this.duties)
 			ret += duty.toString() + " ";
 		return ret;
