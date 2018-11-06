@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.NumberFormatException;
 import java.lang.Exception;
+import java.io.FileWriter;
+import java.io.IOException;
 
 class Database
 {
@@ -15,9 +17,17 @@ class Database
 
 	private Integer currentID = Integer.valueOf(0);
 
+	// Files which were used to load doctors and pacients
+	private String doctorsSourceFilePath;
+	private String pacientsSourceFilePath;
+
 	public void open(String pacientFilePath, String doctorsFilePath)
 	throws FileNotFoundException
-	{
+	{	
+		// Save file names
+		this.doctorsSourceFilePath = doctorsFilePath;
+		this.pacientsSourceFilePath = pacientFilePath;
+
 		this.loadPacients(pacientFilePath);
 		this.loadDoctors(doctorsFilePath);
 		this.updateRoomVisits();
@@ -273,6 +283,56 @@ class Database
 	public ArrayList<Event> getAvailableVisitsByDoctor(Doctor doctor)
 	{
 		return null;
+	}
+
+	private void flushDoctorsToFile()
+	throws IOException
+	{
+		FileWriter writer = new FileWriter(this.doctorsSourceFilePath);
+		writer.write(String.valueOf(this.currentID) + "\n");
+
+		for(Doctor doc : this.doctors)
+		{
+			writer.write(doc.getId() + ";" + doc.getFirstName() + ";" + doc.getLastName() +
+			             ";" + doc.getSpeciality());
+
+			// Write all duties
+			for(Event duty : doc.duties)
+			{
+				writer.write(";" + duty.roomNumber + "," + duty.timeOffset);
+			}
+			writer.write("\n");
+		}
+
+		writer.close();
+	}
+
+	private void flushPacientToFile()
+	throws IOException
+	{
+		FileWriter writer = new FileWriter(this.pacientsSourceFilePath);
+
+		for(Pacient pac : this.pacients)
+		{
+			writer.write(pac.getFirstName() + ";" + pac.getLastName() +
+			             ";" + pac.getPesel());
+
+			// Write all visits
+			for(Event visit : pac.visits)
+			{
+				writer.write(";" + visit.roomNumber + "," + visit.timeOffset);
+			}
+			writer.write("\n");
+		}
+
+		writer.close();
+	}
+
+	public void save()
+	throws IOException
+	{
+		this.flushDoctorsToFile();
+		this.flushPacientToFile();
 	}
 }
 

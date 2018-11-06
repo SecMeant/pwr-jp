@@ -46,6 +46,8 @@ class Main
 
 		for(Doctor d2 : db.doctors)
 			System.out.println(d2);
+
+		db.save();
 	}
 
 	public static void main(String[] args)
