@@ -26,6 +26,10 @@ class Main
 
 		for(Doctor d : db.doctors)
 			System.out.println(d);
+
+		System.out.println(db.rooms.size());
+		for(Room r : db.rooms)
+			System.out.println(r);
 	}
 
 	public static void main(String[] args)

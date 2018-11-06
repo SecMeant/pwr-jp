@@ -7,8 +7,13 @@ class Room
 	// Room number
 	Integer number;
 
-	ArrayList<Event> duties;
-	ArrayList<Event> visits;
+	ArrayList<Event> duties = new ArrayList<>();
+	ArrayList<Event> visits = new ArrayList<>();
+
+	Room(Integer roomNumber)
+	{
+		this.number = roomNumber;
+	}
 
 	public boolean addVisit(Event visit)
 	{
@@ -46,6 +51,14 @@ class Room
 		this.duties.add(duty);
 
 		return true;
+	}
+
+	public String toString()
+	{
+		String ret = "{Room number: " + this.number + ";" + "Duties: " + 
+		             this.duties.toString() + " Visits: " + this.visits.toString() + "}";
+
+		return ret;
 	}
 }
 

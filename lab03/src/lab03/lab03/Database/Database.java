@@ -153,7 +153,9 @@ class Database
 			if(r.number == number)
 				return r;
 
-		return null;
+		Room room = new Room(number);
+		this.rooms.add(room);
+		return room;
 	}
 
 	public void addPacient
