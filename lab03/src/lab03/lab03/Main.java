@@ -27,6 +27,9 @@ class Main
 		for(Doctor d : db.doctors)
 			System.out.println(d);
 
+		for(Doctor d2 : db.getDoctorsBySpeciality("Dentist"))
+			System.out.println(d2);
+
 		System.out.println(db.rooms.size());
 		for(Room r : db.rooms)
 			System.out.println(r);

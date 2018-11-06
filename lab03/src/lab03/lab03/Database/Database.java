@@ -283,5 +283,18 @@ class Database
 
 		return null;
 	}
+
+	public ArrayList<Doctor> getDoctorsBySpeciality(String speciality)
+	{
+		ArrayList<Doctor> ret = new ArrayList<>();
+
+		this.doctors.forEach(d->{
+			if(d.getSpeciality().equals(speciality))
+				ret.add(d);
+		});
+
+		System.out.println(ret.size());
+		return ret;
+	}
 }
 
