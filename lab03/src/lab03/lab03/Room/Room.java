@@ -9,37 +9,33 @@ class Room
 	// Room number
 	Integer number;
 
-	Event[] duties = new Event[meetingCountPerRoom];
-	Event[] visits = new Event[meetingCountPerRoom];
+	Doctor[] duties = new Doctor[meetingCountPerRoom];
+	Pacient[] visits = new Pacient[meetingCountPerRoom];
 
 	Room(Integer roomNumber)
 	{
 		this.number = roomNumber;
 	}
 
-	public boolean addVisit(Event visit)
+	public boolean signPacient(Pacient pacient, int timeOffset)
 	{	
-		System.out.println("Adding visit " + visit.toString());
-		// TODO catch boundary exception
-		if(this.visits[visit.timeOffset] != null)
+		if(this.visits[timeOffset] != null)
 			return false;
 
-		// No doctor here
-		// TODO UNCOMMENT
-		//if(this.duties[visit.timeOffset] == null)
+		// TODO uncomment
+		//if(this.duties[timeOffset] == null)
 		//	return false;
-		
-		this.visits[visit.timeOffset] = visit;
+
+		this.visits[timeOffset] = pacient;
 		return true;
 	}
 
-	public boolean addDuty(Event duty)
+	public boolean signDoctor(Doctor doctor, int timeOffset)
 	{
-		// Some doctor have already this duty?
-		if(this.duties[duty.timeOffset] != null)
+		if(this.duties[timeOffset] != null)
 			return false;
 
-		this.duties[duty.timeOffset] = duty;
+		this.duties[timeOffset] = doctor;
 		return true;
 	}
 

@@ -124,17 +124,17 @@ class Database
 			doc.duties.forEach(duty->{
 				Room r = this.getRoomByNumber(duty.roomNumber);
 				if(r != null)
-					r.addDuty(duty);
+					r.signDoctor(doc, duty.timeOffset.intValue());
 				else
 					System.err.println("Just tried to add duty to room that doesnt exists");
 			});
 		});
 
-		this.pacients.forEach(p->{
-			p.visits.forEach(v->{
-				Room r = this.getRoomByNumber(v.roomNumber);
+		this.pacients.forEach(pacient->{
+			pacient.visits.forEach(visit->{
+				Room r = this.getRoomByNumber(visit.roomNumber);
 				if(r != null)
-					r.addVisit(v);
+					r.signPacient(pacient, visit.timeOffset);
 				else
 					System.err.println("Just tried to add visit to room that doesnt exists");
 			});
@@ -181,11 +181,8 @@ class Database
 		{
 			for(int i=0; i < r.visits.length ; i++)
 			{
-				for(Event pacientVisit : pacient.visits)
-				{
-					if(pacientVisit == r.visits[i])
-						r.visits[i] = null;
-				}
+				if(pacient == r.visits[i])
+					r.visits[i] = null;
 			}
 		}
 
@@ -213,16 +210,13 @@ class Database
 		{
 			for(int i=0; i < r.duties.length ; i++)
 			{
-				for(Event doctorsDuty : doctor.duties)
+				if(doctor == r.duties[i])
 				{
-					if(doctorsDuty == r.duties[i])
-					{
-						// If doctor being dropped has duty, drop it
-						r.duties[i] = null;
+					// If doctor being dropped has duty, drop it
+					r.duties[i] = null;
 
-						// If anyone has visit at this time, drop it also
-						r.visits[i] = null;
-					}
+					// If anyone has visit at this time, drop it also
+					r.visits[i] = null;
 				}
 			}
 		}
@@ -274,6 +268,11 @@ class Database
 
 		System.out.println(ret.size());
 		return ret;
+	}
+
+	public ArrayList<Event> getAvailableVisitsByDoctor(Doctor doctor)
+	{
+		return null;
 	}
 }
 
