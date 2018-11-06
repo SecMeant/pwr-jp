@@ -42,11 +42,8 @@ class Database
 					String[] visitInfo = pacientFields[i].split(",");
 					Event visit = new Event();
 					visit.roomNumber = Integer.valueOf(visitInfo[0]);
-					visit.timeRange =
-						new TimeRange(new Time(Integer.valueOf(visitInfo[1]),
-						                       Integer.valueOf(visitInfo[2])),
-					                new Time(Integer.valueOf(visitInfo[3]),
-													         Integer.valueOf(visitInfo[4])));
+					visit.timeOffset = Integer.valueOf(visitInfo[1]);
+
 					try
 					{
 						pacient.addVisit(visit);
@@ -97,11 +94,8 @@ class Database
 					String[] dutyInfo = doctorFields[i].split(",");
 					Event duty = new Event();
 					duty.roomNumber = Integer.valueOf(dutyInfo[0]);
-					duty.timeRange =
-						new TimeRange(new Time(Integer.valueOf(dutyInfo[1]),
-						                       Integer.valueOf(dutyInfo[2])),
-					                new Time(Integer.valueOf(dutyInfo[3]),
-													         Integer.valueOf(dutyInfo[4])));
+					duty.timeOffset = Integer.valueOf(dutyInfo[1]);
+
 					try
 					{
 						doctor.addDuty(duty);
@@ -169,51 +163,44 @@ class Database
 	(Integer pesel)
 	{
 		for(Pacient p : this.pacients)
-			if(p.getPesel() == pesel)
-				this.pacients.remove(p); // This might be slow, maybe i should delete by index
-
+		{
+			if(p.getPesel().intValue() == pesel.intValue())
+			{
+				this.removePacient(p); // This might be slow, maybe i should delete by index
+				break;
+			}
+		}
 		// If not in db just ignore
 	}
 
 	public void removePacient
 	(Pacient pacient)
 	{
-		// TODO optimize ?
-		
-		ArrayList<Event> toRemove = new ArrayList<>();
-
+		// Remove all visits from rooms for given pacient
 		for(Room r : this.rooms)
 		{
-			for(Event roomVisit : r.visits)
+			for(int i=0; i < r.visits.length ; i++)
 			{
 				for(Event pacientVisit : pacient.visits)
 				{
-					// If given visit "belongs" to pacient that is
-					// being removed, clear his visits
-					if(roomVisit.equals(pacientVisit))
-						toRemove.add(pacientVisit);
+					if(pacientVisit == r.visits[i])
+						r.visits[i] = null;
 				}
 			}
-
-			toRemove.forEach(v->{
-				r.visits.remove(v);
-			});
-
-			toRemove.clear();
 		}
 
-		// This might be slow, maybe i should delete by index
-		this.pacients.remove(pacient); 
-
-		// If not in db just ignore
+		this.pacients.remove(pacient);
 	}
 
 	public void removeDoctor
 	(Integer id)
 	{
 		for(Doctor d : this.doctors)
-			if(d.getId() == id)
-				this.doctors.remove(d); // This might be slow, maybe i should delete by index
+			if(d.getId().intValue() == id.intValue())
+			{
+				this.removeDoctor(d); // This might be slow, maybe i should delete by index
+				break;
+			}
 
 		// If not in db just ignore
 	}
@@ -221,34 +208,26 @@ class Database
 	public void removeDoctor
 	(Doctor doctor)
 	{
-		// TODO Remove from visits
-
-		ArrayList<Event> toRemove = new ArrayList<>();
-
+		// Remove all visits from rooms for given pacient
 		for(Room r : this.rooms)
 		{
-			for(Event roomDuty : r.duties)
+			for(int i=0; i < r.duties.length ; i++)
 			{
 				for(Event doctorsDuty : doctor.duties)
 				{
-					// If given visit "belongs" to pacient that is
-					// being removed, clear his visits
-					if(doctorsDuty.equals(doctorsDuty))
-						toRemove.add(doctorsDuty);
+					if(doctorsDuty == r.duties[i])
+					{
+						// If doctor being dropped has duty, drop it
+						r.duties[i] = null;
+
+						// If anyone has visit at this time, drop it also
+						r.visits[i] = null;
+					}
 				}
 			}
-
-			toRemove.forEach(d->{
-				r.duties.remove(d);
-			});
-
-			toRemove.clear();
 		}
 
-		// This might be slow, maybe i should delete by index
 		this.doctors.remove(doctor);
-
-		// If not in db just ignore
 	}
 
 	public Room getRoomByNumber(Integer number)

@@ -1,4 +1,4 @@
 12
-1;Dr Adam;Oetcker;Dentist;120,12,34,14,13;122,9,10,11,45
+1;Dr Adam;Oetcker;Dentist;120,1;122,2
 2;Charles;Darwin;Surgeon
-3;Richard;Dawkins;Dentist;143,12,44,15,16
+3;Richard;Dawkins;Dentist;143,3

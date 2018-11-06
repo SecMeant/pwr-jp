@@ -1,4 +1,4 @@
-Kevin;Mitnick;605037909;120,8,15,10,45
+Kevin;Mitnick;605037909;120,4
 Tavis;Ormandy;991997998
 asdads;;123
 dqwe

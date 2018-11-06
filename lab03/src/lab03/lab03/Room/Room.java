@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 class Room
 {
+	public static final int meetingCountPerRoom = 10;
+
 	// Room number
 	Integer number;
 
-	ArrayList<Event> duties = new ArrayList<>();
-	ArrayList<Event> visits = new ArrayList<>();
+	Event[] duties = new Event[meetingCountPerRoom];
+	Event[] visits = new Event[meetingCountPerRoom];
 
 	Room(Integer roomNumber)
 	{
@@ -16,47 +18,42 @@ class Room
 	}
 
 	public boolean addVisit(Event visit)
-	{
-		// Check if visit doesnt intersects with
-		// other visit at the time
-		for(Event e : this.visits)
-		{
-			if(e.intersects(visit))
-				return false;
-		}
-	
-		// Check if in requested visits time any
-		// doctor is on duty in this room
-		for(Event e : this.duties)
-		{
-			if(!visit.within(e))
-				return false;
-		}
+	{	
+		System.out.println("Adding visit " + visit.toString());
+		// TODO catch boundary exception
+		if(this.visits[visit.timeOffset] != null)
+			return false;
 
-		this.visits.add(visit);
-
+		// No doctor here
+		// TODO UNCOMMENT
+		//if(this.duties[visit.timeOffset] == null)
+		//	return false;
+		
+		this.visits[visit.timeOffset] = visit;
 		return true;
 	}
 
 	public boolean addDuty(Event duty)
 	{
-		// Check given duty intersects with already
-		// declated duty
-		for(Event e : this.duties)
-		{
-			if(duty.intersects(e))
-				return false;
-		}
+		// Some doctor have already this duty?
+		if(this.duties[duty.timeOffset] != null)
+			return false;
 
-		this.duties.add(duty);
-
+		this.duties[duty.timeOffset] = duty;
 		return true;
 	}
 
 	public String toString()
 	{
-		String ret = "{Room number: " + this.number + ";" + "Duties: " + 
-		             this.duties.toString() + " Visits: " + this.visits.toString() + "}";
+		String ret = "Room number: " + this.number + "\n";
+		
+		ret += "\tDuties: \n\t\t";
+		for(int i=0; i < this.meetingCountPerRoom; i++)
+			ret += this.duties[i] + " | ";
+
+		ret += "\n\tVisits: \n\t\t";
+		for(int i=0; i < this.meetingCountPerRoom; i++)
+			ret += this.visits[i] + " | ";
 
 		return ret;
 	}

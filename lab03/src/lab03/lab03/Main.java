@@ -34,13 +34,9 @@ class Main
 		for(Room r : db.rooms)
 			System.out.println(r);
 
-		Pacient p = db.getPacientByPesel(605037909);
-		if(p != null)
-			db.removePacient(p);
+		db.removePacient(605037909);
 
-		Doctor d = db.getDoctorById(1);
-		if(d != null)
-			db.removeDoctor(d);
+		db.removeDoctor(1);
 
 		for(Room r : db.rooms)
 			System.out.println(r);

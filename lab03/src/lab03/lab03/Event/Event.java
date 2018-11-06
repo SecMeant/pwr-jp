@@ -3,24 +3,19 @@ package lab03;
 class Event
 {
 	Integer roomNumber;
-	TimeRange timeRange;
+	Integer timeOffset;
 
-	public boolean intersects(Event e)
-	{
-		// TODO make checking
-		return false;
-	}
+	Event()
+	{}
 
-	public boolean within(Event e)
+	Event(Integer roomNumber, Integer timeOffset)
 	{
-		// TODO make checking
-		return true;
+		this.roomNumber = roomNumber;
+		this.timeOffset = timeOffset;
 	}
 
 	public String toString()
 	{
-		return "Room: " + this.roomNumber + ", " + this.timeRange.from.hour + ":" +
-		       this.timeRange.from.minute + " - " + this.timeRange.to.hour + ":" + 
-					 this.timeRange.to.minute;
+		return "Room: " + this.roomNumber + ", " + this.timeOffset;
 	}
 }
