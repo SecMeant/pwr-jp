@@ -147,17 +147,6 @@ class Database
 		});
 	}
 
-	public Room getRoomByNumber(Integer number)
-	{
-		for(Room r : this.rooms)
-			if(r.number == number)
-				return r;
-
-		Room room = new Room(number);
-		this.rooms.add(room);
-		return room;
-	}
-
 	public void addPacient
 	(String firstName, String lastName, Integer pesel)
 	throws Exception
@@ -189,9 +178,32 @@ class Database
 	public void removePacient
 	(Pacient pacient)
 	{
-		// TODO remove from visits
+		// TODO optimize ?
+		
+		ArrayList<Event> toRemove = new ArrayList<>();
 
-		this.pacients.remove(pacient); // This might be slow, maybe i should delete by index
+		for(Room r : this.rooms)
+		{
+			for(Event roomVisit : r.visits)
+			{
+				for(Event pacientVisit : pacient.visits)
+				{
+					// If given visit "belongs" to pacient that is
+					// being removed, clear his visits
+					if(roomVisit.equals(pacientVisit))
+						toRemove.add(pacientVisit);
+				}
+			}
+
+			toRemove.forEach(v->{
+				r.visits.remove(v);
+			});
+
+			toRemove.clear();
+		}
+
+		// This might be slow, maybe i should delete by index
+		this.pacients.remove(pacient); 
 
 		// If not in db just ignore
 	}
@@ -211,9 +223,65 @@ class Database
 	{
 		// TODO Remove from visits
 
-		this.doctors.remove(doctor); // This might be slow, maybe i should delete by index
+		ArrayList<Event> toRemove = new ArrayList<>();
+
+		for(Room r : this.rooms)
+		{
+			for(Event roomDuty : r.duties)
+			{
+				for(Event doctorsDuty : doctor.duties)
+				{
+					// If given visit "belongs" to pacient that is
+					// being removed, clear his visits
+					if(doctorsDuty.equals(doctorsDuty))
+						toRemove.add(doctorsDuty);
+				}
+			}
+
+			toRemove.forEach(d->{
+				r.duties.remove(d);
+			});
+
+			toRemove.clear();
+		}
+
+		// This might be slow, maybe i should delete by index
+		this.doctors.remove(doctor);
 
 		// If not in db just ignore
+	}
+
+	public Room getRoomByNumber(Integer number)
+	{
+		for(Room r : this.rooms)
+			if(r.number == number)
+				return r;
+
+		Room room = new Room(number);
+		this.rooms.add(room);
+		return room;
+	}
+
+	public Pacient getPacientByPesel(Integer pesel)
+	{
+		for(Pacient p : this.pacients)
+		{
+			if(p.getPesel().intValue() == pesel.intValue())
+				return p;
+		}
+
+		return null;
+	}
+
+	public Doctor getDoctorById(Integer id)
+	{
+		for(Doctor d : this.doctors)
+		{
+			if(d.getId().intValue() == id.intValue())
+				return d;
+		}
+
+		return null;
 	}
 }
 

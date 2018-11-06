@@ -19,7 +19,8 @@ class Event
 
 	public String toString()
 	{
-		return "Room: " + this.roomNumber + ", " + this.timeRange.from.hour + ":" + this.timeRange.from.minute +
-		       " - " + this.timeRange.to.hour + ":" + this.timeRange.to.minute;
+		return "Room: " + this.roomNumber + ", " + this.timeRange.from.hour + ":" +
+		       this.timeRange.from.minute + " - " + this.timeRange.to.hour + ":" + 
+					 this.timeRange.to.minute;
 	}
 }
