@@ -27,6 +27,7 @@ class ConsoleInterface
 		System.out.println("\t11. Unsign pacient");
 		System.out.println("\t12. Sign doctor");
 		System.out.println("\t13. Unsign doctor");
+		System.out.println("\t15. Save");
 	}
 
 	public boolean handleUserInput()
@@ -166,7 +167,7 @@ class ConsoleInterface
 			System.out.println("Successfully added new pacient");
 		}
 		else if(args[0].equals("9"))
-		{
+	{
 			if(args.length != 1)
 			{
 				System.out.println("Error! Unexpected arguments.");
@@ -197,6 +198,20 @@ class ConsoleInterface
 			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
 			
 			try { db.signPacient(pesel, roomNumber, timeOffset); }
+			catch(Exception e){System.out.println(e.getMessage());return true;}
+		}
+		else if(args[0].equals("11"))
+		{
+			System.out.print("Pesel: ");
+			Integer pesel = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Room number: ");
+			Integer roomNumber  = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Time offset: ");
+			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
+			
+			try { db.unsignPacient(pesel, roomNumber, timeOffset); }
 			catch(Exception e){System.out.println(e.getMessage());return true;}
 		}
 		else if(args[0].equals("12"))

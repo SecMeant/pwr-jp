@@ -35,13 +35,10 @@ class Room
 	public void unsignPacient(Pacient pacient, int timeOffset)
 	throws Exception
 	{	
-		if(this.visits[timeOffset] != null)
-			throw new Exception("Given visit is already taken by someone else");
+		if(this.visits[timeOffset] != pacient)
+			throw new Exception("Given visit is taken by someone else");
 
-		if(this.duties[timeOffset] == null)
-			throw new Exception("No doctor is in this room at that moment");
-
-		this.visits[timeOffset] = pacient;
+		this.visits[timeOffset] = null;
 	}
 
 	public boolean signDoctor(Doctor doctor, int timeOffset)

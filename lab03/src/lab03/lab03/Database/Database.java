@@ -214,11 +214,29 @@ class Database
 		pacient.visits.add(new Event(roomNumber, timeOffset));
 	}
 
+	public void unsignPacient(Integer pesel, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		this.unsignPacient(this.getPacientByPesel(pesel), roomNumber, timeOffset);
+	}
+
 	public void unsignPacient(Pacient pacient, int roomNumber, int timeOffset)
 	throws Exception
 	{
 		Room r = getRoomByNumber(roomNumber);
 
+		try{r.unsignPacient(pacient, timeOffset);}
+		catch(Exception e){System.out.println(e.getMessage());return;}
+	
+		// Find visit in visits list and drop it	
+		for(int i=0; i<pacient.visits.size(); i++)
+		{
+			if(pacient.visits.get(i).roomNumber == roomNumber && 
+			   pacient.visits.get(i).timeOffset == timeOffset)
+			{
+				pacient.visits.remove(i);
+			}
+		}
 	}
 
 	public void removePacient
