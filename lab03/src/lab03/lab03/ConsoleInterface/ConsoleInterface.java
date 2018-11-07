@@ -25,6 +25,8 @@ class ConsoleInterface
 		System.out.println("\t9. Add new doctor");
 		System.out.println("\t10. Sign pacient");
 		System.out.println("\t11. Unsign pacient");
+		System.out.println("\t12. Sign doctor");
+		System.out.println("\t13. Unsign doctor");
 	}
 
 	public boolean handleUserInput()
@@ -196,8 +198,20 @@ class ConsoleInterface
 			
 			try { db.signPacient(pesel, roomNumber, timeOffset); }
 			catch(Exception e){System.out.println(e.getMessage());return true;}
+		}
+		else if(args[0].equals("12"))
+		{
+			System.out.print("ID: ");
+			Integer id = Integer.valueOf(this.scanner.next().trim());
 
-			System.out.println("Successfully signed");
+			System.out.print("Room number: ");
+			Integer roomNumber  = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Time offset: ");
+			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
+			
+			try { db.signDoctor(db.getDoctorById(id), roomNumber, timeOffset); }
+			catch(Exception e){System.out.println(e.getMessage());return true;}
 		}
 		else
 		{

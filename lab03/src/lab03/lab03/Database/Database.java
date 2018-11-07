@@ -130,13 +130,20 @@ class Database
 	{
 		this.rooms = new ArrayList<>();
 		
-		this.doctors.forEach(doc->{
-			doc.duties.forEach(duty->{
+		this.doctors.forEach(doc->
+		{
+			doc.duties.forEach(duty->
+			{
 				Room r = this.getRoomByNumber(duty.roomNumber);
 				if(r != null)
-					r.signDoctor(doc, duty.timeOffset.intValue());
+				{
+					try{r.signDoctor(doc, duty.timeOffset.intValue());}
+					catch(Exception e){System.out.println(e.getMessage());}
+				}
 				else
+				{
 					System.err.println("Just tried to add duty to room that doesnt exists");
+				}
 			});
 		});
 		
@@ -176,6 +183,14 @@ class Database
 		this.currentID++;
 	}
 
+	public void signDoctor(Doctor doctor, int roomNumber, int timeOffset)
+	{
+		Room room = this.getRoomByNumber(roomNumber);
+		
+		try{room.signDoctor(doctor, timeOffset);}
+		catch(Exception e){System.out.println(e.getMessage());}
+	}
+
 	public void signPacient(Integer pesel, int roomNumber, int timeOffset)
 	throws Exception
 	{
@@ -197,6 +212,13 @@ class Database
 		}
 
 		pacient.visits.add(new Event(roomNumber, timeOffset));
+	}
+
+	public void unsignPacient(Pacient pacient, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		Room r = getRoomByNumber(roomNumber);
+
 	}
 
 	public void removePacient
@@ -268,7 +290,7 @@ class Database
 	public Room getRoomByNumber(Integer number)
 	{
 		for(Room r : this.rooms)
-			if(r.getNumber() == number)
+			if(r.getNumber().intValue() == number.intValue())
 				return r;
 
 		Room room = new Room(number);
