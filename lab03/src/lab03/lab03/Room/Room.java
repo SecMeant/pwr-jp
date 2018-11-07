@@ -20,16 +20,16 @@ class Room
 	public Integer getNumber()
 	{return this.number;}
 
-	public boolean signPacient(Pacient pacient, int timeOffset)
+	public void signPacient(Pacient pacient, int timeOffset)
+	throws Exception
 	{	
 		if(this.visits[timeOffset] != null)
-			return false;
+			throw new Exception("Given visit is already taken by someone else");
 
 		if(this.duties[timeOffset] == null)
-			return false;
+			throw new Exception("No doctor is in this room at that moment");
 
 		this.visits[timeOffset] = pacient;
-		return true;
 	}
 
 	public boolean signDoctor(Doctor doctor, int timeOffset)

@@ -89,7 +89,7 @@ class Database
 		Integer line = Integer.valueOf(1); // for debug
 
 		// First value in file is currentID, restore it
-		System.out.println(Integer.valueOf(sc.next().trim()));
+		this.currentID = Integer.valueOf(sc.next().trim());
 
 		while(sc.hasNext())
 		{
@@ -139,14 +139,21 @@ class Database
 					System.err.println("Just tried to add duty to room that doesnt exists");
 			});
 		});
-
-		this.pacients.forEach(pacient->{
-			pacient.visits.forEach(visit->{
+		
+		this.pacients.forEach(pacient->
+		{
+			pacient.visits.forEach(visit->
+			{
 				Room r = this.getRoomByNumber(visit.roomNumber);
 				if(r != null)
-					r.signPacient(pacient, visit.timeOffset);
+				{
+					try{r.signPacient(pacient, visit.timeOffset);}
+					catch(Exception e){System.err.println(e.toString());} // just log and go forward
+				}
 				else
+				{
 					System.err.println("Just tried to add visit to room that doesnt exists");
+				}
 			});
 		});
 	}
@@ -167,6 +174,23 @@ class Database
 	{	
 		this.doctors.add(new Doctor(this.currentID, firstName, lastName, speciality));
 		this.currentID++;
+	}
+
+	public void signPacient(Pacient pacient, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		Room r = getRoomByNumber(roomNumber);
+		
+		try
+		{
+			r.signPacient(pacient,timeOffset);
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+
+		pacient.visits.add(new Event(roomNumber, timeOffset));
 	}
 
 	public void removePacient
