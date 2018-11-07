@@ -176,6 +176,12 @@ class Database
 		this.currentID++;
 	}
 
+	public void signPacient(Integer pesel, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		this.signPacient(this.getPacientByPesel(pesel), roomNumber, timeOffset);
+	}
+
 	public void signPacient(Pacient pacient, int roomNumber, int timeOffset)
 	throws Exception
 	{

@@ -23,6 +23,8 @@ class ConsoleInterface
 		System.out.println("\t7. Get visits by pesel");
 		System.out.println("\t8. Add new pacient");
 		System.out.println("\t9. Add new doctor");
+		System.out.println("\t10. Sign pacient");
+		System.out.println("\t11. Unsign pacient");
 	}
 
 	public boolean handleUserInput()
@@ -33,6 +35,10 @@ class ConsoleInterface
 		if(args[0].equals("quit") || args[0].equals("q"))
 		{
 			return false;
+		}
+		else if(args[0].equals("0"))
+		{
+			db.rooms.forEach(System.out::println);
 		}
 		else if(args[0].equals("1"))
 		{
@@ -48,13 +54,17 @@ class ConsoleInterface
 		}
 		else if(args[0].equals("2"))
 		{
-			if(args.length != 3)
+			if(args.length != 1)
 			{
-				System.out.println("Error! Expected 2 arguments. Firstname and lastname.");
+				System.out.println("Error! Unexpected arguments.");
 				return true;
 			}
+			System.out.print("First name: ");
+			String firstname = this.scanner.next().trim();
+			System.out.print("Last name: ");
+			String lastname = this.scanner.next().trim();
 
-			Doctor doc = db.getDoctorByName(args[1],args[2]);
+			Doctor doc = db.getDoctorByName(firstname, lastname);
 			if(doc == null)
 			{
 				System.out.println("That doctor doesnt exists.");
@@ -172,6 +182,22 @@ class ConsoleInterface
 			db.addDoctor(firstName, lastName, speciality);
 
 			System.out.println("Successfully added new doctor");
+		}
+		else if(args[0].equals("10"))
+		{
+			System.out.print("Pesel: ");
+			Integer pesel = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Room number: ");
+			Integer roomNumber  = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Time offset: ");
+			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
+			
+			try { db.signPacient(pesel, roomNumber, timeOffset); }
+			catch(Exception e){System.out.println(e.getMessage());return true;}
+
+			System.out.println("Successfully signed");
 		}
 		else
 		{

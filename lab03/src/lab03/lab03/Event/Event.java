@@ -16,6 +16,6 @@ class Event
 
 	public String toString()
 	{
-		return "Room: " + this.roomNumber + ", " + this.timeOffset;
+		return "Room: " + this.roomNumber + ", " + (this.timeOffset+7) + ":00";
 	}
 }
