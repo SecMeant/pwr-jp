@@ -3,6 +3,7 @@ package lab03;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.lang.IndexOutOfBoundsException;
 
 class ConsoleInterface
 {
@@ -28,6 +29,7 @@ class ConsoleInterface
 		System.out.println("\t11. Unsign pacient");
 		System.out.println("\t12. Sign doctor");
 		System.out.println("\t13. Unsign doctor");
+		System.out.println("\t14. Finish visit");
 		System.out.println("\t15. Save");
 	}
 
@@ -245,6 +247,38 @@ class ConsoleInterface
 		}
 		else if(args[0].equals("14"))
 		{
+			System.out.print("Room number: ");
+			Integer roomNumber  = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Time offset: ");
+			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
+
+			Room r = db.getRoomByNumber(roomNumber);
+			int pacientID;
+			
+			try
+			{
+				if(r.visits[timeOffset] == null)
+				{
+					System.out.println("There is no visit at that time");
+					return true;
+				}
+				pacientID = r.visits[timeOffset].getPesel();
+				r.visits[timeOffset] = null;
+
+				System.out.print("Notes: ");
+				String notes = this.scanner.next().trim();
+
+				db.visitsDone.add(new VisitDone(roomNumber, timeOffset, pacientID, notes));
+
+				db.visitsDone.forEach(vd->{System.out.println(vd.dump());});
+			}
+			catch(IndexOutOfBoundsException e)
+			{
+				System.out.println("Bad time offset");
+				return true;
+			}
+
 			return true;
 		}
 		else if(args[0].equals("15"))

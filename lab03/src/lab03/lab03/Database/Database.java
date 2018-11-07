@@ -14,6 +14,7 @@ class Database
 	public ArrayList<Pacient> pacients = new ArrayList<>();
 	public ArrayList<Doctor> doctors = new ArrayList<>();
 	public ArrayList<Room> rooms = new ArrayList<>();
+	public ArrayList<VisitDone> visitsDone = new ArrayList<>();
 
 	private Integer currentID = Integer.valueOf(0);
 
