@@ -153,6 +153,26 @@ class ConsoleInterface
 
 			System.out.println("Successfully added new pacient");
 		}
+		else if(args[0].equals("9"))
+		{
+			if(args.length != 1)
+			{
+				System.out.println("Error! Unexpected arguments.");
+				return true;
+			}
+			System.out.print("First name: ");
+			String firstName = this.scanner.next().trim();
+
+			System.out.print("Second name: ");
+			String lastName = this.scanner.next().trim();
+
+			System.out.print("speciality: ");
+			String speciality = this.scanner.next().trim();
+			
+			db.addDoctor(firstName, lastName, speciality);
+
+			System.out.println("Successfully added new doctor");
+		}
 		else
 		{
 			this.printMenu();
