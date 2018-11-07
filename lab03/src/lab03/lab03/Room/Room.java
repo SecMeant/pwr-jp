@@ -25,9 +25,8 @@ class Room
 		if(this.visits[timeOffset] != null)
 			return false;
 
-		// TODO uncomment
-		//if(this.duties[timeOffset] == null)
-		//	return false;
+		if(this.duties[timeOffset] == null)
+			return false;
 
 		this.visits[timeOffset] = pacient;
 		return true;

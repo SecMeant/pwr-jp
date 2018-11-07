@@ -20,6 +20,7 @@ class ConsoleInterface
 		System.out.println("\t4. Get doctors list");
 		System.out.println("\t5. Remove pacient by pesel");
 		System.out.println("\t6. Remove doctor by id");
+		System.out.println("\t7. Get visits by pesel");
 	}
 
 	public boolean handleUserInput()
@@ -95,6 +96,31 @@ class ConsoleInterface
 			}
 
 			db.removeDoctor(Integer.valueOf(args[1]));
+		}
+		else if(args[0].equals("7"))
+		{
+			if(args.length != 2)
+			{
+				System.out.println("Error! Expected 1 argument.");
+				return true;
+			}
+
+			Pacient pacient = db.getPacientByPesel(Integer.valueOf(args[1]));
+			if(pacient == null)
+			{
+				System.out.println("Couldnt find pacient with given pesel");
+				return true;
+			}
+
+			if(pacient.visits.size() == 0)
+			{
+				System.out.println("No visits");
+				return true;
+			}
+
+			pacient.visits.forEach(visit->{
+				System.out.println(visit);
+			});
 		}
 		else
 		{
