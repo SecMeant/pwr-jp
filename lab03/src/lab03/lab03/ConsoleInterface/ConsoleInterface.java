@@ -18,6 +18,8 @@ class ConsoleInterface
 		System.out.println("\t2. Get available visits by given doctor");
 		System.out.println("\t3. Get pacients list");
 		System.out.println("\t4. Get doctors list");
+		System.out.println("\t5. Remove pacient by pesel");
+		System.out.println("\t6. Remove doctor by id");
 	}
 
 	public boolean handleUserInput()
@@ -73,6 +75,26 @@ class ConsoleInterface
 		else if(args[0].equals("4"))
 		{
 			db.doctors.forEach(System.out::println);
+		}
+		else if(args[0].equals("5"))
+		{
+			if(args.length != 2)
+			{
+				System.out.println("Error! Expected 1 argument.");
+				return true;
+			}
+
+			db.removePacient(Integer.valueOf(args[1]));
+		}
+		else if(args[0].equals("6"))
+		{
+			if(args.length != 2)
+			{
+				System.out.println("Error! Expected 1 argument.");
+				return true;
+			}
+
+			db.removeDoctor(Integer.valueOf(args[1]));
 		}
 		else
 		{

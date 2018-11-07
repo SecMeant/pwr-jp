@@ -176,7 +176,8 @@ class Database
 		{
 			if(p.getPesel().intValue() == pesel.intValue())
 			{
-				this.removePacient(p); // This might be slow, maybe i should delete by index
+				// This might be slow, maybe i should delete by index
+				this.removePacient(p); 
 				break;
 			}
 		}
