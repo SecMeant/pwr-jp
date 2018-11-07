@@ -11,12 +11,15 @@ class Main
 	private final static String doctorsPath = 
 		Paths.get(System.getProperty("user.dir"), "data", "doctors.txt").toString();
 
+	private final static String visitsPath = 
+		Paths.get(System.getProperty("user.dir"), "data", "visitsDone.txt").toString();
+
 	private static void test()
 	throws FileNotFoundException, Exception
 	{
 		Database db = new Database();
 
-		db.open(pacientsPath, doctorsPath);
+		db.open(pacientsPath, doctorsPath, visitsPath);
 
 		ConsoleInterface ci = new ConsoleInterface(db);
 		ci.run();

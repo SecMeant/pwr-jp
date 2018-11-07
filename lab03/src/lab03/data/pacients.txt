@@ -1,4 +1,4 @@
-Kevin;Mitnick;605037909;120,4
+Kevin;Mitnick;605037909;120,2
 Tavis;Ormandy;991997998
 asdads;;123
 Michal;Skladnikiewicz;313379999;122,2

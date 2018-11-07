@@ -45,6 +45,7 @@ class ConsoleInterface
 		else if(args[0].equals("0"))
 		{
 			db.rooms.forEach(System.out::println);
+			db.visitsDone.forEach(vd->{System.out.println(vd.dump());});
 		}
 		else if(args[0].equals("1"))
 		{

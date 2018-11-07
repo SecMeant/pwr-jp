@@ -21,16 +21,20 @@ class Database
 	// Files which were used to load doctors and pacients
 	private String doctorsSourceFilePath;
 	private String pacientsSourceFilePath;
+	private String doneVisitsSourceFilePath;
 
-	public void open(String pacientFilePath, String doctorsFilePath)
+	public void open(String pacientFilePath, String doctorsFilePath,
+	                 String doneVisitsFilePath)
 	throws FileNotFoundException
 	{	
 		// Save file names
 		this.doctorsSourceFilePath = doctorsFilePath;
 		this.pacientsSourceFilePath = pacientFilePath;
+		this.doneVisitsSourceFilePath = doneVisitsFilePath;
 
 		this.loadPacients(pacientFilePath);
 		this.loadDoctors(doctorsFilePath);
+		this.loadDoneVisits(doneVisitsFilePath);
 		this.updateRoomVisits();
 	}
 
@@ -67,7 +71,6 @@ class Database
 
 				pacients.add(pacient);
 			}
-
 			catch(IndexOutOfBoundsException e)
 			{
 				System.err.println("Parsing error occured when parsing Pacients from file on line " + line);
@@ -123,6 +126,31 @@ class Database
 			catch(IndexOutOfBoundsException e)
 			{
 				System.err.println("Parsing error occured when parsing Doctors from file on line " + line);
+			}
+		}
+	}
+
+	private void loadDoneVisits
+	(String filepath)
+	throws FileNotFoundException
+	{
+		Scanner sc = new Scanner(new File(filepath)).useDelimiter("\n");
+		Integer line = Integer.valueOf(1); // for debug
+
+		while(sc.hasNext())
+		{
+			String[] visitFields = sc.next().trim().split(";");
+			try
+			{
+				VisitDone vd = new VisitDone(Integer.valueOf(visitFields[0]),
+				                             Integer.valueOf(visitFields[1]),
+				                             Integer.valueOf(visitFields[2]),
+				                             visitFields[3]);
+				this.visitsDone.add(vd);
+			}
+			catch(IndexOutOfBoundsException e)
+			{
+				System.err.println("Parsing error occured when parsing visits done from file on line " + line);
 			}
 		}
 	}
@@ -443,11 +471,25 @@ class Database
 		writer.close();
 	}
 
+	private void flushVisitsDoneToFile()
+	throws IOException
+	{
+		FileWriter writer = new FileWriter(this.doneVisitsSourceFilePath);
+
+		for(VisitDone vd : this.visitsDone)
+		{
+			writer.write(vd.dump());
+		}
+
+		writer.close();
+	}
+
 	public void save()
 	throws IOException
 	{
 		this.flushDoctorsToFile();
 		this.flushPacientToFile();
+		this.flushVisitsDoneToFile();
 	}
 }
 
