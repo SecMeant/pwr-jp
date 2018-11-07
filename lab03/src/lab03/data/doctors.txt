@@ -1,4 +1,5 @@
-12
-1;Dr Adam;Oetcker;Dentist;120,1;122,2
+13
+1;Dr Adam;Oetcker;Dentist;122,2
 2;Charles;Darwin;Surgeon
 3;Richard;Dawkins;Dentist;143,3;120,2
+12;Patryk;Wlazlyn;Programista

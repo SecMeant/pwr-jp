@@ -41,14 +41,22 @@ class Room
 		this.visits[timeOffset] = null;
 	}
 
-	public boolean signDoctor(Doctor doctor, int timeOffset)
+	public void signDoctor(Doctor doctor, int timeOffset)
 	throws Exception
 	{
 		if(this.duties[timeOffset] != null)
 			throw new Exception("Another doctor has already taken that room and hour");
 
 		this.duties[timeOffset] = doctor;
-		return true;
+	}
+
+	public void unsignDoctor(Doctor doctor, int timeOffset)
+	throws Exception
+	{
+		if(this.duties[timeOffset] != doctor)
+			throw new Exception("Another doctor has taken that room and hour");
+
+		this.duties[timeOffset] = null;
 	}
 
 	public String toString()

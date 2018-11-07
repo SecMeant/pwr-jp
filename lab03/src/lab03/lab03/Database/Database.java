@@ -171,7 +171,7 @@ class Database
 	{
 		for(Pacient p : this.pacients)
 			if(p.getPesel().intValue() == pesel.intValue())
-				throw new Exception("Another pacient with this pesel already exists");
+				throw new Exception("Another pacient with this pesel already exists " + pesel);
 
 		this.pacients.add(new Pacient(firstName, lastName, pesel));
 	}
@@ -235,6 +235,31 @@ class Database
 			   pacient.visits.get(i).timeOffset == timeOffset)
 			{
 				pacient.visits.remove(i);
+			}
+		}
+	}
+
+	public void unsignDoctor(Integer id, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		this.unsignDoctor(this.getDoctorById(id), roomNumber, timeOffset);
+	}
+
+	public void unsignDoctor(Doctor doctor, int roomNumber, int timeOffset)
+	throws Exception
+	{
+		Room r = getRoomByNumber(roomNumber);
+
+		try{r.unsignDoctor(doctor, timeOffset);}
+		catch(Exception e){System.out.println(e.getMessage());return;}
+	
+		// Find duty in futies list and drop it	
+		for(int i=0; i<doctor.duties.size(); i++)
+		{
+			if(doctor.duties.get(i).roomNumber == roomNumber && 
+			   doctor.duties.get(i).timeOffset == timeOffset)
+			{
+				doctor.duties.remove(i);
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package lab03;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.IOException;
 
 class ConsoleInterface
 {
@@ -228,6 +229,34 @@ class ConsoleInterface
 			try { db.signDoctor(db.getDoctorById(id), roomNumber, timeOffset); }
 			catch(Exception e){System.out.println(e.getMessage());return true;}
 		}
+		else if(args[0].equals("13"))
+		{
+			System.out.print("ID: ");
+			Integer id = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Room number: ");
+			Integer roomNumber  = Integer.valueOf(this.scanner.next().trim());
+
+			System.out.print("Time offset: ");
+			Integer timeOffset = Integer.valueOf(this.scanner.next().trim());
+			
+			try { db.unsignDoctor(db.getDoctorById(id), roomNumber, timeOffset); }
+			catch(Exception e){System.out.println(e.getMessage());return true;}
+		}
+		else if(args[0].equals("14"))
+		{
+			return true;
+		}
+		else if(args[0].equals("15"))
+		{
+			try{db.save();}
+			catch(IOException e)
+			{
+				System.out.println("Error occured when writing to file");
+				System.out.println(e.getMessage());
+			}
+			return true;
+		}
 		else
 		{
 			this.printMenu();
@@ -238,6 +267,7 @@ class ConsoleInterface
 
 	public void run()
 	{
+		this.printMenu();
 		while(this.handleUserInput()) {}
 	}
 

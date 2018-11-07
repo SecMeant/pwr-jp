@@ -18,12 +18,6 @@ class Main
 
 		db.open(pacientsPath, doctorsPath);
 
-		db.addDoctor("Patryk","Wlazlyn","Programista");
-		db.addPacient("Adam","Waleczny", 997998991);
-
-		for(Doctor d2 : db.getDoctorsBySpeciality("Dentist"))
-			System.out.println(d2);
-
 		ConsoleInterface ci = new ConsoleInterface(db);
 		ci.run();
 	}
