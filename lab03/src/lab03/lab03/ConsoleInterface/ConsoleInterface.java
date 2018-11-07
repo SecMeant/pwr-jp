@@ -16,6 +16,8 @@ class ConsoleInterface
 		System.out.println("=== Menu ===");
 		System.out.println("\t1. Get doctor list by speciality");
 		System.out.println("\t2. Get available visits by given doctor");
+		System.out.println("\t3. Get pacients list");
+		System.out.println("\t4. Get doctors list");
 	}
 
 	public boolean handleUserInput()
@@ -63,6 +65,14 @@ class ConsoleInterface
 					System.out.println(ev);
 				});
 			}
+		}
+		else if(args[0].equals("3"))
+		{
+			db.pacients.forEach(System.out::println);
+		}
+		else if(args[0].equals("4"))
+		{
+			db.doctors.forEach(System.out::println);
 		}
 		else
 		{
