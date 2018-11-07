@@ -484,6 +484,18 @@ class Database
 		writer.close();
 	}
 
+	public ArrayList<VisitDone> getVisitsByPacientId(Integer id)
+	{
+		ArrayList<VisitDone> vdarr = new ArrayList<>();
+
+		this.visitsDone.forEach(vd->{
+			if(vd.pacientID.intValue() == id.intValue())
+				vdarr.add(vd);
+		});
+
+		return vdarr;
+	}
+
 	public void save()
 	throws IOException
 	{

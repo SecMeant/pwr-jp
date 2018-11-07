@@ -30,7 +30,8 @@ class ConsoleInterface
 		System.out.println("\t12. Sign doctor");
 		System.out.println("\t13. Unsign doctor");
 		System.out.println("\t14. Finish visit");
-		System.out.println("\t15. Save");
+		System.out.println("\t15. Finish visit");
+		System.out.println("\t16. Save");
 	}
 
 	public boolean handleUserInput()
@@ -45,7 +46,7 @@ class ConsoleInterface
 		else if(args[0].equals("0"))
 		{
 			db.rooms.forEach(System.out::println);
-			db.visitsDone.forEach(vd->{System.out.println(vd.dump());});
+			db.visitsDone.forEach(vd->{System.out.println(vd.formatedDump());});
 		}
 		else if(args[0].equals("1"))
 		{
@@ -283,6 +284,15 @@ class ConsoleInterface
 			return true;
 		}
 		else if(args[0].equals("15"))
+		{
+			System.out.print("ID: ");
+			Integer id = Integer.valueOf(this.scanner.next().trim());
+		
+			db.getVisitsByPacientId(id).forEach(vd->{System.out.print(vd.formatedDump());});
+			
+			return true;
+		}
+		else if(args[0].equals("16"))
 		{
 			try{db.save();}
 			catch(IOException e)

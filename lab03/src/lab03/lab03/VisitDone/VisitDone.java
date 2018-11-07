@@ -20,4 +20,9 @@ class VisitDone
 		return this.roomNumber + ";" + this.timeOffset + ";" + this.pacientID + 
 		       ";" + this.notes + "\n";
 	}
+
+	public String formatedDump()
+	{
+		return "Room: " + this.roomNumber + ", " + this.timeOffset + "\nNotes: " + this.notes + "\n";
+	}
 }
