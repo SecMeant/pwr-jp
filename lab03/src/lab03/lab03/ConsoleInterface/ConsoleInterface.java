@@ -21,6 +21,8 @@ class ConsoleInterface
 		System.out.println("\t5. Remove pacient by pesel");
 		System.out.println("\t6. Remove doctor by id");
 		System.out.println("\t7. Get visits by pesel");
+		System.out.println("\t8. Add new pacient");
+		System.out.println("\t9. Add new doctor");
 	}
 
 	public boolean handleUserInput()
@@ -121,6 +123,35 @@ class ConsoleInterface
 			pacient.visits.forEach(visit->{
 				System.out.println(visit);
 			});
+		}
+		else if(args[0].equals("8"))
+		{
+			if(args.length != 1)
+			{
+				System.out.println("Error! Unexpected arguments.");
+				return true;
+			}
+			System.out.print("First name: ");
+			String firstName = this.scanner.next().trim();
+
+			System.out.print("Second name: ");
+			String lastName = this.scanner.next().trim();
+
+			System.out.print("pesel: ");
+			int pesel = Integer.valueOf(this.scanner.next().trim());
+			
+			// TODO make better exception
+			try
+			{
+				db.addPacient(firstName, lastName, pesel);
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+				return true;
+			}
+
+			System.out.println("Successfully added new pacient");
 		}
 		else
 		{

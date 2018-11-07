@@ -156,7 +156,7 @@ class Database
 	throws Exception
 	{
 		for(Pacient p : this.pacients)
-			if(p.getPesel() == pesel)
+			if(p.getPesel().intValue() == pesel.intValue())
 				throw new Exception("Another pacient with this pesel already exists");
 
 		this.pacients.add(new Pacient(firstName, lastName, pesel));
