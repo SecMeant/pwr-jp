@@ -4,7 +4,7 @@ public class Main
 {
 	private static void createAndShowGui()
 	{
-		MainWindow wnd = new MainWindow("Hello world swing");
+		new MainWindow("Hello world swing");
 	}
 	
 	public static void main(String[] args)

@@ -1,6 +1,5 @@
 package lab04;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -19,7 +18,7 @@ public class MainWindow extends JFrame
 	public static final int BTNFONTSIZE = 10;
 
 	JPanel contentPanel = new JPanel();
-	JButton button = new JButton();
+	JPButton button = new JPButton();
 	DataInput firstNameInput = new DataInput("First name:");
 	DataInput surnameInput = new DataInput("Surname:");
 	
@@ -31,10 +30,10 @@ public class MainWindow extends JFrame
 		//this.setSize(MainWindow.WIDTH, MainWindow.HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.button.setPreferredSize(new Dimension(MainWindow.BTNWIDTH, MainWindow.BTNHEIGHT));
-		this.button.setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
-		this.button.setText("Push me!");
-		this.button.addActionListener(new PushButtonActionLister(this));
+		this.button.get().setPreferredSize(new Dimension(MainWindow.BTNWIDTH, MainWindow.BTNHEIGHT));
+		this.button.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
+		this.button.get().setText("Push me!");
+		this.button.get().addActionListener(new PushButtonActionLister(this));
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
@@ -43,8 +42,8 @@ public class MainWindow extends JFrame
 		this.contentPanel.setLayout(new GridLayout(3,1));
 		this.contentPanel.add(this.firstNameInput);
 		this.contentPanel.add(this.surnameInput);
-		this.contentPanel.add(button);
-		
+		this.contentPanel.add(this.button);
+
 		this.setContentPane(this.contentPanel);
 		
 		this.setLocationRelativeTo(null); // center
@@ -63,7 +62,7 @@ public class MainWindow extends JFrame
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.printf("Your name is %s %s", 
+			System.out.printf("Your name is %s %s\n", 
 					            this.parent.firstNameInput.textfield.getText(),
 					            this.parent.surnameInput.textfield.getText());
 			this.parent.firstNameInput.textfield.setText("");
