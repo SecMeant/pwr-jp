@@ -63,9 +63,9 @@ public class MainWindow extends JFrame
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println(String.format("Your name is %s %s", 
+			System.out.printf("Your name is %s %s", 
 					            this.parent.firstNameInput.textfield.getText(),
-					            this.parent.surnameInput.textfield.getText()));
+					            this.parent.surnameInput.textfield.getText());
 			this.parent.firstNameInput.textfield.setText("");
 			this.parent.surnameInput.textfield.setText("");
 		}
