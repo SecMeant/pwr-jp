@@ -23,6 +23,5 @@ public class DataInput extends JPanel
 	{
 		this.label.setText(label);
 		this.textfield.setColumns(textFieldWidth);
-		this.setVisible(true);
 	}
 }
