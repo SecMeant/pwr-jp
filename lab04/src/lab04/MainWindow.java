@@ -28,6 +28,7 @@ public class MainWindow extends JFrame
 	public static final int BTNHEIGHT = 30;
 	public static final int BTNFONTSIZE = 10;
 
+	JTabbedPane tabPane = new JTabbedPane();
 	JPanel contentPanel = new JPanel();
 	JPButton button = new JPButton();
 	DataInput firstNameInput = new DataInput("First name:");
@@ -38,6 +39,9 @@ public class MainWindow extends JFrame
 	{
 		// delegate construction
 		super(string);
+		
+		this.tabPane.addTab("Tab 1", this.contentPanel);
+		this.tabPane.addTab("Tab 2", new JPanel());
 		
 		// setup window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +62,7 @@ public class MainWindow extends JFrame
 		this.contentPanel.add(this.button);
 		this.contentPanel.add(this.list);
 
-		this.setContentPane(this.contentPanel);
+		this.setContentPane(this.tabPane);
 		
 		// center
 		this.setLocationRelativeTo(null);
