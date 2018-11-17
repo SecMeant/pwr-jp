@@ -12,9 +12,22 @@ public class StudentsListGeneral extends JPListView
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final int PANELWIDTH = 600;
+	public static final int PANELHEIGHT = 300;
+	public static final Dimension STUDENTSPANELDIMENSION = 
+			new Dimension(StudentsListGeneral.PANELWIDTH, StudentsListGeneral.PANELHEIGHT);
+	
 	private JButton deleteButton;
 	
+	StudentsListGeneral(String[] courses)
 	{
+		for(String header : courses)
+		{
+			this.model.addColumn(header);
+		}
+		
+		this.getPane().setPreferredSize(StudentsListGeneral.STUDENTSPANELDIMENSION);
+		
 		this.deleteButton = new JButton();
 		this.deleteButton.setPreferredSize(new Dimension(MainWindow.BTNWIDTH, MainWindow.BTNHEIGHT));
 		this.deleteButton.setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));

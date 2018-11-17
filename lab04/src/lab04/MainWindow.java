@@ -28,55 +28,58 @@ public class MainWindow extends JFrame
 	public static final int BTNWIDTH = 80;
 	public static final int BTNHEIGHT = 30;
 	public static final int BTNFONTSIZE = 10;
+	
+	public static final String[] COURSES = new String[] {"Programming","Digital signal processing","English"};
 
 	JTabbedPane tabPane = new JTabbedPane();
-	JPanel contentPanel = new JPanel();
+	JPanel AddStudentPanel = new JPanel();
+	JPanel MarksPanel = new JPanel();
+	JPanel OtherPanel = new JPanel();
 	JPButton button = new JPButton();
 	StudentsForm studentsForm = new StudentsForm();
-	StudentsListGeneral list = new StudentsListGeneral();
+	StudentsListGeneral studentsListGeneral = new StudentsListGeneral(MainWindow.COURSES);
 	
 	public MainWindow(String string)
 	{
 		// delegate construction
 		super(string);
 		
-		this.tabPane.addTab("Add / Remove student", this.contentPanel);
-		this.tabPane.addTab("Marks", new JPanel());
+		this.tabPane.addTab("Add / Remove student", this.AddStudentPanel);
+		this.tabPane.addTab("Marks", this.MarksPanel);
 		this.tabPane.addTab("Attendence", new JPanel());
+		this.tabPane.addTab("Other", this.OtherPanel);
 		
 		// setup window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
+		/* AddStudentsPanel setup */
 		// Button setup
 		this.button.get().setPreferredSize(new Dimension(MainWindow.BTNWIDTH, MainWindow.BTNHEIGHT));
 		this.button.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
 		this.button.get().setText("Add");
 		this.button.get().addActionListener(new PushButtonActionLister(this));
 		
-		this.list.setLabel("Items");
+		this.studentsListGeneral.setLabel("Students");
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
 		
 		// add elements
-		this.contentPanel.setLayout(new GridBagLayout());
+		this.AddStudentPanel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		this.contentPanel.add(this.studentsForm, c);
+		this.AddStudentPanel.add(this.studentsForm, c);
 		
 		c.gridx = 0;
 		c.gridy = 1;
-		this.contentPanel.add(this.button, c);
+		this.AddStudentPanel.add(this.button, c);
 		
-		c.gridx = 1;
-		c.gridy = 0;
-		c.gridheight = 10;
-		this.contentPanel.add(this.list, c);
+		/* MarksPanel setup */
+		this.MarksPanel.add(studentsListGeneral);
 
 		this.setContentPane(this.tabPane);
 		
@@ -98,7 +101,7 @@ public class MainWindow extends JFrame
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			this.parent.list.addElement(this.parent.studentsForm.getFullFormInput());
+			this.parent.studentsListGeneral.addElement(this.parent.studentsForm.getFullFormInput());
 			this.parent.studentsForm.clearForm();
 		}
 	}

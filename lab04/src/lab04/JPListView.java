@@ -1,10 +1,10 @@
 package lab04;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class JPListView extends JPanel
 {
@@ -13,21 +13,36 @@ public class JPListView extends JPanel
 	
 	public static final int LISTHEIGHT = 10;
 	
+	public static final String[] HEADERLIST = new String[] {"First name", "Surname", "Pesel"};
+
 	private JScrollPane scrollPane;
-	private DefaultListModel<String> model;
-	private JList<String> list;
+	protected DefaultTableModel model;
+	private JTable list;
 	private JLabel label;
 	
 	{
-		this.model = new DefaultListModel<String>();
-		this.list = new JList<>(this.model);
+		// Create model with editable only part of cells
+		this.model = new DefaultTableModel() {
+			private static final long serialVersionUID = 1L;
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            	if (columnIndex > 2)
+            		return true;
+            	return false;
+            }
+		};
+		
+		this.list = new JTable(this.model);
+		
+		for(String header : JPListView.HEADERLIST)
+		{
+			this.model.addColumn(header);
+		}
 		
 		this.scrollPane = new JScrollPane(this.list);
-		this.scrollPane.setPreferredSize(new Dimension(200,100));
 
 		this.label = new JLabel();
 		this.label.setHorizontalAlignment(JLabel.CENTER);
-		
 		
 		this.setLayout(new GridBagLayout());
 		
@@ -41,19 +56,14 @@ public class JPListView extends JPanel
 		this.add(this.scrollPane, c);
 	}
 	
-	void addElement(String elem)
+	void addElement(String[] elem)
 	{
-		this.model.addElement(elem);
-	}
-	
-	void removeElement(String element)
-	{
-		this.model.removeElement(element);
+		this.model.addRow(elem);
 	}
 	
 	void removeElementAt(int elemId)
 	{
-		this.model.removeElementAt(elemId);
+		this.model.removeRow(elemId);
 	}
 	
 	JScrollPane getPane()
@@ -68,6 +78,6 @@ public class JPListView extends JPanel
 	
 	int getSelectedItemIndex()
 	{
-		return this.list.getSelectedIndex();
+		return this.list.getSelectedRow();
 	}
 }

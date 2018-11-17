@@ -45,11 +45,9 @@ public class StudentsForm extends JPanel
 		return this.peselInput.textfield.getText();
 	}
 	
-	public String getFullFormInput()
+	public String[] getFullFormInput()
 	{
-		return this.getFirstNameInput() + " " +
-	           this.getSurnameInput()   + " " + 
-               this.getPeselInput();
+		return new String[] {this.getFirstNameInput(), this.getSurnameInput(), this.getPeselInput()};
 	}
 	
 	public void clearFirstNameInput()
