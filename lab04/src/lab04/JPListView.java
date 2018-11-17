@@ -11,6 +11,8 @@ public class JPListView extends JPanel
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final int LISTHEIGHT = 10;
+	
 	private JScrollPane scrollPane;
 	private DefaultListModel<String> model;
 	private JList<String> list;
@@ -35,7 +37,7 @@ public class JPListView extends JPanel
 		this.add(this.label, c);
 		
 		c.gridy = 1;
-		c.gridheight = 4;
+		c.gridheight = JPListView.LISTHEIGHT;
 		this.add(this.scrollPane, c);
 	}
 	
@@ -62,5 +64,10 @@ public class JPListView extends JPanel
 	void setLabel(String text)
 	{
 		this.label.setText(text);
+	}
+	
+	int getSelectedItemIndex()
+	{
+		return this.list.getSelectedIndex();
 	}
 }

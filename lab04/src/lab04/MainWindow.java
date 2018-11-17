@@ -33,7 +33,7 @@ public class MainWindow extends JFrame
 	JPanel contentPanel = new JPanel();
 	JPButton button = new JPButton();
 	StudentsForm studentsForm = new StudentsForm();
-	JPListView list = new JPListView();
+	StudentsListGeneral list = new StudentsListGeneral();
 	
 	public MainWindow(String string)
 	{
