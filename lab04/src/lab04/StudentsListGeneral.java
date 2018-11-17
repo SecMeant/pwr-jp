@@ -12,6 +12,9 @@ public class StudentsListGeneral extends JPListView
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String[] HEADERS = new String[] {"First name", "Surname", "Pesel", "Programming","Digital signal processing","English"};
+	public static final boolean[] EDITABLE = new boolean[] {false, false, false, true, true, true};
+	
 	public static final int PANELWIDTH = 600;
 	public static final int PANELHEIGHT = 300;
 	public static final Dimension STUDENTSPANELDIMENSION = 
@@ -19,12 +22,9 @@ public class StudentsListGeneral extends JPListView
 	
 	private JButton deleteButton;
 	
-	StudentsListGeneral(String[] courses)
+	StudentsListGeneral()
 	{
-		for(String header : courses)
-		{
-			this.model.addColumn(header);
-		}
+		super(StudentsListGeneral.HEADERS, StudentsListGeneral.EDITABLE);
 		
 		this.getPane().setPreferredSize(StudentsListGeneral.STUDENTSPANELDIMENSION);
 		

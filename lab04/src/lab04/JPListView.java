@@ -6,43 +6,42 @@ import java.awt.GridBagLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class JPListView extends JPanel
+abstract public class JPListView extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
 	
 	public static final int LISTHEIGHT = 10;
-	
-	public static final String[] HEADERLIST = new String[] {"First name", "Surname", "Pesel"};
 
 	private JScrollPane scrollPane;
 	protected DefaultTableModel model;
 	private JTable list;
 	private JLabel label;
 	
+	JPListView(String[] headers, boolean[] canEdit)
 	{
 		// Create model with editable only part of cells
 		this.model = new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
+			
+			boolean[] editable = canEdit;
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-            	if (columnIndex > 2)
-            		return true;
-            	return false;
+            	return this.editable[columnIndex];
             }
 		};
 		
 		this.list = new JTable(this.model);
 		
-		for(String header : JPListView.HEADERLIST)
-		{
-			this.model.addColumn(header);
-		}
-		
 		this.scrollPane = new JScrollPane(this.list);
 
 		this.label = new JLabel();
 		this.label.setHorizontalAlignment(JLabel.CENTER);
+		
+		for(String header : headers)
+		{
+			this.model.addColumn(header);
+		}
 		
 		this.setLayout(new GridBagLayout());
 		

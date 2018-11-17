@@ -28,16 +28,16 @@ public class MainWindow extends JFrame
 	public static final int BTNWIDTH = 80;
 	public static final int BTNHEIGHT = 30;
 	public static final int BTNFONTSIZE = 10;
-	
-	public static final String[] COURSES = new String[] {"Programming","Digital signal processing","English"};
 
 	JTabbedPane tabPane = new JTabbedPane();
 	JPanel AddStudentPanel = new JPanel();
 	JPanel MarksPanel = new JPanel();
+	JPanel AttendencePanel = new JPanel();
 	JPanel OtherPanel = new JPanel();
 	JPButton button = new JPButton();
 	StudentsForm studentsForm = new StudentsForm();
-	StudentsListGeneral studentsListGeneral = new StudentsListGeneral(MainWindow.COURSES);
+	StudentsListGeneral studentsListGeneral = new StudentsListGeneral();
+	StudentsListAttendence studentsListAttendence = new StudentsListAttendence();
 	
 	public MainWindow(String string)
 	{
@@ -46,7 +46,7 @@ public class MainWindow extends JFrame
 		
 		this.tabPane.addTab("Add / Remove student", this.AddStudentPanel);
 		this.tabPane.addTab("Marks", this.MarksPanel);
-		this.tabPane.addTab("Attendence", new JPanel());
+		this.tabPane.addTab("Attendence", this.AttendencePanel);
 		this.tabPane.addTab("Other", this.OtherPanel);
 		
 		// setup window
@@ -60,6 +60,7 @@ public class MainWindow extends JFrame
 		this.button.get().addActionListener(new PushButtonActionLister(this));
 		
 		this.studentsListGeneral.setLabel("Students");
+		this.studentsListAttendence.setLabel("Week 1");
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
@@ -80,6 +81,9 @@ public class MainWindow extends JFrame
 		
 		/* MarksPanel setup */
 		this.MarksPanel.add(studentsListGeneral);
+		
+		/* AttendecePanel setup */
+		this.AttendencePanel.add(studentsListAttendence);
 
 		this.setContentPane(this.tabPane);
 		
