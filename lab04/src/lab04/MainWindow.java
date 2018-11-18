@@ -60,7 +60,9 @@ public class MainWindow extends JFrame
 		this.button.get().addActionListener(new PushButtonActionLister(this));
 		
 		this.studentsListGeneral.setLabel("Students");
-		this.studentsListAttendence.setLabel("Week 1");
+		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
+		this.studentsListAttendence.studentsTable.setLabel("Students list");
+		this.studentsListGeneral.model.addTableModelListener(new TableChangeExtracter(this.studentsListGeneral.model));
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
@@ -86,6 +88,9 @@ public class MainWindow extends JFrame
 		this.AttendencePanel.add(studentsListAttendence);
 
 		this.setContentPane(this.tabPane);
+		
+		// Adds some test data
+		this.studentsListGeneral.updateListView(new String[][] {{"asdf","qwer asdas","123123"},{"qweqwe","asdasdqwe sad q","123123"}});
 		
 		// center
 		this.setLocationRelativeTo(null);

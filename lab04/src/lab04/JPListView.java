@@ -6,7 +6,7 @@ import java.awt.GridBagLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-abstract public class JPListView extends JPanel
+public class JPListView extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
@@ -34,6 +34,7 @@ abstract public class JPListView extends JPanel
 		this.list = new JTable(this.model);
 		
 		this.scrollPane = new JScrollPane(this.list);
+		this.scrollPane.setSize(400, 200);
 
 		this.label = new JLabel();
 		this.label.setHorizontalAlignment(JLabel.CENTER);
@@ -78,5 +79,24 @@ abstract public class JPListView extends JPanel
 	int getSelectedItemIndex()
 	{
 		return this.list.getSelectedRow();
+	}
+	
+	void updateListView(String[][] data)
+	{
+		for(int i=0; i<data.length; i++)
+		{
+			for(int j=0; j<data[i].length; j++)
+			{
+				try
+				{
+					this.model.setValueAt(data[i][j], i, j);
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+					this.model.addRow(data[i]);
+				}
+			}
+		}
+		
 	}
 }
