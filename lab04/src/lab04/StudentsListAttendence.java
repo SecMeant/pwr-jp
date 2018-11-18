@@ -11,13 +11,17 @@ public class StudentsListAttendence extends JPanel
 	
 	public static final String[] HEADERS = new String[] {"---------", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 	public static final boolean[] EDITABLE = new boolean[] {false, true, true, true, true, true};
+	
+	// TODO Make it better name
 	public static final String[] HEADERS2 = new String[] {"Name", "Surname", "Pesel"};
 	public static final boolean[] EDITABLE2 = new boolean[] {false, false, false};
+	
 	public static final Vector<String> hours = new Vector<>();
 	
 	NavigationPanel navigationPanel = new NavigationPanel();
 	JPListView attendeceTable;
 	JPListView studentsTable;
+	TableChangeExtracter changeExtracter;
 
 	StudentsListAttendence()
 	{		
@@ -32,7 +36,6 @@ public class StudentsListAttendence extends JPanel
 		c.gridx = 2;
 		this.add(this.studentsTable, c);
 		
-		
 		c.gridx = 0;
 		c.gridy = 11;
 		this.add(this.navigationPanel, c);
@@ -43,8 +46,11 @@ public class StudentsListAttendence extends JPanel
 			this.attendeceTable.model.addRow(ins);
 			this.attendeceTable.model.setValueAt(String.format("%d:%d%d", i+7, 0, 0), i, 0);
 		}
+	}		
+	
+	public void watch(StudentsListGeneral toWatchTable)
+	{
+		this.changeExtracter = new TableChangeExtracter(toWatchTable.model);
+		toWatchTable.model.addTableModelListener(this.changeExtracter);
 	}
-	
-	
-	
 }

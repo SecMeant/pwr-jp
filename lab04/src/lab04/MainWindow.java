@@ -62,7 +62,7 @@ public class MainWindow extends JFrame
 		this.studentsListGeneral.setLabel("Students");
 		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
 		this.studentsListAttendence.studentsTable.setLabel("Students list");
-		this.studentsListGeneral.model.addTableModelListener(new TableChangeExtracter(this.studentsListGeneral.model));
+		this.studentsListAttendence.watch(this.studentsListGeneral);
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
