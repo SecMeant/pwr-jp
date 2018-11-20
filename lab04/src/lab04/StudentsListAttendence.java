@@ -101,8 +101,7 @@ public class StudentsListAttendence extends JPanel
 		{
 			Vector<String> rowData = this.getSelectedRow(e.getSource());
 			
-			// TODO add database object
-			//boolean[][] attendenceTable = dataBase.getWeekAttendeceByPesel(rowData.get(2), this.getRowIdFromSelectEvent(e));
+			WeekAttendence attendenceTable = dataBase.getWeekAttendeceByPesel(rowData.get(2), this.getRowIdFromSelectEvent(e));
 		}	
 		
 		private Vector<String> getSelectedRow(DefaultListSelectionModel model)
