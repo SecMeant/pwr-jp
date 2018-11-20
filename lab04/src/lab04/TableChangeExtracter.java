@@ -8,47 +8,44 @@ import javax.swing.table.DefaultTableModel;
 
 class TableChangeExtracter implements TableModelListener
 {
-	DefaultTableModel tableModel;
+	DefaultTableModel watchModel;
+	DefaultTableModel outModel;
 	
-	TableChangeExtracter(DefaultTableModel model)
+	TableChangeExtracter(DefaultTableModel watchmodel, DefaultTableModel outmodel)
 	{
-		this.tableModel = model;
+		this.watchModel = watchmodel;
+		this.outModel = outmodel;
 	}
 	
 	@Override
 	public void tableChanged(TableModelEvent e)
 	{
 		if(e.getType() == TableModelEvent.UPDATE)
-		{
-			System.out.print("UPDATE row:");
-			this.getRow(e.getFirstRow()).forEach(s->{
-				System.out.print(s);
-				System.out.print(" ");
-			});
-			System.out.println("");
+		{		
+			Vector<String> dataRow = this.getRow(e.getFirstRow());
+			for(int i=0; i<3; i++)
+			{
+				this.outModel.setValueAt(dataRow.get(i), e.getFirstRow(), i);
+			}
 		}
 		else if(e.getType() == TableModelEvent.INSERT)
 		{
-			System.out.print("INSERT row:");
-			this.getRow(e.getFirstRow()).forEach(s->{
-				System.out.print(s);
-				System.out.print(" ");
-			});
-			System.out.println("");
+			Vector<String> dataRow = this.getRow(e.getFirstRow());
+			this.outModel.addRow(dataRow);
 		}
 		else if(e.getType() == TableModelEvent.DELETE)
 		{
-			System.out.print("DELETE row:");
-			this.getRow(e.getFirstRow()).forEach(s->{
-				System.out.print(s);
-				System.out.print(" ");
-			});
-			System.out.println("");
+			System.out.println("DELETE");
+			this.outModel.removeRow(e.getFirstRow());
 		}
 	}
 	
 	Vector<String> getRow(int i)
 	{
-		return (Vector<String>) this.tableModel.getDataVector().elementAt(i);
+		Vector<String> ret = new Vector<String>();
+		for(int j=0; j<3; j++)
+			ret.addElement((String) this.watchModel.getValueAt(i, j));
+		
+		return ret;
 	}
 }

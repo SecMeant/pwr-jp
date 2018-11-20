@@ -13,7 +13,7 @@ public class StudentsListGeneral extends JPListView
 	private static final long serialVersionUID = 1L;
 	
 	public static final String[] HEADERS = new String[] {"First name", "Surname", "Pesel", "Programming","Digital signal processing","English"};
-	public static final boolean[] EDITABLE = new boolean[] {false, false, false, true, true, true};
+	public static final boolean[] EDITABLE = new boolean[] {false, false, true, true, true, true};
 	
 	public static final int PANELWIDTH = 600;
 	public static final int PANELHEIGHT = 300;
