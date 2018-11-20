@@ -3,7 +3,11 @@ package lab04;
 import java.awt.GridBagConstraints;
 import java.util.Vector;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class StudentsListAttendence extends JPanel
 {
@@ -17,6 +21,8 @@ public class StudentsListAttendence extends JPanel
 	NavigationPanel navigationPanel = new NavigationPanel();
 	JPListView attendeceTable;
 	StudentListFinal studentsTable;
+	
+	Integer currentWeek = new Integer(1);
 
 	StudentsListAttendence()
 	{		
@@ -35,13 +41,40 @@ public class StudentsListAttendence extends JPanel
 		c.gridy = 11;
 		this.add(this.navigationPanel, c);
 		
+		this.attendeceTable.addSelectionListener(new TableSelectionExtracter(this.attendeceTable));
+		
 		for(int i=0; i<10;i++)
 		{
 			Vector<String> ins = new Vector<>();
 			this.attendeceTable.model.addRow(ins);
 			this.attendeceTable.model.setValueAt(String.format("%d:%d%d", i+7, 0, 0), i, 0);
 		}
-	}		
+	}
 	
-
+	class TableSelectionExtracter implements ListSelectionListener
+	{
+		JPListView watchTable;
+		
+		TableSelectionExtracter(JPListView toWatchTable)
+		{
+			this.watchTable = toWatchTable;
+		}
+		
+		@Override
+		public void valueChanged(ListSelectionEvent e)
+		{
+			System.out.println(this.getSelectedRow(e.getSource()));
+		}	
+		
+		private Vector<String> getSelectedRow(DefaultListSelectionModel model)
+		{
+			int index = model.getMinSelectionIndex();
+			return Utils.getListRow(this.watchTable.model, index);
+		}
+		
+		private Vector<String> getSelectedRow(Object model)
+		{
+			return this.getSelectedRow((DefaultListSelectionModel) model);
+		}
+	}
 }

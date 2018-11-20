@@ -44,7 +44,7 @@ public class MainWindow extends JFrame
 		// delegate construction
 		super(string);
 		
-		this.tabPane.addTab("Add / Remove student", this.AddStudentPanel);
+		this.tabPane.addTab("Add student", this.AddStudentPanel);
 		this.tabPane.addTab("Marks", this.MarksPanel);
 		this.tabPane.addTab("Attendence", this.AttendencePanel);
 		this.tabPane.addTab("Other", this.OtherPanel);

@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class JPListView extends JPanel
@@ -98,5 +99,10 @@ public class JPListView extends JPanel
 			}
 		}
 		
+	}
+	
+	void addSelectionListener(ListSelectionListener selectionListener)
+	{
+		this.list.getSelectionModel().addListSelectionListener(selectionListener);
 	}
 }

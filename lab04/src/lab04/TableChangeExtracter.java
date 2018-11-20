@@ -22,7 +22,7 @@ class TableChangeExtracter implements TableModelListener
 	{
 		if(e.getType() == TableModelEvent.UPDATE)
 		{		
-			Vector<String> dataRow = this.getRow(e.getFirstRow());
+			Vector<String> dataRow = Utils.getListRow(this.watchModel, e.getFirstRow());
 			for(int i=0; i<3; i++)
 			{
 				this.outModel.setValueAt(dataRow.get(i), e.getFirstRow(), i);
@@ -30,7 +30,7 @@ class TableChangeExtracter implements TableModelListener
 		}
 		else if(e.getType() == TableModelEvent.INSERT)
 		{
-			Vector<String> dataRow = this.getRow(e.getFirstRow());
+			Vector<String> dataRow = Utils.getListRow(this.watchModel, e.getFirstRow());
 			this.outModel.addRow(dataRow);
 		}
 		else if(e.getType() == TableModelEvent.DELETE)
@@ -38,14 +38,5 @@ class TableChangeExtracter implements TableModelListener
 			System.out.println("DELETE");
 			this.outModel.removeRow(e.getFirstRow());
 		}
-	}
-	
-	Vector<String> getRow(int i)
-	{
-		Vector<String> ret = new Vector<String>();
-		for(int j=0; j<3; j++)
-			ret.addElement((String) this.watchModel.getValueAt(i, j));
-		
-		return ret;
 	}
 }
