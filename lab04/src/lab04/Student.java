@@ -1,5 +1,7 @@
 package lab04;
 
+import java.util.Vector;
+
 public class Student
 {
 	static final String[] MARKS_NAMES = new String[] {"Programming languages","Calculus","Digital signal processing"};
@@ -8,7 +10,15 @@ public class Student
 	public String surname;
 	private String pesel;
 	final String[] marks = new String[Student.MARKS_NAMES.length];
-	final WeekAttendence[] attendence = new WeekAttendence[Utils.ATTENDENCE_WEEK_COUNT];
+	final WeekAttendence[] attendence;
+	
+	{
+		this.attendence = new WeekAttendence[Utils.ATTENDENCE_WEEK_COUNT];
+		for(int i=0; i<this.attendence.length; i++)
+		{
+			this.attendence[i] = new WeekAttendence();
+		}
+	}
 	
 	Student(String firstName, String surname, String pesel)
 	{
@@ -20,7 +30,7 @@ public class Student
 	
 	public WeekAttendence getWeekAttendence(int weekNumber)
 	{
-		return this.attendence[weekNumber-1];
+		return this.attendence[weekNumber];
 	}
 	
 	public void addAttendence(int week, int day, int hour)
@@ -42,5 +52,17 @@ public class Student
 	void setPesel(int pesel)
 	{
 		this.pesel = String.valueOf(pesel);
+	}
+	
+	Vector<String> getDataAsVector()
+	{
+		Vector<String> ret = new Vector<String>();
+		ret.add(this.firstName);
+		ret.add(this.surname);
+		ret.add(this.pesel);
+		for(String mark : this.marks)
+			ret.add(mark);
+		
+		return ret;
 	}
 }

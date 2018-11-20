@@ -14,6 +14,9 @@ public class StudentsListAttendence extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String ATTENDENCE_TRUE = null;
+	public static final String ATTENDENCE_FALSE = "X";
+	
 	public static final String[] HEADERS = new String[] {"---------", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 	public static final boolean[] EDITABLE = new boolean[] {false, true, true, true, true, true};
 	
@@ -23,7 +26,8 @@ public class StudentsListAttendence extends JPanel
 	JPListView attendeceTable;
 	StudentListFinal studentsTable;
 	
-	int currentWeek = 1;
+	private int currentWeek = 1;
+	private static String currentPeselSelected = "0";
 
 	StudentsListAttendence()
 	{		
@@ -42,7 +46,7 @@ public class StudentsListAttendence extends JPanel
 		c.gridy = 11;
 		this.add(this.navigationPanel, c);
 		
-		this.studentsTable.addSelectionListener(new TableSelectionExtracter(this.studentsTable));
+		this.studentsTable.addSelectionListener(new TableSelectionEventHandler(this.studentsTable, this));
 		this.navigationPanel.addActionPerformedListener(new NavigationButtonListener(this));
 		
 		for(int i=0; i<10;i++)
@@ -78,30 +82,47 @@ public class StudentsListAttendence extends JPanel
 	
 	private void updateAttendeceTableData()
 	{
-		
+		WeekAttendence attendenceTable = Main.dataBase.getWeekAttendenceByPesel(this.currentPeselSelected, this.currentWeek);
+		this.clearAttendenceTable();
+		attendenceTable.attendence.forEach(att->{
+			this.attendeceTable.model.setValueAt(StudentsListAttendence.ATTENDENCE_FALSE, att.hour, att.day);
+		});
 	}
 	
+	private void clearAttendenceTable()
+	{
+		for(int i=0 ; i<this.attendeceTable.model.getRowCount() ; i++)
+		{
+			for(int j=1; j<this.attendeceTable.model.getColumnCount() ; j++)
+			{
+				this.attendeceTable.model.setValueAt(StudentsListAttendence.ATTENDENCE_TRUE, i, j);
+			}
+		}
+	}
+
 	private void updateAttendenceTable()
 	{
 		this.updateAttendeceTableData();
 		this.updateAttendeceTableLabel();
 	}
 	
-	class TableSelectionExtracter implements ListSelectionListener
+	class TableSelectionEventHandler implements ListSelectionListener
 	{
+		StudentsListAttendence parent;
 		JPListView watchTable;
 		
-		TableSelectionExtracter(JPListView toWatchTable)
+		TableSelectionEventHandler(JPListView toWatchTable, StudentsListAttendence parent)
 		{
 			this.watchTable = toWatchTable;
+			this.parent = parent;
 		}
 		
 		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
 			Vector<String> rowData = this.getSelectedRow(e.getSource());
-			
-			WeekAttendence attendenceTable = dataBase.getWeekAttendeceByPesel(rowData.get(2), this.getRowIdFromSelectEvent(e));
+			this.parent.currentPeselSelected = rowData.get(2);
+			this.parent.updateAttendenceTable();
 		}	
 		
 		private Vector<String> getSelectedRow(DefaultListSelectionModel model)
@@ -140,6 +161,8 @@ public class StudentsListAttendence extends JPanel
 			}
 			
 			this.parent.decrementWeekNumber();
+			
+			this.parent.updateAttendenceTable();
 		}
 		
 		boolean isForwardButton(Object button)

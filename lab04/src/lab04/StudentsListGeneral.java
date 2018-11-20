@@ -60,6 +60,11 @@ public class StudentsListGeneral extends JPListView
 			this.parent.removeElementAt(idx);
 		}
 	}
+	
+	void SyncWithDataBase(DataBase db)
+	{
+		this.syncWithDataBase(db);;
+	}
 }
 
 

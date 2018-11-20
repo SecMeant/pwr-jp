@@ -63,6 +63,7 @@ public class MainWindow extends JFrame
 		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
 		this.studentsListAttendence.studentsTable.setLabel("Students list");
 		this.studentsListAttendence.studentsTable.watch(this.studentsListGeneral);
+		this.studentsListGeneral.SyncWithDataBase(Main.dataBase);
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
@@ -88,9 +89,6 @@ public class MainWindow extends JFrame
 		this.AttendencePanel.add(studentsListAttendence);
 
 		this.setContentPane(this.tabPane);
-		
-		// Adds some test data
-		this.studentsListGeneral.updateListView(new String[][] {{"asdf","qwer asdas","123123"},{"qweqwe","asdasdqwe sad q","123123"}});
 		
 		// center
 		this.pack();

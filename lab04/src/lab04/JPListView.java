@@ -2,6 +2,7 @@ package lab04;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -98,7 +99,26 @@ public class JPListView extends JPanel
 				}
 			}
 		}
+	}
+	
+	void updateListView(Vector<Student> data)
+	{
+		data.forEach(s->{
+			this.model.addRow(s.getDataAsVector());
+		});
+	}
+	
+	void syncWithDataBase(DataBase db)
+	{
+		if (this.model.getRowCount() > 0)
+		{
+		    for (int i = this.model.getRowCount() - 1; i > -1; i--) 
+		    {
+		        this.model.removeRow(i);
+		    }
+		}
 		
+		this.updateListView(db.getStudents());
 	}
 	
 	void addSelectionListener(ListSelectionListener selectionListener)
