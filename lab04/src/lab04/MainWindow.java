@@ -108,6 +108,7 @@ public class MainWindow extends JFrame
 			this.parent = parent;
 		}
 		
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			this.parent.studentsListGeneral.addElement(this.parent.studentsForm.getFullFormInput());

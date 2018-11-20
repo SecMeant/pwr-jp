@@ -1,11 +1,12 @@
 package lab04;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,7 +23,7 @@ public class StudentsListAttendence extends JPanel
 	JPListView attendeceTable;
 	StudentListFinal studentsTable;
 	
-	Integer currentWeek = new Integer(1);
+	int currentWeek = 1;
 
 	StudentsListAttendence()
 	{		
@@ -41,7 +42,8 @@ public class StudentsListAttendence extends JPanel
 		c.gridy = 11;
 		this.add(this.navigationPanel, c);
 		
-		this.attendeceTable.addSelectionListener(new TableSelectionExtracter(this.attendeceTable));
+		this.studentsTable.addSelectionListener(new TableSelectionExtracter(this.studentsTable));
+		this.navigationPanel.addActionPerformedListener(new NavigationButtonListener(this));
 		
 		for(int i=0; i<10;i++)
 		{
@@ -49,6 +51,40 @@ public class StudentsListAttendence extends JPanel
 			this.attendeceTable.model.addRow(ins);
 			this.attendeceTable.model.setValueAt(String.format("%d:%d%d", i+7, 0, 0), i, 0);
 		}
+	}
+	
+	private void incrementWeekNumber()
+	{
+		if(this.currentWeek > 40)
+			return;
+		
+		this.currentWeek++;
+		this.updateAttendenceTable();
+	}
+	
+	private void decrementWeekNumber()
+	{
+		if(this.currentWeek <= 1)
+			return;
+		
+		this.currentWeek--;
+		this.updateAttendenceTable();
+	}
+	
+	private void updateAttendeceTableLabel()
+	{
+		this.attendeceTable.setLabel(String.format("Week %d", this.currentWeek));
+	}
+	
+	private void updateAttendeceTableData()
+	{
+		
+	}
+	
+	private void updateAttendenceTable()
+	{
+		this.updateAttendeceTableData();
+		this.updateAttendeceTableLabel();
 	}
 	
 	class TableSelectionExtracter implements ListSelectionListener
@@ -63,7 +99,10 @@ public class StudentsListAttendence extends JPanel
 		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
-			System.out.println(this.getSelectedRow(e.getSource()));
+			Vector<String> rowData = this.getSelectedRow(e.getSource());
+			
+			// TODO add database object
+			//boolean[][] attendenceTable = dataBase.getWeekAttendeceByPesel(rowData.get(2), this.getRowIdFromSelectEvent(e));
 		}	
 		
 		private Vector<String> getSelectedRow(DefaultListSelectionModel model)
@@ -75,6 +114,38 @@ public class StudentsListAttendence extends JPanel
 		private Vector<String> getSelectedRow(Object model)
 		{
 			return this.getSelectedRow((DefaultListSelectionModel) model);
+		}
+		
+		private int getRowIdFromSelectEvent(ListSelectionEvent e)
+		{
+			return ((DefaultListSelectionModel) e.getSource()).getMinSelectionIndex();
+		}
+	}
+	
+	class NavigationButtonListener implements ActionListener
+	{
+		StudentsListAttendence parent;
+		
+		NavigationButtonListener(StudentsListAttendence parent)
+		{
+			this.parent = parent;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(this.isForwardButton(e.getSource()))
+			{
+				this.parent.incrementWeekNumber();
+				return;
+			}
+			
+			this.parent.decrementWeekNumber();
+		}
+		
+		boolean isForwardButton(Object button)
+		{
+			return this.parent.navigationPanel.isForwardButton(button);
 		}
 	}
 }

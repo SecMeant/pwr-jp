@@ -35,7 +35,6 @@ class TableChangeExtracter implements TableModelListener
 		}
 		else if(e.getType() == TableModelEvent.DELETE)
 		{
-			System.out.println("DELETE");
 			this.outModel.removeRow(e.getFirstRow());
 		}
 	}
