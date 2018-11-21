@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
-public class StudentsAddFromPanel extends JPanel
+public class StudentsAddFormPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -19,7 +19,7 @@ public class StudentsAddFromPanel extends JPanel
 	
 	JPListView outputList;
 	
-	StudentsAddFromPanel(JPListView outputList)
+	StudentsAddFormPanel(JPListView outputList)
 	{
 		this.outputList = outputList;
 		
@@ -64,9 +64,9 @@ public class StudentsAddFromPanel extends JPanel
 	
 	private class AddStudentButtonListener implements ActionListener
 	{
-		StudentsAddFromPanel parent;
+		StudentsAddFormPanel parent;
 		
-		AddStudentButtonListener(StudentsAddFromPanel parent)
+		AddStudentButtonListener(StudentsAddFormPanel parent)
 		{
 			this.parent = parent;
 		}

@@ -1,12 +1,6 @@
 package lab04;
 
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.*;
 
@@ -31,22 +25,23 @@ public class MainWindow extends JFrame
 	public static final int BTNFONTSIZE = 10;
 
 	JTabbedPane tabPane = new JTabbedPane();
-	JPanel AddStudentPanel = new JPanel();
-	JPanel MarksPanel = new JPanel();
-	JPanel AttendencePanel = new JPanel();
-	JPanel OtherPanel = new JPanel();
+	JPanel addStudentPanelTab = new JPanel();
+	JPanel marksPanelTab = new JPanel();
+	JPanel attendencePanelTab = new JPanel();
+	JPanel otherPanelTab = new JPanel();
 	StudentsListGeneral studentsListGeneral = new StudentsListGeneral();
 	StudentsListAttendence studentsListAttendence = new StudentsListAttendence();
+	OtherPanel otherPanel = new OtherPanel(this.studentsListGeneral);
 	
 	public MainWindow(String string)
 	{
 		// delegate construction
 		super(string);
 		
-		this.tabPane.addTab("Add student", this.AddStudentPanel);
-		this.tabPane.addTab("Marks", this.MarksPanel);
-		this.tabPane.addTab("Attendence", this.AttendencePanel);
-		this.tabPane.addTab("Other", this.OtherPanel);
+		this.tabPane.addTab("Add student", this.addStudentPanelTab);
+		this.tabPane.addTab("Marks", this.marksPanelTab);
+		this.tabPane.addTab("Attendence", this.attendencePanelTab);
+		this.tabPane.addTab("Other", this.otherPanelTab);
 		
 		// setup window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +52,8 @@ public class MainWindow extends JFrame
 		this.studentsListAttendence.studentsTable.setLabel("Students list");
 		this.studentsListAttendence.studentsTable.watch(this.studentsListGeneral);
 		
+		this.otherPanel.studentList.watch(this.studentsListGeneral);
+		
 		// get current data from database
 		this.studentsListGeneral.syncWithDataBase(Main.dataBase);
 		
@@ -64,9 +61,10 @@ public class MainWindow extends JFrame
 		this.setLayout(new SpringLayout());
 		
 		// Add elements
-		this.AddStudentPanel.add(new StudentsAddFromPanel(this.studentsListGeneral));
-		this.MarksPanel.add(studentsListGeneral);
-		this.AttendencePanel.add(studentsListAttendence);
+		this.addStudentPanelTab.add(new StudentsAddFormPanel(this.studentsListGeneral));
+		this.marksPanelTab.add(studentsListGeneral);
+		this.attendencePanelTab.add(studentsListAttendence);
+		this.otherPanelTab.add(this.otherPanel);
 
 		this.setContentPane(this.tabPane);
 		

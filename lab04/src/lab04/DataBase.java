@@ -119,9 +119,7 @@ public class DataBase
 		
 		Student s = new Student(newStudentInfo[0], newStudentInfo[1], newStudentInfo[2], marks);
 		
-		int sizebefore = this.students.size();	
 		this.addStudent(s);
-		int sizeAfter = this.students.size();
 	}
 	
 	public Vector<Student> getStudents()
@@ -135,7 +133,6 @@ public class DataBase
 		File file = new File(filepath); 
 	    Scanner sc = new Scanner(file);
 	    sc.useDelimiter("\n");
-	    
 	    
 	    while(sc.hasNext())
 	    {
@@ -239,5 +236,63 @@ public class DataBase
 		 }
 		 
 		 fileWriter.close();
+	}
+	
+	public float getAverageByPesel(String pesel)
+	{
+		Student s = this.getStudentByPesel(pesel);
+		float sum = 0;
+		float marksCount = 0;
+		
+		for(String marks : s.marks)
+		{
+			for(String mark : marks.split(","))
+			{
+				try
+				{
+					sum += Float.parseFloat(mark);
+					marksCount++;
+				}
+				catch(NumberFormatException e)
+				{
+					// do nothing
+				}
+			}
+		}
+		
+		if(marksCount == 0)
+			return 0;
+		
+		return sum/marksCount;
+	}
+	
+	public float getClassAverage()
+	{
+		float sum = 0;
+		float marksCount = 0;
+		
+		for(Student s : this.students)
+		{
+			for(String marks : s.marks)
+			{
+				for(String mark : marks.split(","))
+				{
+					try
+					{
+						sum += Float.parseFloat(mark);
+						marksCount++;
+					}
+					catch(NumberFormatException e)
+					{
+						// do nothing
+					}
+				}
+			}
+		}
+		
+		if(marksCount == 0)
+			return 0;
+		
+		return sum/marksCount;
 	}
 }
