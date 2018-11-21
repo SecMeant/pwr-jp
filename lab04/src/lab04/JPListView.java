@@ -23,15 +23,7 @@ public class JPListView extends JPanel
 	JPListView(String[] headers, boolean[] canEdit)
 	{
 		// Create model with editable only part of cells
-		this.model = new DefaultTableModel() {
-			private static final long serialVersionUID = 1L;
-			
-			boolean[] editable = canEdit;
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-            	return this.editable[columnIndex];
-            }
-		};
+		this.model = new ListModel(this, canEdit);
 		
 		this.list = new JTable(this.model);
 		
@@ -124,5 +116,24 @@ public class JPListView extends JPanel
 	void addSelectionListener(ListSelectionListener selectionListener)
 	{
 		this.list.getSelectionModel().addListSelectionListener(selectionListener);
+	}
+	
+	class ListModel extends DefaultTableModel
+	{
+		private static final long serialVersionUID = 1L;
+		
+		JPListView parent;
+		boolean[] editable;
+		
+		ListModel(JPListView parent, boolean[] canEdit)
+		{
+			this.parent = parent;
+			this.editable = canEdit;
+		}
+
+        public boolean isCellEditable(int rowIndex, int columnIndex)
+        {
+        	return this.editable[columnIndex];
+        }
 	}
 }

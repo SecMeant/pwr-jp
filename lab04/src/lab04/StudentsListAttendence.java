@@ -12,6 +12,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import lab04.JPListView.ListModel;
+
 public class StudentsListAttendence extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +31,11 @@ public class StudentsListAttendence extends JPanel
 	StudentListFinal studentsTable;
 	
 	private int currentWeek = 1;
-	private  String currentPeselSelected = "0";
+	private  String currentPeselSelected = "";
+	
+	// Used to prevent listeners on data change on the list to flush
+	// recently read data from database
+	private boolean isUpdatingAttendenceView = false;
 
 	StudentsListAttendence()
 	{		
@@ -49,7 +55,7 @@ public class StudentsListAttendence extends JPanel
 		this.add(this.navigationPanel, c);
 		
 		this.studentsTable.addSelectionListener(new TableSelectionEventHandler(this.studentsTable, this));
-		this.attendeceTable.model.addTableModelListener(new AttendenceChangeListener());
+		this.attendeceTable.model.addTableModelListener(new AttendenceChangeListener(this));
 		this.navigationPanel.addActionPerformedListener(new NavigationButtonListener(this));
 		
 		for(int i=0; i<10;i++)
@@ -85,11 +91,15 @@ public class StudentsListAttendence extends JPanel
 	
 	private void updateAttendeceTableData()
 	{
+		this.isUpdatingAttendenceView = true;
+		
 		WeekAttendence attendenceTable = Main.dataBase.getWeekAttendenceByPesel(this.currentPeselSelected, this.currentWeek);
 		this.clearAttendenceTable();
 		attendenceTable.attendence.forEach(att->{
 			this.attendeceTable.model.setValueAt(att.value, att.hour, att.day);
 		});
+		
+		this.isUpdatingAttendenceView = false;
 	}
 	
 	private void clearAttendenceTable()
@@ -155,10 +165,40 @@ public class StudentsListAttendence extends JPanel
 	
 	class AttendenceChangeListener implements TableModelListener
 	{	
+		StudentsListAttendence parent;
+		
+		AttendenceChangeListener(StudentsListAttendence parent)
+		{
+			this.parent = parent;
+		}
+		
 		@Override
 		public void tableChanged(TableModelEvent e)
 		{
+			// Changed outside of interesting area
+			if(e.getColumn() < 1 || e.getFirstRow() == -1)
+				return;
+			
+			// No student selected
+			if(this.parent.currentPeselSelected.equals(""))
+				return;
+			
+			if(this.parent.isUpdatingAttendenceView)
+				return;
+			
+			System.out.println(String.format("%d %d %s",e.getFirstRow(), e.getColumn(), e.getSource().toString()));
+			Main.dataBase.setStudentAttendenceByPesel(
+					this.parent.currentPeselSelected,
+					this.parent.currentWeek, 
+					e.getColumn(), 
+					e.getFirstRow(), 
+					this.getInsertedValueFromEvent(e));
+		}
 		
+		private String getInsertedValueFromEvent(TableModelEvent e)
+		{
+			ListModel source = (ListModel) e.getSource();
+			return (String) source.parent.model.getValueAt(e.getFirstRow(),e.getColumn());
 		}
 		
 	}
