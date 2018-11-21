@@ -35,9 +35,6 @@ public class MainWindow extends JFrame
 	JPanel MarksPanel = new JPanel();
 	JPanel AttendencePanel = new JPanel();
 	JPanel OtherPanel = new JPanel();
-	JPButton button = new JPButton();
-	JPButton buttonSaveDatabase = new JPButton();
-	StudentsForm studentsForm = new StudentsForm();
 	StudentsListGeneral studentsListGeneral = new StudentsListGeneral();
 	StudentsListAttendence studentsListAttendence = new StudentsListAttendence();
 	
@@ -54,59 +51,21 @@ public class MainWindow extends JFrame
 		// setup window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		/* AddStudentsPanel setup */
-		// Button setup
-		this.button.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
-		this.button.get().setText("Add");
-		this.button.get().addActionListener(new AddStudentButtonListener(this));
-		
-		this.buttonSaveDatabase.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
-		this.buttonSaveDatabase.get().setText("Save all to file");
-		this.buttonSaveDatabase.get().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try
-				{
-					Main.dataBase.SaveDataToFile();
-				}
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				}
-			}});
-		
 		this.studentsListGeneral.setLabel("Students");
+
 		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
 		this.studentsListAttendence.studentsTable.setLabel("Students list");
 		this.studentsListAttendence.studentsTable.watch(this.studentsListGeneral);
+		
+		// get current data from database
 		this.studentsListGeneral.syncWithDataBase(Main.dataBase);
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
 		
-		// add elements
-		this.AddStudentPanel.setLayout(new GridBagLayout());
-		
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 1;
-		this.AddStudentPanel.add(this.studentsForm, c);
-		
-		c.gridx = 0;
-		c.gridy = 1;
-		this.AddStudentPanel.add(this.button, c);
-		
-		c.gridx = 0;
-		c.gridy = 2;
-		this.AddStudentPanel.add(this.buttonSaveDatabase, c);
-		
-		/* MarksPanel setup */
+		// Add elements
+		this.AddStudentPanel.add(new StudentsAddFromPanel(this.studentsListGeneral));
 		this.MarksPanel.add(studentsListGeneral);
-		
-		/* AttendecePanel setup */
 		this.AttendencePanel.add(studentsListAttendence);
 
 		this.setContentPane(this.tabPane);
@@ -117,41 +76,5 @@ public class MainWindow extends JFrame
 		this.setVisible(true);
 	}
 	
-	// Onclick handler
-	private class AddStudentButtonListener implements ActionListener
-	{
-		MainWindow parent;
-		
-		AddStudentButtonListener(MainWindow parent)
-		{
-			this.parent = parent;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if(!this.validateInput())
-				return;
-			
-			try
-			{
-				Main.dataBase.addStudent(this.parent.studentsForm.getFullFormInput());
-			} 
-			catch (DataBaseInsertException e1)
-			{
-				e1.printStackTrace();
-				return;
-			}
-			
-			this.parent.studentsListGeneral.addElement(this.parent.studentsForm.getFullFormInput());
-			this.parent.studentsForm.clearForm();
-		}
-		
-		boolean validateInput()
-		{
-			if(Main.dataBase.getStudentByPesel(this.parent.studentsForm.getPeselInput()) != null)
-				return false;
-			return true;
-		}
-	}
+	
 }
