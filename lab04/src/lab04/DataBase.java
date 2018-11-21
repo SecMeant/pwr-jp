@@ -67,12 +67,6 @@ public class DataBase
 		if(s == null)
 			return;
 		
-		System.out.println("New marks");
-		for(String mark:newmarks)
-		{
-			System.out.println(mark);
-		}
-		
 		if(newfirstName != null)
 			s.firstName = newfirstName;
 		if(newsurname != null)

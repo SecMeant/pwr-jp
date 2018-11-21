@@ -91,13 +91,6 @@ public class StudentsListGeneral extends JPListView
 				Utils.copyArray(marks, dataRowCast,3);
 				
 				Main.dataBase.changeStudentInfoByPesel(dataRow.get(2), dataRow.get(0), dataRow.get(1), dataRow.get(2), marks);
-				
-				Main.dataBase.getStudents().forEach(s->{
-					for(String mark: s.marks)
-					{
-						System.out.println(mark);
-					}
-					});
 			}
 		}
 	}

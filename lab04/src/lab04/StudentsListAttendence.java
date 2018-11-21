@@ -123,13 +123,26 @@ public class StudentsListAttendence extends JPanel
 		public void valueChanged(ListSelectionEvent e)
 		{
 			Vector<String> rowData = this.getSelectedRow(e.getSource());
-			this.parent.currentPeselSelected = rowData.get(2);
+			
+			if(rowData.size() == 0)
+			{
+				this.parent.currentPeselSelected = "";
+			}
+			else
+			{
+				this.parent.currentPeselSelected = rowData.get(2);
+			}
+			
 			this.parent.updateAttendenceTable();
 		}	
 		
 		private Vector<String> getSelectedRow(DefaultListSelectionModel model)
 		{
 			int index = model.getMinSelectionIndex();
+			
+			if(index == -1)
+				return new Vector<String>(6,6);
+			
 			return Utils.getListRow(this.watchTable.model, index);
 		}
 		
