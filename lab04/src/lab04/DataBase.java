@@ -15,7 +15,8 @@ public class DataBase
 			this.addStudent(new Student("Patryk","Wlazlyn","997998999"));
 			this.addStudent(new Student("John","Carmack","997998991"));
 			
-			this.students.get(0).attendence[2].attendence.add(new DayAttendence(2,3));			
+			this.students.get(0).attendence[2].attendence.add(new DayAttendence(2,3));
+			this.setStudentAttendenceByPesel("997998999", 2, 4, 8, StudentsListAttendence.ATTENDENCE_FALSE);
 		} catch (DataBaseInsertException e) {
 			e.printStackTrace();
 		}
@@ -42,6 +43,22 @@ public class DataBase
 		return null;
 	}
 	
+	void setStudentAttendenceByPesel(String pesel, int week, int day, int hour, String attendenceValue)
+	{
+		Student s = this.getStudentByPesel(pesel);
+		DayAttendence datt = new DayAttendence(day, hour);
+		int idx = s.attendence[week].attendence.indexOf(datt);
+		
+		// Not found
+		if(idx == -1)
+		{
+			s.attendence[week].attendence.add(datt);
+			return;
+		}
+		
+		s.attendence[week].attendence.set(idx, datt);
+	}
+	
 	public void addStudent(Student s) throws DataBaseInsertException
 	{
 		if(this.getStudentByPesel(s.getPesel()) != null)
@@ -50,7 +67,7 @@ public class DataBase
 		this.students.add(s);
 	}
 	
-	Vector<Student> getStudents()
+	public Vector<Student> getStudents()
 	{
 		return this.students;
 	}
