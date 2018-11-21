@@ -49,6 +49,7 @@ public class StudentsListAttendence extends JPanel
 		this.add(this.navigationPanel, c);
 		
 		this.studentsTable.addSelectionListener(new TableSelectionEventHandler(this.studentsTable, this));
+		this.attendeceTable.model.addTableModelListener(new AttendenceChangeListener());
 		this.navigationPanel.addActionPerformedListener(new NavigationButtonListener(this));
 		
 		for(int i=0; i<10;i++)
@@ -87,7 +88,7 @@ public class StudentsListAttendence extends JPanel
 		WeekAttendence attendenceTable = Main.dataBase.getWeekAttendenceByPesel(this.currentPeselSelected, this.currentWeek);
 		this.clearAttendenceTable();
 		attendenceTable.attendence.forEach(att->{
-			this.attendeceTable.model.setValueAt(StudentsListAttendence.ATTENDENCE_FALSE, att.hour, att.day);
+			this.attendeceTable.model.setValueAt(att.value, att.hour, att.day);
 		});
 	}
 	
@@ -157,7 +158,7 @@ public class StudentsListAttendence extends JPanel
 		@Override
 		public void tableChanged(TableModelEvent e)
 		{
-			
+		
 		}
 		
 	}

@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -35,6 +36,7 @@ public class MainWindow extends JFrame
 	JPanel AttendencePanel = new JPanel();
 	JPanel OtherPanel = new JPanel();
 	JPButton button = new JPButton();
+	JPButton buttonSaveDatabase = new JPButton();
 	StudentsForm studentsForm = new StudentsForm();
 	StudentsListGeneral studentsListGeneral = new StudentsListGeneral();
 	StudentsListAttendence studentsListAttendence = new StudentsListAttendence();
@@ -54,10 +56,25 @@ public class MainWindow extends JFrame
 		
 		/* AddStudentsPanel setup */
 		// Button setup
-		this.button.get().setPreferredSize(new Dimension(MainWindow.BTNWIDTH, MainWindow.BTNHEIGHT));
 		this.button.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
 		this.button.get().setText("Add");
-		this.button.get().addActionListener(new PushButtonActionLister(this));
+		this.button.get().addActionListener(new AddStudentButtonListener(this));
+		
+		this.buttonSaveDatabase.get().setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
+		this.buttonSaveDatabase.get().setText("Save all to file");
+		this.buttonSaveDatabase.get().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try
+				{
+					Main.dataBase.SaveDataToFile();
+				}
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+			}});
 		
 		this.studentsListGeneral.setLabel("Students");
 		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
@@ -82,6 +99,10 @@ public class MainWindow extends JFrame
 		c.gridy = 1;
 		this.AddStudentPanel.add(this.button, c);
 		
+		c.gridx = 0;
+		c.gridy = 2;
+		this.AddStudentPanel.add(this.buttonSaveDatabase, c);
+		
 		/* MarksPanel setup */
 		this.MarksPanel.add(studentsListGeneral);
 		
@@ -97,11 +118,11 @@ public class MainWindow extends JFrame
 	}
 	
 	// Onclick handler
-	private class PushButtonActionLister implements ActionListener
+	private class AddStudentButtonListener implements ActionListener
 	{
 		MainWindow parent;
 		
-		PushButtonActionLister(MainWindow parent)
+		AddStudentButtonListener(MainWindow parent)
 		{
 			this.parent = parent;
 		}

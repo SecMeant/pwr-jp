@@ -28,6 +28,15 @@ public class Student
 		this.setPesel(pesel);
 	}
 	
+	Student(String firstName, String surname, String pesel, String[] marks)
+	{
+		this.firstName = firstName;
+		this.surname = surname;
+		this.pesel = "0";
+		this.setPesel(pesel);
+		Utils.copyArray(this.marks, marks);
+	}
+	
 	public WeekAttendence getWeekAttendence(int weekNumber)
 	{
 		return this.attendence[weekNumber];

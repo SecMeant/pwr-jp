@@ -4,11 +4,26 @@ class DayAttendence
 {
 	int day;
 	int hour;
+	String value;
 	
 	DayAttendence(int day, int hour)
 	{
 		this.day = day;
 		this.hour = hour;
+	}
+	
+	DayAttendence(int day, int hour, String value)
+	{
+		this.day = day;
+		this.hour = hour;
+		this.value = value;
+	}
+	
+	DayAttendence(DayAttendence other)
+	{
+		this.day = other.day;
+		this.hour = other.hour;
+		this.value = other.value;
 	}
 	
 	@Override

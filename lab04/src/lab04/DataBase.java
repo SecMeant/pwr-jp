@@ -1,25 +1,33 @@
 package lab04;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class DataBase
 {
+	private String studentsOutFileName;
+	private String attendenceOutFileName;
+	
 	private Vector<Student> students = new Vector<>();
 	
 	DataBase(String studentsFilePath, String attendenceFilePath)
 	{
-		// TODO read from files
+		this.studentsOutFileName = studentsFilePath;
+		this.attendenceOutFileName = attendenceFilePath;
 		
-		try 
+		try
 		{
-			this.addStudent(new Student("Patryk","Wlazlyn","997998999"));
-			this.addStudent(new Student("John","Carmack","997998991"));
-			
-			this.students.get(0).attendence[2].attendence.add(new DayAttendence(2,3));
-			this.setStudentAttendenceByPesel("997998999", 2, 4, 8, StudentsListAttendence.ATTENDENCE_FALSE);
-			this.setStudentAttendenceByPesel("997998999", 2, 4, 8, StudentsListAttendence.ATTENDENCE_TRUE);
-		} catch (DataBaseInsertException e) {
-			e.printStackTrace();
+			this.fetchStudentsFromFile(studentsFilePath);
+			this.fetchAttendenceFromFile(attendenceFilePath);
+		} 
+		catch (FileNotFoundException | FileParsingException | DataBaseInsertException e1)
+		{
+			e1.printStackTrace();
 		}
 	}
 	 
@@ -47,17 +55,22 @@ public class DataBase
 	void setStudentAttendenceByPesel(String pesel, int week, int day, int hour, String attendenceValue)
 	{
 		Student s = this.getStudentByPesel(pesel);
-		DayAttendence datt = new DayAttendence(day, hour);
+		DayAttendence datt = new DayAttendence(day, hour, attendenceValue);
 		int idx = s.attendence[week].attendence.indexOf(datt);
 		
-		// Not found
+		// Not found, add new
 		if(idx == -1)
 		{
 			s.attendence[week].attendence.add(datt);
 			return;
 		}
 		
-		s.attendence[week].attendence.removeElementAt(idx);
+		// Clear attendence
+		if(attendenceValue == null)
+			s.attendence[week].attendence.removeElementAt(idx);
+		// Set new value
+		else
+			s.attendence[week].attendence.get(idx).value = attendenceValue;
 	}
 	
 	void changeStudentInfoByPesel(String pesel, String newfirstName, String newsurname, String newpesel, String[] newmarks)
@@ -102,11 +115,129 @@ public class DataBase
 		if(newStudentInfo.length <3)
 			return;
 		
-		this.addStudent(new Student(newStudentInfo[0], newStudentInfo[1], newStudentInfo[2]));
+		String marks[] = Arrays.copyOfRange(newStudentInfo, 3, newStudentInfo.length);
+		
+		Student s = new Student(newStudentInfo[0], newStudentInfo[1], newStudentInfo[2], marks);
+		
+		int sizebefore = this.students.size();	
+		this.addStudent(s);
+		int sizeAfter = this.students.size();
 	}
 	
 	public Vector<Student> getStudents()
 	{
 		return this.students;
+	}
+	
+	private void fetchStudentsFromFile(String filepath)
+	throws FileNotFoundException, FileParsingException, DataBaseInsertException
+	{
+		File file = new File(filepath); 
+	    Scanner sc = new Scanner(file);
+	    sc.useDelimiter("\n");
+	    
+	    
+	    while(sc.hasNext())
+	    {
+	    	String line = sc.next();
+	    	String[] data = line.split(";");
+	    	
+	    	// Change all empty fields from null to empty string
+	    	for(int i=0; i<data.length; i++)
+	    	{
+	    		if(data[i].equals("null"))
+	    			data[i] = "";
+	    	}
+	    	
+	    	if(data.length < 3)
+	    		throw new FileParsingException("Error! 0 Bad aligned data occured while parsing students file.");
+	    	this.addStudent(data);
+	    }
+	    
+	    sc.close();
+	}
+	
+	private void fetchAttendenceFromFile(String filepath)
+	throws FileNotFoundException, FileParsingException
+	{
+		File file = new File(filepath); 
+	    Scanner sc = new Scanner(file);
+	    sc.useDelimiter("\n");
+	    
+	    while(sc.hasNext())
+	    {
+	    	String line = sc.next();
+	    	String[] data = line.split(";");
+	    	if(data.length < 1)
+	    		throw new FileParsingException("Error! 1 Bad aligned data occured while parsing attendece file.");
+	    	
+	    	// Change all empty fields from null to empty string
+	    	for(int i=0; i<data.length; i++)
+	    	{
+	    		if(data[i].equals("null"))
+	    			data[i] = "";
+	    	}
+	    	
+	    	for(int i=1; i<data.length; i++)
+	    	{
+	    		String[] attendence = data[i].split(",");
+	    		if(attendence.length != 4)
+	    			throw new FileParsingException(
+	    					String.format("Error! 2 Bad aligned data occured while parsing attendece file. %d", attendence.length));
+	    		this.setStudentAttendenceByPesel(data[0],
+	    				                         Integer.parseInt(attendence[0]),
+	    				                         Integer.parseInt(attendence[1]),
+	    				                         Integer.parseInt(attendence[2]),
+	    				                         attendence[3]);
+	    	}
+	    	
+	    }
+	    
+	    sc.close();
+	}
+	
+	public void SaveDataToFile() throws IOException
+	{
+		this.saveStudentsToFile();
+		this.saveAttendenceToFile();
+	}
+	
+	private void saveStudentsToFile() throws IOException
+	{
+		 FileWriter fileWriter = new FileWriter(this.studentsOutFileName);
+		 
+		 for(Student s : this.students)
+		 {
+			 fileWriter.write(String.format("%s;%s;%s",s.firstName,s.surname,s.getPesel()));
+			 for(String mark : s.marks)
+			 {
+				 fileWriter.write(String.format(";%s",mark));
+			 }
+			 fileWriter.write("\n");
+		 }
+		 
+		 fileWriter.close();
+	}
+	
+	private void saveAttendenceToFile() throws IOException
+	{
+		FileWriter fileWriter = new FileWriter(this.attendenceOutFileName);
+		 
+		 for(Student s : this.students)
+		 {
+			 fileWriter.write(String.format("%s",s.getPesel()));
+			 
+			 for(int i=0; i<s.attendence.length; i++)
+			 {
+				 for(DayAttendence da : s.attendence[i].attendence)
+				 {
+					 fileWriter.write(String.format(";%s,%s,%s,%s",String.valueOf(i),da.day,da.hour,da.value));
+				 }
+			 }
+
+			 fileWriter.write("\n");
+		 }
+		 
+		 fileWriter.close();
 	}
 }

@@ -1,0 +1,6 @@
+Patryk;Wlazlyn;997998999;4,5,5.5;5;3
+John;Carmack;991998997;;;
+asdasd;asdad;123123;;;
+John;Romero;123453;;;
+John;Romero;0;;;
+Harry;Potter;998998998;4;44;5
