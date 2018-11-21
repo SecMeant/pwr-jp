@@ -17,6 +17,7 @@ public class DataBase
 			
 			this.students.get(0).attendence[2].attendence.add(new DayAttendence(2,3));
 			this.setStudentAttendenceByPesel("997998999", 2, 4, 8, StudentsListAttendence.ATTENDENCE_FALSE);
+			this.setStudentAttendenceByPesel("997998999", 2, 4, 8, StudentsListAttendence.ATTENDENCE_TRUE);
 		} catch (DataBaseInsertException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +57,7 @@ public class DataBase
 			return;
 		}
 		
-		s.attendence[week].attendence.set(idx, datt);
+		s.attendence[week].attendence.removeElementAt(idx);
 	}
 	
 	public void addStudent(Student s) throws DataBaseInsertException
