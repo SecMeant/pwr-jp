@@ -7,7 +7,7 @@ public class StudentListFinal extends JPListView
 	public static final String[] HEADERS = new String[] {"Name", "Surname", "Pesel"};
 	public static final boolean[] EDITABLE = new boolean[] {false, false, false};
 		
-	TableChangeExtracter changeExtracter;
+	TableChangeReflector changeExtracter;
 
 	StudentListFinal()
 	{
@@ -16,7 +16,7 @@ public class StudentListFinal extends JPListView
 	
 	public void watch(JPListView toWatchTable)
 	{
-		this.changeExtracter = new TableChangeExtracter(toWatchTable.model, this.model);
+		this.changeExtracter = new TableChangeReflector(toWatchTable.model, this.model);
 		toWatchTable.model.addTableModelListener(this.changeExtracter);
 	}
 }

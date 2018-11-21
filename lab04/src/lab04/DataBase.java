@@ -60,12 +60,55 @@ public class DataBase
 		s.attendence[week].attendence.removeElementAt(idx);
 	}
 	
+	void changeStudentInfoByPesel(String pesel, String newfirstName, String newsurname, String newpesel, String[] newmarks)
+	{
+		Student s = this.getStudentByPesel(pesel);
+		
+		if(s == null)
+			return;
+		
+		System.out.println("New marks");
+		for(String mark:newmarks)
+		{
+			System.out.println(mark);
+		}
+		
+		if(newfirstName != null)
+			s.firstName = newfirstName;
+		if(newsurname != null)
+			s.surname = newsurname;
+		if(newpesel != null)
+			s.setPesel(newpesel);
+		if(newmarks != null)
+			Utils.copyArray(s.marks, newmarks);
+	}
+	
+	void removeStudentByPesel(String pesel)
+	{
+		for(int i=0; i<this.students.size(); i++)
+		{
+			if(this.students.get(i).getPesel().equals(pesel))
+			{
+				this.students.removeElementAt(i);
+				break;
+			}
+		}
+	}
+	
 	public void addStudent(Student s) throws DataBaseInsertException
 	{
 		if(this.getStudentByPesel(s.getPesel()) != null)
 			throw new DataBaseInsertException("User with given pesel already exists in database");
 		
 		this.students.add(s);
+	}
+	
+	public void addStudent(String[] newStudentInfo) throws DataBaseInsertException
+	{
+		if(newStudentInfo.length <3)
+			return;
+		
+		this.addStudent(new Student(newStudentInfo[0], newStudentInfo[1], newStudentInfo[2]));
 	}
 	
 	public Vector<Student> getStudents()

@@ -9,6 +9,8 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 public class StudentsListAttendence extends JPanel
 {
@@ -27,7 +29,7 @@ public class StudentsListAttendence extends JPanel
 	StudentListFinal studentsTable;
 	
 	private int currentWeek = 1;
-	private static String currentPeselSelected = "0";
+	private  String currentPeselSelected = "0";
 
 	StudentsListAttendence()
 	{		
@@ -135,11 +137,16 @@ public class StudentsListAttendence extends JPanel
 		{
 			return this.getSelectedRow((DefaultListSelectionModel) model);
 		}
-		
-		private int getRowIdFromSelectEvent(ListSelectionEvent e)
+	}
+	
+	class AttendenceChangeListener implements TableModelListener
+	{	
+		@Override
+		public void tableChanged(TableModelEvent e)
 		{
-			return ((DefaultListSelectionModel) e.getSource()).getMinSelectionIndex();
+			
 		}
+		
 	}
 	
 	class NavigationButtonListener implements ActionListener

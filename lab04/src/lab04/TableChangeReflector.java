@@ -6,12 +6,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-class TableChangeExtracter implements TableModelListener
+class TableChangeReflector implements TableModelListener
 {
 	DefaultTableModel watchModel;
 	DefaultTableModel outModel;
 	
-	TableChangeExtracter(DefaultTableModel watchmodel, DefaultTableModel outmodel)
+	TableChangeReflector(DefaultTableModel watchmodel, DefaultTableModel outmodel)
 	{
 		this.watchModel = watchmodel;
 		this.outModel = outmodel;

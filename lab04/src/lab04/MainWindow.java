@@ -63,7 +63,7 @@ public class MainWindow extends JFrame
 		this.studentsListAttendence.attendeceTable.setLabel("Week 1");
 		this.studentsListAttendence.studentsTable.setLabel("Students list");
 		this.studentsListAttendence.studentsTable.watch(this.studentsListGeneral);
-		this.studentsListGeneral.SyncWithDataBase(Main.dataBase);
+		this.studentsListGeneral.syncWithDataBase(Main.dataBase);
 		
 		// set layout before adding elements
 		this.setLayout(new SpringLayout());
@@ -109,8 +109,28 @@ public class MainWindow extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			if(!this.validateInput())
+				return;
+			
+			try
+			{
+				Main.dataBase.addStudent(this.parent.studentsForm.getFullFormInput());
+			} 
+			catch (DataBaseInsertException e1)
+			{
+				e1.printStackTrace();
+				return;
+			}
+			
 			this.parent.studentsListGeneral.addElement(this.parent.studentsForm.getFullFormInput());
 			this.parent.studentsForm.clearForm();
+		}
+		
+		boolean validateInput()
+		{
+			if(Main.dataBase.getStudentByPesel(this.parent.studentsForm.getPeselInput()) != null)
+				return false;
+			return true;
 		}
 	}
 }

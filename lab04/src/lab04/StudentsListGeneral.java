@@ -5,8 +5,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 
 public class StudentsListGeneral extends JPListView
 {
@@ -33,6 +37,7 @@ public class StudentsListGeneral extends JPListView
 		this.deleteButton.setFont(new Font("Arial", Font.PLAIN, MainWindow.BTNFONTSIZE));
 		this.deleteButton.setText("Usun");
 		this.deleteButton.addActionListener(new RemoveButtonActionListener(this));
+		this.model.addTableModelListener(new DataBaseSynchronizer(this.model));
 		
 		GridBagConstraints c = new GridBagConstraints();
 		// Use previous height to calc new pos
@@ -57,13 +62,44 @@ public class StudentsListGeneral extends JPListView
 			if(idx == -1)
 				return;
 			
+			
 			this.parent.removeElementAt(idx);
 		}
 	}
 	
-	void SyncWithDataBase(DataBase db)
+	private class DataBaseSynchronizer implements TableModelListener
 	{
-		this.syncWithDataBase(db);;
+		private DefaultTableModel watchModel;
+		
+		DataBaseSynchronizer(DefaultTableModel toWatch)
+		{
+			this.watchModel = toWatch;
+		}
+		
+		@Override
+		public void tableChanged(TableModelEvent e)
+		{
+			// Other case are handled when button are clicked
+			if(e.getType() == TableModelEvent.UPDATE)
+			{		
+				System.out.println("UPDATE");
+				Vector<String> dataRow = Utils.getListRow(this.watchModel, e.getFirstRow());
+				
+				// Copy marks
+				String[] marks = new String[dataRow.size()-3];
+				String[] dataRowCast = dataRow.toArray(new String[dataRow.size()]);
+				Utils.copyArray(marks, dataRowCast,3);
+				
+				Main.dataBase.changeStudentInfoByPesel(dataRow.get(2), dataRow.get(0), dataRow.get(1), dataRow.get(2), marks);
+				
+				Main.dataBase.getStudents().forEach(s->{
+					for(String mark: s.marks)
+					{
+						System.out.println(mark);
+					}
+					});
+			}
+		}
 	}
 }
 

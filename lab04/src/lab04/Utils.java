@@ -30,4 +30,29 @@ public class Utils
 			return false;
 		} 
 	}
+
+	public static void copyArray(String[] dest, String[] src)
+	{
+		for(int i=0; i<min(dest.length, src.length); i++)
+		{
+			dest[i] = src[i];
+		}
+		
+	}
+	
+	public static void copyArray(String[] dest, String[] src, int startOffset)
+	{
+		for(int i=0; i<min(dest.length, src.length); i++)
+		{
+			dest[i] = src[i+startOffset];
+		}
+		
+	}
+	
+	public static int min(int a, int b)
+	{
+		if(a < b)
+			return a;
+		return b;
+	}
 }
