@@ -3,13 +3,13 @@ package lab05;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-class Cooker extends Thread{
+class Cook extends Thread{
 	private static int globalID = 0;
 	private int id;
 	private SpiceManager spiceManager;
 	private boolean isHired = false;
 
-	Cooker(SpiceManager sm){
+	Cook(SpiceManager sm){
 		this.spiceManager = sm;
 		synchronized (this){
 			this.id = this.globalID;
@@ -41,7 +41,7 @@ class Cooker extends Thread{
 		Recipe r = new Recipe(new int[]{0,6,4,0,2});
 	
 		try{
-		this.spiceManager.getMix(r);
+			this.spiceManager.getMix(r, Mixer.DONT_WAIT);
 		}catch(Unfulfillable e){
 			System.out.println(e.getMessage());
 		}

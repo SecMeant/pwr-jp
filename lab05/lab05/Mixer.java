@@ -9,21 +9,46 @@ interface TestInterface{
 class Mixer implements TestInterface, SpiceManager{
 	
 	public static final int SPICES_COUNT = 10;
+
+	// Blocking / non-blocking call flags
+	public static final boolean WAIT = true;
+	public static final boolean DONT_WAIT = false;
 	
 	// Each index describes state of each mix
 	private int[] spices = new int[SPICES_COUNT];
 
-	public void getMix(Recipe r) throws Unfulfillable{
-		if(!this.isRequestFulfillable(r) || 
-		    this.spices.length != r.spices.length)
-			throw new Unfulfillable("Given request is unfulfillable");
-	
-		this.applyRequest(r);
+	public void getMix(Recipe r, boolean waitIfNotReady) throws Unfulfillable{
+		synchronized (this.spices){
+			if(!this.isRequestFulfillable(r)){
+				
+				// If blocking mode on, wait for notify
+				while(waitIfNotReady){
+					try{
+					// Wait for fill
+					this.spices.wait();
+					}catch(InterruptedException e){
+						e.printStackTrace();
+					}
+
+					// If request now fulfillable, take it
+					if(this.isRequestFulfillable(r)){
+						this.applyRequest(r);
+						return;
+					}
+				}
+		
+				// If non blocking mode, throw exception
+				throw new Unfulfillable("Given request is unfulfillable");
+			}
+		
+			this.applyRequest(r);
+		}
 	}
 	
 	public void fillSpice(int spiceID, int spiceAmount){
 		synchronized (this.spices){
 			this.spices[spiceID] += spiceAmount;
+			this.spices.notifyAll();
 		}
 	}
 
@@ -35,6 +60,9 @@ class Mixer implements TestInterface, SpiceManager{
 	}
 
 	private boolean isRequestFulfillable(Recipe r){
+		if(this.spices.length < r.spices.length)
+			return false;
+
 		for(int i = 0; i < this.spices.length; i++){
 			if(r.spices[i] > this.spices[i])
 				return false;
@@ -45,10 +73,8 @@ class Mixer implements TestInterface, SpiceManager{
 	
 	// Used to update state of 
 	private void applyRequest(Recipe r){
-		synchronized (this.spices){
-			for(int i = 0; i < this.spices.length; i++){
-				this.spices[i] -= r.spices[i];
-			}
+		for(int i = 0; i < this.spices.length; i++){
+			this.spices[i] -= r.spices[i];
 		}
 	}
 
