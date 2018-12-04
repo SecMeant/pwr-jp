@@ -34,7 +34,7 @@ class Tests{
 
 		mixer.fillAllSpices();
 
-		Utils.sleep(Supplier_Worker.maxOrderTime);
+		Utils.sleep(Supplier_Worker.maxOrderTime*2);
 		mixer.printSpices();
 		
 		for( int i = 0; i < Mixer.SPICES_COUNT; i++ ){
@@ -43,13 +43,12 @@ class Tests{
 		}
 
 		Cook cook = new Cook(mixer);
+		cook.start();
 
-		Utils.sleep(1000);
-		mixer.printSpices();
-		Utils.sleep(1000);
-		mixer.printSpices();
-		Utils.sleep(1000);
-		mixer.printSpices();
+		for(;;){
+			Utils.sleep(1000);
+			mixer.printSpices();
+		}
 
 	}
 }

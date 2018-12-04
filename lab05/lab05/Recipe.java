@@ -1,10 +1,12 @@
 package lab05;
 
+import java.lang.Math;
+
 class Recipe{
 	public int[] spices = new int[Mixer.SPICES_COUNT];
 	
 	Recipe(int[] spices){
-		for(int i = 0; i < this.spices.length; i++){
+		for(int i = 0; i < Math.min(this.spices.length, spices.length); i++){
 			this.spices[i] = spices[i];
 		}
 	}

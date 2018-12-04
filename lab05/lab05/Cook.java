@@ -15,6 +15,7 @@ class Cook extends Thread{
 			this.id = this.globalID;
 			this.globalID++;
 		}
+		this.isHired = true;
 	}
 
 	public void fire(){
@@ -38,10 +39,10 @@ class Cook extends Thread{
 	}
 
 	private void aquireRandomIngredients(){
-		Recipe r = new Recipe(new int[]{0,6,4,0,2});
+		Recipe r = new Recipe(new int[]{2,6,4,0,2});
 	
 		try{
-			this.spiceManager.getMix(r, Mixer.DONT_WAIT);
+			this.spiceManager.getMix(r, Mixer.WAIT);
 		}catch(Unfulfillable e){
 			System.out.println(e.getMessage());
 		}
