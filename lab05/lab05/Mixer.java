@@ -20,7 +20,7 @@ class Mixer implements TestInterface, SpiceManager{
 	private int[] spices = new int[SPICES_COUNT];
 
 	// Spices supplier
-	public Supplier supplier;
+	public Supplier supplier = new Supplier(this);
 
 	public void getMix(Recipe r, boolean waitIfNotReady) throws Unfulfillable{
 		synchronized (this.spices){

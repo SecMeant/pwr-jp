@@ -23,7 +23,6 @@ class Tests{
 
 	static void fillAndGetTest(){
 		Mixer mixer = new Mixer();
-		mixer.supplier = new Supplier(mixer);
 
 		mixer.fillSpice(3,1337);
 		mixer.fillSpice(2,3);
@@ -41,6 +40,5 @@ class Tests{
 			test_assert(mixer.getSpiceStateById(i) == Mixer.SPICE_MAX_STATE,
 			            String.format("Filling spice failed %d != %d", i, Mixer.SPICE_MAX_STATE));
 		}
-
 	}
 }
