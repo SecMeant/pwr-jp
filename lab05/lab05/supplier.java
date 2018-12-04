@@ -15,12 +15,15 @@ class Supplier_Worker extends Thread{
 	public static final int minOrderTime = 200;
 	public static final int maxOrderTime = 400;
 
+	private boolean isHired = false;
+
 	private Order order;
 	private SpiceManager spiceManager;
 
 	Supplier_Worker(SpiceManager sm, Order o){
 		this.spiceManager = sm;
 		this.order = o;
+		this.isHired = true;
 	}
 
 	private void executeOrder(){
@@ -41,7 +44,14 @@ class Supplier_Worker extends Thread{
 	}
 
 	public void run(){
-		this.executeOrder();
+		while(this.isHired){
+			Utils.sleep(this.getRandomOrderTime());
+			this.executeOrder();
+		}
+	}
+
+	public void fire(){
+		this.isHired = false;
 	}
 }
 
@@ -54,6 +64,7 @@ class Supplier{
 
 	public void makeOrder(Order o){
 		Supplier_Worker worker = new Supplier_Worker(this.spiceManager, o);
+		worker.setDaemon(true);
 		worker.start();
 	}
 }

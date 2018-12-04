@@ -35,10 +35,21 @@ class Tests{
 		mixer.fillAllSpices();
 
 		Utils.sleep(Supplier_Worker.maxOrderTime);
+		mixer.printSpices();
 		
 		for( int i = 0; i < Mixer.SPICES_COUNT; i++ ){
 			test_assert(mixer.getSpiceStateById(i) == Mixer.SPICE_MAX_STATE,
 			            String.format("Filling spice failed %d != %d", i, Mixer.SPICE_MAX_STATE));
 		}
+
+		Cook cook = new Cook(mixer);
+
+		Utils.sleep(1000);
+		mixer.printSpices();
+		Utils.sleep(1000);
+		mixer.printSpices();
+		Utils.sleep(1000);
+		mixer.printSpices();
+
 	}
 }

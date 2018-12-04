@@ -29,8 +29,8 @@ class Mixer implements TestInterface, SpiceManager{
 				// If blocking mode on, wait for notify
 				while(waitIfNotReady){
 					try{
-					// Wait for fill
-					this.spices.wait();
+						// Wait for fill
+						this.spices.wait();
 					}catch(InterruptedException e){
 						e.printStackTrace();
 					}
@@ -112,6 +112,13 @@ class Mixer implements TestInterface, SpiceManager{
 	/* TEST INTERFACE */
 	public int getSpiceStateById(int spiceID){
 		return this.spices[spiceID];
+	}
+
+	public void printSpices(){
+		for ( int i = 0; i < this.spices.length; i++ ){
+			System.out.print(this.spices[i] + " ");
+		}
+		System.out.println("");
 	}
 
 }
