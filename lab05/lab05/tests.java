@@ -25,7 +25,6 @@ class Tests{
 		Mixer mixer = new Mixer();
 
 		View view = new View(mixer);
-		view.workerCountLabel.setText(String.format("Workers: %d",1));
 
 		for(;;){
 			Utils.sleep(50);

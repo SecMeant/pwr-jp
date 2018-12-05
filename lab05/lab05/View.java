@@ -20,7 +20,7 @@ class View{
 	JFrame mainFrame = new JFrame("Mixer");
 	JPanel mainPanel = new JPanel();
 
-	JLabel workerCountLabel = new JLabel("Workers: ");
+	JLabel supplierLabel = new JLabel("Free");
 	JLabel[] spicesState = new JLabel[Mixer.SPICES_COUNT];
 	JLabel[] cooksState = new JLabel[Mixer.COOK_COUNT];
 
@@ -49,7 +49,8 @@ class View{
 
 		// Workers count panel setup
 		JPanel panel_tmp = new JPanel();
-		panel_tmp.add(this.workerCountLabel);
+		this.supplierLabel.setText("");
+		panel_tmp.add(this.supplierLabel);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -111,7 +112,26 @@ class View{
 			}
 		}
 
+		this.setSupplierState(this.toWatch.getCurrentOrderState());
+
 		this.mainFrame.pack();
+	}
+
+	private void setSupplierState(int state){
+		switch(state){
+			case Mixer.ORDER_STATE_FREE:
+				this.supplierLabel.setText("Free");
+				this.supplierLabel.setForeground(Color.GREEN);
+				break;
+			case Mixer.ORDER_STATE_PREPARE:
+				this.supplierLabel.setText("Preparing");
+				this.supplierLabel.setForeground(Color.ORANGE);
+				break;
+			case Mixer.ORDER_STATE_FILLING:
+				this.supplierLabel.setText("Filling");
+				this.supplierLabel.setForeground(Color.YELLOW);
+				break;
+		}
 	}
 }
 

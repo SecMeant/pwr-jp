@@ -19,6 +19,11 @@ class Mixer implements TestInterface, SpiceManager{
 
 	public static final int SPICE_MAX_STATE = 20;
 
+	// Flags for indicating order status
+	public static final int ORDER_STATE_FREE = 0;
+	public static final int ORDER_STATE_PREPARE = 1;
+	public static final int ORDER_STATE_FILLING = 2;
+
 	// When state of any spices pass it value, mixer requests filling it from supplier
 	public static final int SPICE_LOW_STATE = SPICE_MAX_STATE / 3;
 	
@@ -83,11 +88,17 @@ class Mixer implements TestInterface, SpiceManager{
 	}
 
 	public void fillSpices(int[] spices){
-		synchronized(this.spices){
+			synchronized(this.spices){
+			this.orderManager.orderState = ORDER_STATE_FILLING;
 			for(int i = 0; i < this.spices.length; i++){
 				this.spices[i] += spices[i];
 			}
+
+			// Hard work, filling spices
+			Utils.sleep(1000);
+
 			this.spices.notifyAll();
+			this.orderManager.orderState = ORDER_STATE_FREE;
 		}
 	}
 
@@ -155,10 +166,16 @@ class Mixer implements TestInterface, SpiceManager{
 		Utils.printTab(this.spices);
 	}
 
+	public int getCurrentOrderState(){
+		return this.orderManager.orderState;
+	}
+
 	private class OrderManager extends Thread{
 		private Supplier supplier;
 		private Mixer parent;
 		private boolean killFlag = false;
+
+		public int orderState = ORDER_STATE_FREE;
 
 		OrderManager(Mixer parent, Supplier supp){
 			this.parent = parent;
@@ -172,20 +189,30 @@ class Mixer implements TestInterface, SpiceManager{
 		@Override
 		public void run(){
 			int[] toOrder = new int[Mixer.SPICES_COUNT];
+			boolean isAnyToOrder;
 
 			while(!killFlag){
+				
+				isAnyToOrder = false;
+
 				for( int i = 0; i < Mixer.SPICES_COUNT; i++ ){
 					
-					if(this.parent.spices[i] < Mixer.SPICE_LOW_STATE)
+					if(this.parent.spices[i] < Mixer.SPICE_LOW_STATE){
 						toOrder[i] = Mixer.SPICE_MAX_STATE - this.parent.getSpiceStateById(i);
+						isAnyToOrder = true;
+					}
 
 					else
 						toOrder[i] = 0;
 				}
 
+				if(!isAnyToOrder)
+					continue;
+
 				//this.supplier.makeOrder(new Order(toOrder));
 				try{
 				// Wait for order to end
+				this.orderState = ORDER_STATE_PREPARE;
 				this.supplier.makeOrder(new Order(toOrder)).join();
 				}catch(InterruptedException e){
 					System.out.println(e.getMessage());
