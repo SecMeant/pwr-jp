@@ -30,7 +30,7 @@ class ConsoleInterface
 		System.out.println("\t12. Sign doctor");
 		System.out.println("\t13. Unsign doctor");
 		System.out.println("\t14. Finish visit");
-		System.out.println("\t15. Finish visit");
+		System.out.println("\t15. Get Pacient visits by ID");
 		System.out.println("\t16. Save");
 	}
 
@@ -266,6 +266,7 @@ class ConsoleInterface
 					return true;
 				}
 				pacientID = r.visits[timeOffset].getPesel();
+				db.getPacientByPesel(pacientID).removeVisit(new Event(r.getNumber(), timeOffset));
 				r.visits[timeOffset] = null;
 
 				System.out.print("Notes: ");

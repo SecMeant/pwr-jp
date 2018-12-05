@@ -54,6 +54,18 @@ class Pacient
 		this.visits.add(visit);
 	}
 
+	public void removeVisit(Event visit)
+	{
+		for(int i = 0; i < this.visits.size(); i++)
+		{
+			if(visit.compare(this.visits.get(i)))
+			{
+				this.visits.remove(i);
+				break;	
+			}
+		}
+	}
+
 	public String toString()
 	{
 		String ret = this.firstName + " " + this.lastName + " " + this.pesel + " ";
