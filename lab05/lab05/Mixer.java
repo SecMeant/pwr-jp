@@ -9,6 +9,7 @@ interface TestInterface{
 class Mixer implements TestInterface, SpiceManager{
 	
 	public static final int SPICES_COUNT = 10;
+	public static final int COOK_COUNT = 4;
 
 	// Blocking / non-blocking call flags
 	public static final boolean WAIT = true;
@@ -24,7 +25,8 @@ class Mixer implements TestInterface, SpiceManager{
 	// Each index describes state of each mix
 	private int[] spices = new int[SPICES_COUNT];
 
-	Vector<Cook> cooks = new Vector<>();
+
+	Cook[] cooks = new Cook[COOK_COUNT];
 
 	// Spices supplier
 	public Supplier supplier = new Supplier(this);
@@ -32,6 +34,13 @@ class Mixer implements TestInterface, SpiceManager{
 	private OrderManager orderManager = new OrderManager(this, this.supplier);
 	
 	{
+		for(int i = 0; i < Mixer.COOK_COUNT; i++){
+			Cook cook = new Cook(this);
+			cook.setDaemon(true);
+			cook.start();
+			this.cooks[i] = cook;
+		}
+
 		this.orderManager.setDaemon(true);
 		this.orderManager.start();
 	}
@@ -134,23 +143,13 @@ class Mixer implements TestInterface, SpiceManager{
 		this.supplier.makeOrder(new Order(recipe.spices));
 	}
 
-	public void hireNewCook(){
-		Cook cook = new Cook(this);
-		cook.setDaemon(true);
-		cook.start();
-		this.cooks.add(cook);
-	}
-
 	/* TEST INTERFACE */
 	public int getSpiceStateById(int spiceID){
 		return this.spices[spiceID];
 	}
 
 	public void printSpices(){
-		for ( int i = 0; i < this.spices.length; i++ ){
-			System.out.print(this.spices[i] + " ");
-		}
-		System.out.println("");
+		Utils.printTab(this.spices);
 	}
 
 	private class OrderManager extends Thread{
@@ -181,6 +180,7 @@ class Mixer implements TestInterface, SpiceManager{
 						toOrder[i] = 0;
 				}
 
+				//this.supplier.makeOrder(new Order(toOrder));
 				try{
 				// Wait for order to end
 				this.supplier.makeOrder(new Order(toOrder)).join();

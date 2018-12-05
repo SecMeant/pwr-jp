@@ -10,11 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import java.lang.Thread;
+
 
 class View{
 	Mixer toWatch;
 
-	JFrame mainFrame = new JFrame("Cos tam");
+	JFrame mainFrame = new JFrame("Mixer");
 	JPanel mainPanel = new JPanel();
 
 	JLabel workerCountLabel = new JLabel("Workers: ");
@@ -43,10 +45,18 @@ class View{
 		this.mainPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
+		// Workers count panel setup
+		JPanel panel_tmp = new JPanel();
+		panel_tmp.add(this.workerCountLabel);
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		this.mainPanel.add(this.workerCountLabel, c);
+		this.mainPanel.add(panel_tmp, c);
+
+		// Spices state panel setup
+		panel_tmp = new JPanel();
+		panel_tmp.setLayout(new GridBagLayout());
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridy = 1;
@@ -55,8 +65,33 @@ class View{
 		for ( int x = 0; x < this.spicesState.length; x++ ){
 			this.spicesState[x] = new JLabel(String.valueOf(this.toWatch.getSpiceStateById(x)));
 			c.gridx = x;
-			this.mainPanel.add(this.spicesState[x], c);
+			panel_tmp.add(this.spicesState[x],c);
 		}
+		c.gridx = 0;
+		this.mainPanel.add(panel_tmp, c);
+
+
+		// Cook state panel setup
+		panel_tmp = new JPanel();
+		panel_tmp.setLayout(new GridBagLayout());
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridy = 2;
+		c.insets = new Insets(0,0,5,5);
+
+		for ( int x = 0; x < this.toWatch.cooks.length; x++ ){
+			String state;
+
+			if(this.toWatch.cooks[x].getState() == Thread.State.WAITING)
+				state = String.valueOf("Waiting");
+			else
+				state = String.valueOf("Working");
+				
+			c.gridx = x;
+			panel_tmp.add(new JLabel(state),c);
+		}
+		c.gridx = 0;
+		this.mainPanel.add(panel_tmp, c);
 	}
 
 	public void updateViewState(){
@@ -64,7 +99,7 @@ class View{
 			this.spicesState[i].setText(String.valueOf(this.toWatch.getSpiceStateById(i)));
 		}
 
-		this.mainFrame.repaint();
+		this.mainFrame.pack();
 	}
 }
 

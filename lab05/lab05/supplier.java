@@ -12,8 +12,8 @@ class Order extends Recipe{
 class Supplier_Worker extends Thread{
 	private static Random randomGenerator = new Random();
 	
-	public static final int minOrderTime = 200;
-	public static final int maxOrderTime = 400;
+	public static final int minOrderTime = 500;
+	public static final int maxOrderTime = 700;
 
 	private boolean isHired = false;
 
@@ -60,6 +60,7 @@ class Supplier{
 	}
 
 	public Supplier_Worker makeOrder(Order o){
+		System.out.println(o);
 		Supplier_Worker worker = new Supplier_Worker(this.spiceManager, o);
 		worker.setDaemon(true);
 		worker.start();
