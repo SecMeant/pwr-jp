@@ -24,30 +24,24 @@ class Tests{
 	static void fillAndGetTest(){
 		Mixer mixer = new Mixer();
 
-		mixer.fillSpice(3,1337);
+		mixer.fillSpice(3,109);
 		mixer.fillSpice(2,3);
-		mixer.fillSpice(6,123);
+		mixer.fillSpice(6,111);
 
-		test_assert(mixer.getSpiceStateById(3) == 1337, "Filling spice failed");
+		test_assert(mixer.getSpiceStateById(3) == 109, "Filling spice failed");
 		test_assert(mixer.getSpiceStateById(2) == 3, "Filling spice failed");
-		test_assert(mixer.getSpiceStateById(6) == 123, "Filling spice failed");
+		test_assert(mixer.getSpiceStateById(6) == 111, "Filling spice failed");
 
-		mixer.fillAllSpices();
-
-		Utils.sleep(Supplier_Worker.maxOrderTime*2);
-		mixer.printSpices();
+		mixer.hireNewCook();
+		mixer.hireNewCook();
+		mixer.hireNewCook();
 		
-		for( int i = 0; i < Mixer.SPICES_COUNT; i++ ){
-			test_assert(mixer.getSpiceStateById(i) == Mixer.SPICE_MAX_STATE,
-			            String.format("Filling spice failed %d != %d", i, Mixer.SPICE_MAX_STATE));
-		}
-
-		Cook cook = new Cook(mixer);
-		cook.start();
+		View view = new View(mixer);
+		view.workerCountLabel.setText(String.format("Workers: %d",1));
 
 		for(;;){
-			Utils.sleep(1000);
-			mixer.printSpices();
+			Utils.sleep(50);
+			view.updateViewState();
 		}
 
 	}

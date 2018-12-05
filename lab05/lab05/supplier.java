@@ -30,7 +30,6 @@ class Supplier_Worker extends Thread{
 		int orderTime = Supplier_Worker.getRandomOrderTime();
 		this.workHard(orderTime);
 		this.spiceManager.fillSpices(this.order.spices);
-		System.out.println("Filling spices");
 	}
 
 	private static int getRandomOrderTime(){
@@ -45,7 +44,6 @@ class Supplier_Worker extends Thread{
 	}
 
 	public void run(){
-		System.out.println("Got order");
 		this.executeOrder();
 	}
 
@@ -61,10 +59,10 @@ class Supplier{
 		this.spiceManager = spiceManager;
 	}
 
-	public void makeOrder(Order o){
-		System.out.println("making new worker");
+	public Supplier_Worker makeOrder(Order o){
 		Supplier_Worker worker = new Supplier_Worker(this.spiceManager, o);
 		worker.setDaemon(true);
 		worker.start();
+		return worker;
 	}
 }

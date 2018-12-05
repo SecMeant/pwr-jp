@@ -31,7 +31,7 @@ class Cook extends Thread{
 
 	private void cook(){
 		try{
-			int randomValue = 337;
+			int randomValue = 1337;
 			TimeUnit.MILLISECONDS.sleep(randomValue);
 		}catch(InterruptedException e){
 			e.printStackTrace();
