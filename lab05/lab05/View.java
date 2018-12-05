@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ class View{
 
 	JLabel workerCountLabel = new JLabel("Workers: ");
 	JLabel[] spicesState = new JLabel[Mixer.SPICES_COUNT];
+	JLabel[] cooksState = new JLabel[Mixer.COOK_COUNT];
 
 	public View(Mixer toWatch){
 		this.toWatch = toWatch;
@@ -80,15 +82,14 @@ class View{
 		c.insets = new Insets(0,0,5,5);
 
 		for ( int x = 0; x < this.toWatch.cooks.length; x++ ){
-			String state;
 
 			if(this.toWatch.cooks[x].getState() == Thread.State.WAITING)
-				state = String.valueOf("Waiting");
+				this.cooksState[x] = new JLabel("Waiting");
 			else
-				state = String.valueOf("Working");
-				
+				this.cooksState[x] = new JLabel("Working");
+			
 			c.gridx = x;
-			panel_tmp.add(new JLabel(state),c);
+			panel_tmp.add(this.cooksState[x],c);
 		}
 		c.gridx = 0;
 		this.mainPanel.add(panel_tmp, c);
@@ -97,6 +98,17 @@ class View{
 	public void updateViewState(){
 		for( int i = 0; i < this.spicesState.length; i++){
 			this.spicesState[i].setText(String.valueOf(this.toWatch.getSpiceStateById(i)));
+		}
+
+		for( int i = 0; i < this.cooksState.length; i++){
+			if(this.toWatch.cooks[i].getState() == Thread.State.WAITING){
+				this.cooksState[i].setText("Waiting");
+				this.cooksState[i].setForeground(Color.YELLOW);
+			}
+			else{
+				this.cooksState[i].setText("Working");
+				this.cooksState[i].setForeground(Color.GREEN);
+			}
 		}
 
 		this.mainFrame.pack();

@@ -8,6 +8,7 @@ class Cook extends Thread{
 	private int id;
 	private SpiceManager spiceManager;
 	private boolean isHired = false;
+	private Random randomGenerator = new Random();
 
 	Cook(SpiceManager sm){
 		this.spiceManager = sm;
@@ -39,7 +40,13 @@ class Cook extends Thread{
 	}
 
 	private void aquireRandomIngredients(){
-		Recipe r = new Recipe(new int[]{2,6,4,0,2});
+		int[] toRecipe = new int[Mixer.SPICES_COUNT];
+
+		for( int i = 0; i < Mixer.SPICES_COUNT; i++ ){
+			toRecipe[i] = this.randomGenerator.nextInt(Mixer.SPICE_MAX_STATE/4);
+		}
+
+		Recipe r = new Recipe(toRecipe);
 	
 		try{
 			this.spiceManager.getMix(r, Mixer.WAIT);

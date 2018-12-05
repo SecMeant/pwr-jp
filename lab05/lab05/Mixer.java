@@ -17,7 +17,7 @@ class Mixer implements TestInterface, SpiceManager{
 
 	public static boolean MAKE_ORDER_ON_FULFILL_ERROR = false; 
 
-	public static final int SPICE_MAX_STATE = 120;
+	public static final int SPICE_MAX_STATE = 20;
 
 	// When state of any spices pass it value, mixer requests filling it from supplier
 	public static final int SPICE_LOW_STATE = SPICE_MAX_STATE / 3;
@@ -133,6 +133,9 @@ class Mixer implements TestInterface, SpiceManager{
 		for(int i = 0; i < this.spices.length; i++){
 			this.spices[i] -= r.spices[i];
 		}
+
+		// Fake hard work
+		Utils.sleep(600);
 
 	}
 
