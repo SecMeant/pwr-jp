@@ -8,25 +8,25 @@ interface TestInterface{
 
 class Mixer implements TestInterface, SpiceManager{
 	
-	public static final int SPICES_COUNT = 10;
-	public static final int COOK_COUNT = 4;
+	public static final int SPICES_COUNT = 15;
+	public static final int COOK_COUNT = 10;
+	public static final int SPICE_MAX_STATE = 20;
 
+	// When state of any spices pass it value, mixer requests filling it from supplier
+	public static final int SPICE_LOW_STATE = SPICE_MAX_STATE / 3;
+	
 	// Blocking / non-blocking call flags
 	public static final boolean WAIT = true;
 	public static final boolean DONT_WAIT = false;
 
 	public static boolean MAKE_ORDER_ON_FULFILL_ERROR = false; 
 
-	public static final int SPICE_MAX_STATE = 20;
 
 	// Flags for indicating order status
 	public static final int ORDER_STATE_FREE = 0;
 	public static final int ORDER_STATE_PREPARE = 1;
 	public static final int ORDER_STATE_FILLING = 2;
 
-	// When state of any spices pass it value, mixer requests filling it from supplier
-	public static final int SPICE_LOW_STATE = SPICE_MAX_STATE / 3;
-	
 	// Each index describes state of each mix
 	private int[] spices = new int[SPICES_COUNT];
 

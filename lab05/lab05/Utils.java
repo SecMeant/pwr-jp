@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 class Utils{
 	
-	public static final int TIME_MULTIPLIER = 10;
+	public static final int TIME_MULTIPLIER = 2;
 
 	static void sleep(int sleepTimems){
 		try{
