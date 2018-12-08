@@ -32,15 +32,42 @@ class ServerInfoForm extends JPanel{
 		this.hostNameField.setText("");
 		this.hostNameField.setText("");
 	}
+
+	public void disable(){
+		this.hostNameField.setEnabled(false);
+		this.hostPort.setEnabled(false);
+	}
+
+	public void enable(){
+		this.hostNameField.setEnabled(true);
+		this.hostPort.setEnabled(true);
+	}
+}
+
+interface FormSubmitListener{
+	public void callback(String[] args);
 }
 
 class MainWindow extends JFrame{
 	JPanel mainPanel = new JPanel();
 	ServerInfoForm serverInfoForm = new ServerInfoForm(new ServerFormSubmitListener(this));
+
+	FormSubmitListener formSubmitListener = null;
 	
 	MainWindow(){
-		super("Client <=> Server interface");
-		
+		this.initWindow();
+	}
+
+	MainWindow(FormSubmitListener listener){
+		this.formSubmitListener = listener;
+		this.initWindow();
+	}
+
+	public void addFormSubmitListener(FormSubmitListener listener){
+		this.formSubmitListener = listener;
+	}
+
+	private void initWindow(){
 		this.mainPanel.add(this.serverInfoForm);
 
 		this.add(this.mainPanel);
@@ -57,8 +84,8 @@ class MainWindow extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e){
-			System.out.println(this.parent.serverInfoForm.getInput()[0]);
-			System.out.println(this.parent.serverInfoForm.getInput()[1]);
+			if(this.parent.formSubmitListener != null)
+				this.parent.formSubmitListener.callback(this.parent.serverInfoForm.getInput());
 		}
 	}
 }
@@ -66,7 +93,7 @@ class MainWindow extends JFrame{
 class TaskClientInterface{
 	private TaskClient parent;
 
-	MainWindow window;
+	private MainWindow window = new MainWindow();
 
 	TaskClientInterface(TaskClient parent){
 		System.out.println("Init gui");
@@ -80,9 +107,15 @@ class TaskClientInterface{
 	}
 
 	public void createAndShowGui(){
-		this.window = new MainWindow();
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.window.setSize(400,300);
 	}
+	
+	public ServerInfoForm getServerInfoForm(){
+		return this.window.serverInfoForm;
+	}
 
+	public MainWindow getWindow(){
+		return this.window;
+	}
 }
