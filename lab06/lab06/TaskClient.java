@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.*;
 
@@ -46,10 +46,24 @@ class TaskClient{
 	}
 
 	private void connect(String host, String port) throws IOException{
-		System.out.println("Connecting");
+		System.out.println("Connecting . . .");
 
-		this.connection = new Socket(host, Integer.parseInt(port));
-		this.iface.setStateConnected(true);
+		try{
+			this.connection = new Socket(host, Integer.parseInt(port));
+			this.iface.setStateConnected(true);
+		}catch(NumberFormatException e){
+			this.signalError("Error! Port must be a number");
+		}catch(UnknownHostException e){
+			this.signalError("Error! server host unknown");
+		}
+	}
+
+	private void signalError(String message){
+		this.iface.getWindow().getMessageManager().addMessageError(message);
+	}
+
+	private void signalSuccess(String message){
+		this.iface.getWindow().getMessageManager().addMessageSuccess(message);
 	}
 
 	private void disconnect() throws IOException{

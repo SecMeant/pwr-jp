@@ -7,8 +7,10 @@ import javax.swing.*;
 import java.io.IOException;
 
 class MainWindow extends JFrame{
-	JPanel mainPanel = new JPanel();
-	ServerInfoForm serverInfoForm = new ServerInfoForm(new ServerFormSubmitListener(this));
+	private JPanel mainPanel = new JPanel();
+	public ServerInfoForm serverInfoForm =
+		new ServerInfoForm(new ServerFormSubmitListener(this));
+	private MessageManager messageManager = new MessageManager();
 
 	FormSubmitListener formSubmitListener = null;
 	
@@ -25,8 +27,14 @@ class MainWindow extends JFrame{
 		this.formSubmitListener = listener;
 	}
 
+	public MessageManager getMessageManager(){
+		return this.messageManager;
+	}
+
 	private void initWindow(){
+		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 		this.mainPanel.add(this.serverInfoForm);
+		this.mainPanel.add(this.messageManager.getLabel());
 
 		this.add(this.mainPanel);
 		this.setLocationRelativeTo(null);
@@ -85,9 +93,11 @@ class TaskClientInterface{
 		if(state){
 			this.window.serverInfoForm.disableInput();
 			this.window.serverInfoForm.button.setText("Disconnect");
+			this.window.getMessageManager().addMessageSuccess("Connected to the server");
 		}else{
 			this.window.serverInfoForm.enableInput();
 			this.window.serverInfoForm.button.setText("Connect");
+			this.window.getMessageManager().addMessageForced("Disconnected from the server");
 		}
 	}
 }
