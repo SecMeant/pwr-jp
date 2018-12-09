@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.net.InetSocketAddress;
+
 import javax.swing.*;
 
 class TaskClient{
@@ -15,6 +17,8 @@ class TaskClient{
 	}
 
 	TaskClient() throws IOException{
+		this.connection = new Socket();
+
 		this.iface = new TaskClientInterface(this);
 		this.iface.getWindow().addFormSubmitListener(new ServerFormListener(this));
 	}
@@ -33,10 +37,27 @@ class TaskClient{
 		}
 
 		@Override
-		public void callback(String[] args){
-			System.out.println(args[0]);
-			System.out.println(args[1]);
-			this.parent.iface.getServerInfoForm().disable();
+		public void callback(String[] args) throws IOException{
+			if(!this.parent.connection.isConnected() || this.parent.connection.isClosed())
+				this.parent.connect(args[0], args[1]);
+			else
+				this.parent.disconnect();
 		}
+	}
+
+	private void connect(String host, String port) throws IOException{
+		System.out.println("Connecting");
+
+		this.connection = new Socket(host, Integer.parseInt(port));
+		this.iface.setStateConnected(true);
+	}
+
+	private void disconnect() throws IOException{
+		System.out.println("Disconnecting");
+		
+		this.connection.shutdownInput();
+		this.connection.shutdownOutput();
+		this.connection.close();
+		this.iface.setStateConnected(false);
 	}
 }

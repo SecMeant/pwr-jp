@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import java.io.IOException;
+
 class MainWindow extends JFrame{
 	JPanel mainPanel = new JPanel();
 	ServerInfoForm serverInfoForm = new ServerInfoForm(new ServerFormSubmitListener(this));
@@ -40,8 +42,12 @@ class MainWindow extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e){
-			if(this.parent.formSubmitListener != null)
-				this.parent.formSubmitListener.callback(this.parent.serverInfoForm.getInput());
+			try{
+				if(this.parent.formSubmitListener != null)
+					this.parent.formSubmitListener.callback(this.parent.serverInfoForm.getInput());
+			}catch(IOException excp){
+				excp.printStackTrace();
+			}
 		}
 	}
 }
@@ -73,5 +79,15 @@ class TaskClientInterface{
 
 	public MainWindow getWindow(){
 		return this.window;
+	}
+
+	public void setStateConnected(boolean state){
+		if(state){
+			this.window.serverInfoForm.disableInput();
+			this.window.serverInfoForm.button.setText("Disconnect");
+		}else{
+			this.window.serverInfoForm.enableInput();
+			this.window.serverInfoForm.button.setText("Connect");
+		}
 	}
 }

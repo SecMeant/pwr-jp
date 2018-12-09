@@ -25,9 +25,9 @@ class TaskServer extends Thread{
 	private void listenLoop(){
 		for(;;){
 			try{
-			Socket sock = this.listenSocket.accept();
-			System.out.println("Accepted");
-			this.handleConnection(sock);
+				Socket sock = this.listenSocket.accept();
+				System.out.println("Accepted");
+				this.handleConnection(sock);
 			}catch(IOException e){
 				e.printStackTrace();
 			}
@@ -35,11 +35,15 @@ class TaskServer extends Thread{
 	}
 
 	private void handleConnection(Socket sock) throws IOException{
-		BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-		String msg = in.readLine();
-		if(msg.equals("Hello world")){
-			System.out.println(msg);
-			System.exit(0);
+		try{
+			BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			String msg = in.readLine();
+			if(msg.equals("Hello world")){
+				System.out.println(msg);
+				System.exit(0);
+			}
+		}catch(NullPointerException e){
+			System.out.println("Connection closed");
 		}
 	}
 }

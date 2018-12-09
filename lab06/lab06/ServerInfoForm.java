@@ -33,12 +33,12 @@ class ServerInfoForm extends JPanel{
 		this.hostNameField.setText("");
 	}
 
-	public void disable(){
+	public void disableInput(){
 		this.hostNameField.setEnabled(false);
 		this.hostPort.setEnabled(false);
 	}
 
-	public void enable(){
+	public void enableInput(){
 		this.hostNameField.setEnabled(true);
 		this.hostPort.setEnabled(true);
 	}
