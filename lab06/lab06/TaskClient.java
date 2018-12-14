@@ -55,6 +55,8 @@ class TaskClient{
 			this.signalError("Error! Port must be a number");
 		}catch(UnknownHostException e){
 			this.signalError("Error! server host unknown");
+		}catch(java.net.ConnectException e){
+			this.signalError("Connection refused by server");
 		}
 	}
 
