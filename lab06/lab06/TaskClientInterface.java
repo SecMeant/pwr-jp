@@ -7,10 +7,14 @@ import javax.swing.*;
 import java.io.IOException;
 
 class MainWindow extends JFrame{
+	public static final int WINDOW_WIDTH = 400;
+	public static final int WINDOW_HEIGHT = 300;
+
 	private JPanel mainPanel = new JPanel();
 	public ServerInfoForm serverInfoForm =
 		new ServerInfoForm(new ServerFormSubmitListener(this));
 	private MessageManager messageManager = new MessageManager();
+	private TaskList taskList = new TaskList();
 
 	FormSubmitListener formSubmitListener = null;
 	
@@ -34,7 +38,10 @@ class MainWindow extends JFrame{
 	private void initWindow(){
 		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 		this.mainPanel.add(this.serverInfoForm);
+		this.mainPanel.add(this.taskList);
 		this.mainPanel.add(this.messageManager.getLabel());
+		
+		this.taskList.addElement("asdf");
 
 		this.add(this.mainPanel);
 		this.setLocationRelativeTo(null);
@@ -78,7 +85,7 @@ class TaskClientInterface{
 
 	public void createAndShowGui(){
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.window.setSize(400,300);
+		this.window.setSize(MainWindow.WINDOW_WIDTH,MainWindow.WINDOW_HEIGHT);
 	}
 	
 	public ServerInfoForm getServerInfoForm(){

@@ -3,8 +3,12 @@ package lab06;
 import javax.swing.*;
 
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
+import java.awt.Color;
 
 class ServerInfoForm extends JPanel{
+	public static final int HEIGHT = 40;
+
 	JTextField hostNameField = new JTextField(10);
 	JTextField hostPort = new JTextField(10);
 	JButton button = new JButton("Connect");
@@ -15,6 +19,8 @@ class ServerInfoForm extends JPanel{
 		this.add(button);
 
 		this.button.addActionListener(buttonPressedListener);
+
+		this.setMaximumSize(new Dimension(MainWindow.WINDOW_WIDTH, ServerInfoForm.HEIGHT));
 
 		this.setVisible(true);
 	}
@@ -43,4 +49,3 @@ class ServerInfoForm extends JPanel{
 		this.hostPort.setEnabled(true);
 	}
 }
-
