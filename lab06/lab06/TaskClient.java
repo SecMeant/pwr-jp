@@ -22,6 +22,7 @@ class TaskClient{
 
 		this.iface = new TaskClientInterface(this);
 		this.iface.getWindow().addFormSubmitListener(new ServerFormListener(this));
+		this.iface.getWindow().addAddTaskListener(new AddTaskListener(this));
 	}
 
 	private void test()throws IOException{
@@ -56,8 +57,11 @@ class TaskClient{
 		@Override
 		public void callback(String[] args) throws IOException{
 			if(!this.parent.isConnected()){
-				this.parent.signalError("Error! In order to add task, you need to be connected to the server.");
+				this.parent.signalError("Connect to server first.");
 			}
+
+			System.out.println(args[0]);
+			System.out.println(args[1]);
 		}
 	}
 

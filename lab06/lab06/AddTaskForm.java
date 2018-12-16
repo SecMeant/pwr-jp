@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.Dimension;
 
+import java.awt.event.ActionListener;
+
 class AddTaskForm extends JPanel{
 	private TitledBorder border = new TitledBorder("Add task form");
 
@@ -25,5 +27,18 @@ class AddTaskForm extends JPanel{
 		this.add(this.button);
 
 		this.setVisible(true);
+	}
+
+	public void addButtonPressedListener(ActionListener listener){
+		this.button.addActionListener(listener);
+	}
+
+	public String[] getInput(){
+		String[] ret = new String[2];
+
+		ret[0] = this.operationField.getText();
+		ret[1] = this.argsField.getText();
+
+		return ret;
 	}
 }

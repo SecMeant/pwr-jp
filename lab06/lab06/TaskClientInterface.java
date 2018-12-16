@@ -14,21 +14,27 @@ class MainWindow extends JFrame{
 	public ServerInfoForm serverInfoForm =
 		new ServerInfoForm(new ServerFormSubmitListener(this));
 	private MessageManager messageManager = new MessageManager();
-	private TaskList taskList = new TaskList();
+	private TaskList taskList = new TaskList(new AddTaskFormSubmitListener(this));
 
 	FormSubmitListener connectFormSubmitListener = null;
+	FormSubmitListener addTaskSubmitListener = null;
 	
 	MainWindow(){
 		this.initWindow();
 	}
 
-	MainWindow(FormSubmitListener listener){
-		this.connectFormSubmitListener = listener;
+	MainWindow(FormSubmitListener connectFormListener, FormSubmitListener addTaskListener){
+		this.connectFormSubmitListener = connectFormListener;
+		this.addTaskSubmitListener = addTaskListener;
 		this.initWindow();
 	}
 
 	public void addFormSubmitListener(FormSubmitListener listener){
 		this.connectFormSubmitListener = listener;
+	}
+
+	public void addAddTaskListener(FormSubmitListener listener){
+		this.addTaskSubmitListener = listener;
 	}
 
 	public MessageManager getMessageManager(){
@@ -62,6 +68,24 @@ class MainWindow extends JFrame{
 			try{
 				if(this.parent.connectFormSubmitListener != null)
 					this.parent.connectFormSubmitListener.callback(this.parent.serverInfoForm.getInput());
+			}catch(IOException excp){
+				excp.printStackTrace();
+			}
+		}
+	}
+
+	private class AddTaskFormSubmitListener implements ActionListener{
+		MainWindow parent;
+
+		AddTaskFormSubmitListener(MainWindow parent){
+			this.parent = parent;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e){
+			try{
+				if(this.parent.addTaskSubmitListener != null)
+					this.parent.addTaskSubmitListener.callback(this.parent.taskList.getInput());
 			}catch(IOException excp){
 				excp.printStackTrace();
 			}

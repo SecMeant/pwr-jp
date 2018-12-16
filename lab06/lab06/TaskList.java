@@ -3,7 +3,9 @@ package lab06;
 import java.awt.Color;
 
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+
 
 class	TaskList extends JPanel{
 	public static final int WIDTH = MainWindow.WINDOW_WIDTH;
@@ -15,7 +17,9 @@ class	TaskList extends JPanel{
 
 	private AddTaskForm addTaskForm = new AddTaskForm();
 
-	public TaskList(){
+	public TaskList(ActionListener buttonPressedListener){
+		this.addTaskForm.addButtonPressedListener(buttonPressedListener);
+
 		this.list.setFixedCellWidth(TaskList.WIDTH-20);
 
 		this.scrollPane.setMinimumSize(TaskList.SIZE);
@@ -37,5 +41,9 @@ class	TaskList extends JPanel{
 
 	public String getSelectedElement(){
 		return this.list.getSelectedValue();
+	}
+
+	public String[] getInput(){
+		return this.addTaskForm.getInput();
 	}
 }
