@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class MainWindow extends JFrame{
 	public static final int WINDOW_WIDTH = 400;
-	public static final int WINDOW_HEIGHT = 300;
+	public static final int WINDOW_HEIGHT = 400;
 
 	private JPanel mainPanel = new JPanel();
 	public ServerInfoForm serverInfoForm =
@@ -16,19 +16,19 @@ class MainWindow extends JFrame{
 	private MessageManager messageManager = new MessageManager();
 	private TaskList taskList = new TaskList();
 
-	FormSubmitListener formSubmitListener = null;
+	FormSubmitListener connectFormSubmitListener = null;
 	
 	MainWindow(){
 		this.initWindow();
 	}
 
 	MainWindow(FormSubmitListener listener){
-		this.formSubmitListener = listener;
+		this.connectFormSubmitListener = listener;
 		this.initWindow();
 	}
 
 	public void addFormSubmitListener(FormSubmitListener listener){
-		this.formSubmitListener = listener;
+		this.connectFormSubmitListener = listener;
 	}
 
 	public MessageManager getMessageManager(){
@@ -36,10 +36,12 @@ class MainWindow extends JFrame{
 	}
 
 	private void initWindow(){
+		this.setResizable(false);
 		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 		this.mainPanel.add(this.serverInfoForm);
 		this.mainPanel.add(this.taskList);
-		this.mainPanel.add(this.messageManager.getLabel());
+		this.mainPanel.add(this.messageManager);
+
 		
 		this.taskList.addElement("asdf");
 
@@ -58,8 +60,8 @@ class MainWindow extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e){
 			try{
-				if(this.parent.formSubmitListener != null)
-					this.parent.formSubmitListener.callback(this.parent.serverInfoForm.getInput());
+				if(this.parent.connectFormSubmitListener != null)
+					this.parent.connectFormSubmitListener.callback(this.parent.serverInfoForm.getInput());
 			}catch(IOException excp){
 				excp.printStackTrace();
 			}

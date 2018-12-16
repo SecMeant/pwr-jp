@@ -4,6 +4,7 @@ import java.util.Vector;
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
 import java.awt.Color;
+import java.awt.Dimension;
 
 class Event{}
 
@@ -29,6 +30,12 @@ class MessageManager extends JPanel{
 	private JLabel label = new JLabel();
 	private MessageDisplayer messageDisplayer = new MessageDisplayer(this);
 
+	public MessageManager(){
+		this.label.setBackground(Color.red);
+		this.label.setPreferredSize(new Dimension(MainWindow.WINDOW_WIDTH/2, 12));
+		this.add(this.label);
+	}
+
 	public void addMessage(String message){
 		this.label.setForeground(Color.black);
 		this.messageQ.push(message);
@@ -39,17 +46,22 @@ class MessageManager extends JPanel{
 
 	public void addMessageForced(String message){
 		this.label.setForeground(Color.black);
-		this.label.setText(message);
+		this.setMessage(message);
 	}
 
 	public void addMessageError(String message){
 		this.label.setForeground(Color.red);
-		this.label.setText(message);
+		this.setMessage(message);
 	}
 
 	public void addMessageSuccess(String message){
 		this.label.setForeground(Color.blue);
+		this.setMessage(message);
+	}
+
+	private void setMessage(String message){
 		this.label.setText(message);
+		this.label.setHorizontalAlignment(JLabel.CENTER);
 	}
 
 	public JLabel getLabel(){

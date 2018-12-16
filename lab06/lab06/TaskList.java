@@ -29,12 +29,13 @@ class	TaskList extends JPanel{
 
 	public void addElement(String element){
 		((DefaultListModel<String>)this.list.getModel()).addElement(element);
-		System.out.println(this.list.getSelectedValue());
 	}
 
 	public String getElement(int index){
 		return null;
 	}
 
-
+	public String getSelectedElement(){
+		return this.list.getSelectedValue();
+	}
 }

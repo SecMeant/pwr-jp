@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.net.UnknownHostException;
+import java.lang.IllegalArgumentException;
 
 import javax.swing.*;
 
@@ -53,10 +54,16 @@ class TaskClient{
 			this.iface.setStateConnected(true);
 		}catch(NumberFormatException e){
 			this.signalError("Error! Port must be a number");
+			System.err.println(e.getMessage());
 		}catch(UnknownHostException e){
 			this.signalError("Error! server host unknown");
+			System.err.println(e.getMessage());
 		}catch(java.net.ConnectException e){
 			this.signalError("Connection refused by server");
+			System.err.println(e.getMessage());
+		}catch(java.lang.IllegalArgumentException e){
+			this.signalError("Error! Port of out range");
+			System.err.println(e.getMessage());
 		}
 	}
 
