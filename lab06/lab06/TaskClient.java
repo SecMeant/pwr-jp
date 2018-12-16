@@ -59,9 +59,8 @@ class TaskClient{
 			if(!this.parent.isConnected()){
 				this.parent.signalError("Connect to server first.");
 			}
-
-			System.out.println(args[0]);
-			System.out.println(args[1]);
+			
+			this.parent.addTaskToServer(args[0], args[1]);
 		}
 	}
 
@@ -105,5 +104,25 @@ class TaskClient{
 		this.connection.shutdownOutput();
 		this.connection.close();
 		this.iface.setStateConnected(false);
+	}
+
+	private boolean addTaskToServer(String op, String args){
+		if(!this.isConnected())
+			return false;
+
+		if(!this.checkTask(op,args))
+			return false;
+
+		try{
+			TaskProtocol.sendAddTaskRequest(this.connection.getOutputStream(), op, args);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	private boolean checkTask(String op, String args){
+		return true;
 	}
 }
