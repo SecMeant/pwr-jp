@@ -46,6 +46,25 @@ class TaskClient{
 		}
 	}
 
+	private class AddTaskListener implements FormSubmitListener{
+		private TaskClient parent;
+
+		public AddTaskListener(TaskClient parent){
+			this.parent = parent;
+		}	
+
+		@Override
+		public void callback(String[] args) throws IOException{
+			if(!this.parent.isConnected()){
+				this.parent.signalError("Error! In order to add task, you need to be connected to the server.");
+			}
+		}
+	}
+
+	private boolean isConnected(){
+		return this.connection.isConnected() && !this.connection.isClosed();
+	}
+
 	private void connect(String host, String port) throws IOException{
 		System.out.println("Connecting . . .");
 
