@@ -40,22 +40,35 @@ class TaskProtocol{
 
 	public static final int HEADER_SIZE = 32 * 2;
 
-	public static void sendAddTaskRequest(OutputStream out_, String op, String args)throws IOException{
+	public static void sendAddTaskRequest(OutputStream out_, String op, String args)
+	throws IOException{
 		DataOutputStream out = new DataOutputStream(out_);
+
+		// Send header
+		// Write request id
 		out.writeInt(REQ_ADDTASK);
+
+		// Write data size
 		out.writeInt(
 			op.length() +
 			1 + // null byte, terminator
 			args.length() +
 			1 // null byte, terminator
 			);
+
+		// Send data
+		// Write operation
 		byte[] tmp = op.getBytes();
 		out.write(tmp,0,tmp.length);
 
+		// Null termination for operation string
 		out.write(0);
 
+		// Write args for operation
 		tmp = args.getBytes();
 		out.write(tmp, 0, tmp.length);
+
+		// Null termination for args string
 		out.write(0);
 	}
 }
