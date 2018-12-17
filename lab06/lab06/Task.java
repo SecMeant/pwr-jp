@@ -1,28 +1,33 @@
 package lab06;
 
 class Task{
-	private int id;
-	private String args;
-	private String answer;
+	public String operation;
+	public String args;
+	public String result;
 
-	Task(int id, String args){
-		this.id = id;
+	Task(String operation, String args){
+		this.operation = operation;
 		this.args = args;
 	}
 
-	Task(int id, String args, String answer){
-		this(id, args);
-		this.answer = answer;
+	Task(String operation, String args, String result){
+		this(operation, args);
+		this.result = result;
 	}
 
-	public String serialize(){
-		StringBuilder serialized = new StringBuilder();
-		serialized.append(this.id);
-		serialized.append("&");
-		serialized.append(this.args);
-		serialized.append("&");
-		serialized.append(this.answer);
+	@Override
+	public boolean equals(Object other){
+		if(other == null) return false;
+		if(other == this) return false;
+		if(!(other instanceof Task)) return false;
 
-		return serialized.toString();
+		Task other_t = (Task) other;
+
+		return this.operation.equals(other_t.operation) &&
+		       this.args.equals(other_t.args);
+	}
+
+	public void setResult(String result){
+		this.result = result;
 	}
 }

@@ -15,6 +15,8 @@ import java.io.DataOutputStream;
  * however if any of messages are invalid in terms of protocol ( i.e bad header,
  * unaligned data, missing separator etc. ) server is allowed to shutdown connection
  * immediately and ignore rest of messages / data, therefore client should start new session.
+ * After each request sent server will response with single int32 defined below as RES_OK
+ * or RES_ERR
  * 
  * -!- PROTOCOL HEADERS
  * [ int32   | int32 ]
@@ -38,12 +40,14 @@ class TaskProtocol{
 	public static final int REQ_ADDTASK = 1;
 	public static final int REQ_GETTASKLIST = 2;
 
+	public static final int RES_OK = 1;
+	public static final int RES_ERR = 2;
+
 	public static final int HEADER_SIZE = 32 * 2;
 
-	public static void sendAddTaskRequest(OutputStream out_, String op, String args)
+	public static void sendAddTaskRequest(DataOutputStream out,
+	                                      String op, String args)
 	throws IOException{
-		DataOutputStream out = new DataOutputStream(out_);
-
 		// Send header
 		// Write request id
 		out.writeInt(REQ_ADDTASK);
@@ -70,5 +74,9 @@ class TaskProtocol{
 
 		// Null termination for args string
 		out.write(0);
+	}
+
+	public static void sendGetTaskListRequest(OutputStream out_){
+
 	}
 }
