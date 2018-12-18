@@ -10,6 +10,7 @@ import java.util.List;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
+
 class TaskServer extends Thread{
 	public static final int LISTEN_PORT = 1337;
 	public static final String LISTEN_IP = "0.0.0.0";
@@ -18,7 +19,7 @@ class TaskServer extends Thread{
 	public static final String[] operations =
 		new String[]{"add","sub","mod","mul","div"};
 
-	private volatile ArrayList<Task> tasks = new ArrayList<Task>();
+	public volatile ArrayList<Task> tasks = new ArrayList<Task>();
 
 	ServerSocket listenSocket;
 
@@ -36,24 +37,44 @@ class TaskServer extends Thread{
 			try{
 				Socket sock = this.listenSocket.accept();
 				System.out.println("Accepted");
-				this.handleConnection(sock);
+				Worker worker = new Worker(this, sock);
+				worker.start(); // Will handle connection
 			}catch(IOException e){
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private void handleConnection(Socket sock) throws IOException{
-		DataOutputStream sockOut = new DataOutputStream(sock.getOutputStream());
-		DataInputStream sockIn = new DataInputStream(sock.getInputStream());
+	private class Worker extends Thread{
+		private TaskServer parent;
+		Socket sock;
 
-		while(true){
-			if(!this.handleRequest(sockIn, sockOut)){
-				this.sendERR(sockOut);
-				this.terminateConnection(sock);
-				break;
+		Worker(TaskServer parent, Socket sock){
+			this.parent = parent;
+			this.sock = sock;
+			this.setDaemon(true);
+		}
+
+		public void run(){
+			try{
+			this.handleConnection();
+			}catch(IOException e){
+				e.printStackTrace();
 			}
-			this.sendOK(sockOut);
+		}
+
+		private void handleConnection() throws IOException{
+			DataOutputStream sockOut = new DataOutputStream(this.sock.getOutputStream());
+			DataInputStream sockIn = new DataInputStream(this.sock.getInputStream());
+
+			while(true){
+				if(!this.parent.handleRequest(sockIn, sockOut)){
+					this.parent.sendERR(sockOut);
+					this.parent.terminateConnection(sock);
+					break;
+				}
+				this.parent.sendOK(sockOut);
+			}
 		}
 	}
 
@@ -185,7 +206,10 @@ class TaskServer extends Thread{
 		if(this.tasks.contains(task))
 			return;
 
-		this.tasks.add(task);
+
+		synchronized(this.tasks){
+			this.tasks.add(task);
+		}
 	}
 
 	private void sendTaskList(DataOutputStream out) throws IOException{
@@ -215,13 +239,15 @@ class TaskServer extends Thread{
 	}
 
 	private boolean handleResult(DataOutputStream out, Task task){
-		for(int i = 0; i < this.tasks.size(); i++){
-			if(task.equals(this.tasks.get(i))){
-				this.tasks.get(i).result = task.result;
-				return true;
+		synchronized(this.tasks){
+			for(int i = 0; i < this.tasks.size(); i++){
+				if(task.equals(this.tasks.get(i))){
+					this.tasks.get(i).result = task.result;
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 	}
 }
 
