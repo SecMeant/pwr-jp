@@ -31,6 +31,9 @@ class TaskClient{
 		this.iface.getWindow().addFormSubmitListener(new ServerFormListener(this));
 		this.iface.getWindow().addAddTaskListener(new AddTaskListener(this));
 		this.iface.getWindow().addGetTaskListListener(new GetTaskListListener(this));
+		this.iface.getWindow().addSolveTaskListener(new SolveTaskListener(this));
+
+		this.iface.addTaskToList("add", "1;2");
 	}
 
 	private void test()throws IOException{
@@ -93,7 +96,33 @@ class TaskClient{
 		}
 	}
 
+	private class SolveTaskListener implements FormSubmitListener{
+		private TaskClient parent;
+
+		public SolveTaskListener(TaskClient parent){
+			this.parent = parent;
+		}
+
+		@Override
+		public void callback(String[] args) throws IOException{
+			System.out.println("Solve task");
+			
+			Task task = new Task(args[0], args[1], args[2]);
+
+			if(!this.parent.solveTask(task))
+				return;
+
+			if(this.parent.sendSolve(task)){
+				this.parent.signalSuccess("Successfully sent solved task.");
+				return;
+			}
+
+			this.parent.signalError("Error occurred when tries to send results to server.");
+		}
+	}
+
 	private boolean isConnected(){
+		
 		return this.connection.isConnected() && !this.connection.isClosed();
 	}
 
@@ -222,7 +251,7 @@ class TaskClient{
 		this.sockIn.readFully(buff, 0, buff.length);
 
 		if(this.sockIn.readInt() != TaskProtocol.RES_OK){
-			System.out.println("Got some data from server but it returned NON RES_OK afterward. Parhaps stolen other packet?");
+			System.out.println("Got some data from server but it returned NON RES_OK afterward. Perhaps stolen other packet?");
 		}
 		
 		String data = new String(buff);
@@ -240,5 +269,69 @@ class TaskClient{
 
 			this.iface.addTaskToList(op, args);
 		}
+	}
+
+	private boolean solveTask(Task task){
+		String[] args = Task.unpackArgs(task);
+
+		if(args.length == 0){
+			return false;
+		}
+
+		int result = Integer.parseInt(args[0]);
+
+		try{
+		switch(task.operation){
+			case "add":
+				for(int i = 1; i < args.length; ++i){
+					try{
+						result += Integer.parseInt(args[i]);
+					}catch(NumberFormatException e){/*ignore*/}
+				}
+				break;
+			case "sub":
+				for(int i = 1; i < args.length; ++i){
+					try{
+						result -= Integer.parseInt(args[i]);
+					}catch(NumberFormatException e){/*ignore*/}
+				}
+				break;
+			case "mod":
+				for(int i = 1; i < args.length; ++i){
+					try{
+						result %= Integer.parseInt(args[i]);
+					}catch(NumberFormatException e){/*ignore*/}
+				}
+				break;
+			case "mul":
+				for(int i = 1; i < args.length; ++i){
+					try{
+						result *= Integer.parseInt(args[i]);
+					}catch(NumberFormatException e){/*ignore*/}
+				}
+				break;
+			case "div":
+				for(int i = 1; i < args.length; ++i){
+					try{
+						result /= Integer.parseInt(args[i]);
+					}catch(NumberFormatException e){/*ignore*/}
+				}
+				break;
+			default:
+				throw new Error("Unknown operation");
+		}
+		}catch(ArithmeticException e){
+			this.signalError("Arithmetic exception! Task is unsolvable.");
+			throw e;
+		}
+
+		task.result = String.valueOf(result);
+		return true;
+	}
+
+	// Returns whether server got task successfully
+	private boolean sendSolve(Task task){
+		System.out.println("Fake sending solved task " + task.toString());
+		return true;
 	}
 }

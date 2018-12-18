@@ -14,24 +14,27 @@ class MainWindow extends JFrame{
 	public ServerInfoForm serverInfoForm =
 		new ServerInfoForm(new ServerFormSubmitListener(this));
 	private MessageManager messageManager = new MessageManager();
-	private TaskList taskList = new TaskList(new AddTaskFormSubmitListener(this),
-	                                         new GetTaskListListener(this));
+	private TaskList taskList = 
+		new TaskList(new AddTaskFormSubmitListener(this), new GetTaskListListener(this),
+		             new SolveTaskListener(this));
 
 	FormSubmitListener connectFormSubmitListener = null;
 	FormSubmitListener addTaskSubmitListener = null;
 	FormSubmitListener getTaskListListener = null;
+	FormSubmitListener solveTaskListener = null;
 	
 	MainWindow(){
 		this.initWindow();
 	}
 
 	MainWindow(FormSubmitListener connectFormListener, FormSubmitListener addTaskListener,
-	           FormSubmitListener getTaskListListener){
+	           FormSubmitListener getTaskListListener, FormSubmitListener solveTaskListener){
 
 		// Register listeners for buttons
 		this.connectFormSubmitListener = connectFormListener;
 		this.addTaskSubmitListener = addTaskListener;
 		this.getTaskListListener = getTaskListListener;
+		this.solveTaskListener = solveTaskListener;
 
 		this.initWindow();
 	}
@@ -46,6 +49,10 @@ class MainWindow extends JFrame{
 
 	public void addGetTaskListListener(FormSubmitListener listener){
 		this.getTaskListListener = listener;
+	}
+
+	public void addSolveTaskListener(FormSubmitListener listener){
+		this.solveTaskListener = listener;
 	}
 
 	public MessageManager getMessageManager(){
@@ -66,9 +73,6 @@ class MainWindow extends JFrame{
 		this.mainPanel.add(this.serverInfoForm);
 		this.mainPanel.add(this.taskList);
 		this.mainPanel.add(this.messageManager);
-
-		
-		this.taskList.addElement("asdf");
 
 		this.add(this.mainPanel);
 		this.setLocationRelativeTo(null);
@@ -123,6 +127,31 @@ class MainWindow extends JFrame{
 			try{
 				if(this.parent.getTaskListListener != null)
 					this.parent.getTaskListListener.callback(null);
+			}catch(IOException excp){
+				excp.printStackTrace();
+			}
+		}
+	}
+
+	private class SolveTaskListener implements ActionListener{
+		MainWindow parent;
+
+		SolveTaskListener(MainWindow parent){
+			this.parent = parent;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e){
+			try{
+				if(this.parent.getTaskListListener != null){
+					String val = this.parent.taskList.getSelectedElement();
+
+					if(val == null)
+						return;
+						
+					String[] args = val.split(",");
+					this.parent.solveTaskListener.callback(args);
+				}
 			}catch(IOException excp){
 				excp.printStackTrace();
 			}

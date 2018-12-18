@@ -41,6 +41,14 @@ class Task{
 	}
 
 	public String toString(){
-		return "Operation: " + this.operation + ", Args: " + this.args + ", Result: " + this.result;
+		return this.operation + "," + this.args + "," + this.result;
+	}
+
+	public static String[] unpackArgs(String args){
+		return args.split(";");
+	}
+
+	public static String[] unpackArgs(Task task){
+		return Task.unpackArgs(task.args);
 	}
 }

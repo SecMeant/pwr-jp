@@ -9,14 +9,20 @@ import javax.swing.*;
 class ActionPanel extends JPanel{
 	public AddTaskForm addTaskForm;
 	public JButton refreshButton;
+	public JButton solveButton;
 
 	ActionPanel(){
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		this.addTaskForm = new AddTaskForm();
 		this.refreshButton = new JButton("Refresh");
+		this.solveButton = new JButton("Solve");
 
-		this.add(this.refreshButton);
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(this.refreshButton);
+		buttonPanel.add(this.solveButton);
+
+		this.add(buttonPanel);
 		this.add(this.addTaskForm);
 	}
 }
@@ -31,9 +37,11 @@ class	TaskList extends JPanel{
 
 	private ActionPanel actionPanel = new ActionPanel();
 
-	public TaskList(ActionListener addTaskButtonListener, ActionListener getTaskListButtonListener){
+	public TaskList(ActionListener addTaskButtonListener, ActionListener getTaskListButtonListener,
+	                ActionListener solveTaskButtonListener){
 		this.actionPanel.addTaskForm.addButtonPressedListener(addTaskButtonListener);
 		this.actionPanel.refreshButton.addActionListener(getTaskListButtonListener);
+		this.actionPanel.solveButton.addActionListener(solveTaskButtonListener);
 
 		this.list.setFixedCellWidth(TaskList.WIDTH-20);
 
