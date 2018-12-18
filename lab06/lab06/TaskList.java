@@ -31,8 +31,9 @@ class	TaskList extends JPanel{
 
 	private ActionPanel actionPanel = new ActionPanel();
 
-	public TaskList(ActionListener buttonPressedListener){
-		this.actionPanel.addTaskForm.addButtonPressedListener(buttonPressedListener);
+	public TaskList(ActionListener addTaskButtonListener, ActionListener getTaskListButtonListener){
+		this.actionPanel.addTaskForm.addButtonPressedListener(addTaskButtonListener);
+		this.actionPanel.refreshButton.addActionListener(getTaskListButtonListener);
 
 		this.list.setFixedCellWidth(TaskList.WIDTH-20);
 
@@ -50,11 +51,15 @@ class	TaskList extends JPanel{
 	}
 
 	public String getElement(int index){
-		return null;
+		return ((DefaultListModel<String>)this.list.getModel()).get(index);
 	}
 
 	public String getSelectedElement(){
 		return this.list.getSelectedValue();
+	}
+
+	public void clear(){
+		((DefaultListModel<String>)this.list.getModel()).clear();
 	}
 
 	public String[] getInput(){

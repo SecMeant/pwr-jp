@@ -30,6 +30,7 @@ class TaskClient{
 		this.iface = new TaskClientInterface(this);
 		this.iface.getWindow().addFormSubmitListener(new ServerFormListener(this));
 		this.iface.getWindow().addAddTaskListener(new AddTaskListener(this));
+		this.iface.getWindow().addGetTaskListListener(new GetTaskListListener(this));
 	}
 
 	private void test()throws IOException{
@@ -68,6 +69,27 @@ class TaskClient{
 			}
 			
 			this.parent.addTaskToServer(args[0], args[1]);
+		}
+	}
+
+	private class GetTaskListListener implements FormSubmitListener{
+		private TaskClient parent;
+
+		public GetTaskListListener(TaskClient parent){
+			this.parent = parent;
+		}
+
+		@Override
+		public void callback(String[] args) throws IOException{
+			System.out.println("Refresh list");
+
+			if(!this.parent.isConnected()){
+				this.parent.signalError("Error! Connect to server first.");
+				return;
+			}
+
+			this.parent.iface.clearTaskList();
+			this.parent.handleGetTaskListRequest();
 		}
 	}
 
@@ -169,5 +191,54 @@ class TaskClient{
 		}
 
 		return false;
+	}
+
+	private void handleGetTaskListRequest() throws IOException{
+		// Send request
+		this.sockOut.writeInt(TaskProtocol.REQ_GETTASKLIST);
+
+		// Datasize for this request should be 0
+		this.sockOut.writeInt(0);
+
+		// Fetch request type
+		int anstype = this.sockIn.readInt();
+
+		// Check answer for this packet
+		// If ans type is not of expected type destroy current session
+		// something went out of sync
+		if(anstype != TaskProtocol.ANS_TASKLIST){
+			System.out.println("Got unexpected request from server. Client disconnecting!");
+			System.out.println(anstype);
+			this.signalError("Got unexpected request from server. Disconnecting!");
+			this.disconnect();
+			return;
+		}
+
+		// Get datasize
+		int dataSize = this.sockIn.readInt();
+
+		// Read data
+		byte[] buff = new byte[dataSize];
+		this.sockIn.readFully(buff, 0, buff.length);
+
+		if(this.sockIn.readInt() != TaskProtocol.RES_OK){
+			System.out.println("Got some data from server but it returned NON RES_OK afterward. Parhaps stolen other packet?");
+		}
+		
+		String data = new String(buff);
+		String[] tasks = data.split("\0\0");
+
+		if(tasks.length == 1)
+			return;
+
+		for(String task_ds : tasks){
+			String[] tmp = task_ds.split("\0");
+
+			String op = tmp[0];
+			String args = tmp[1];
+			String result = tmp[2];
+
+			this.iface.addTaskToList(op, args);
+		}
 	}
 }

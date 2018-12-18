@@ -43,8 +43,8 @@ import java.io.DataOutputStream;
  *	after request no additional data should be sent.
  *
  *	In response server will send message with ANS_TASKLIST and data length
- *	in header. After header actual data will be send in form of operations and args
- *	being null byte separated and each arg will be semicolon separated and each 
+ *	in header. After header actual data will be send in form of operations, args and
+ *	result being null byte separated and each arg will be semicolon separated and each
  *	whole task (op and args) will be two null bytes separated. Like so:
  *	OPERATION \0 ARG1;ARG2;ARG3 \0\0 OPERATION \0 ARG1;ARG2 \0 etc.
  * 
@@ -58,7 +58,6 @@ class TaskProtocol{
 	// Server -> Client packets
 	public static final int RES_OK = 1;
 	public static final int RES_ERR = 2;
-
 	public static final int ANS_TASKLIST = 3;
 
 	public static final int HEADER_SIZE = 32 * 2;
@@ -92,9 +91,5 @@ class TaskProtocol{
 
 		// Null termination for args string
 		out.write(0);
-	}
-
-	public static void sendGetTaskListRequest(OutputStream out_){
-
 	}
 }

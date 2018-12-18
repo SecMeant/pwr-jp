@@ -7,6 +7,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 class TaskServer extends Thread{
 	public static final int LISTEN_PORT = 1337;
@@ -102,15 +104,15 @@ class TaskServer extends Thread{
 			in.readFully(buff, 0, dataSize);
 			data = (new String(buff)).split("\0");
 
-			if(!this.isOperationOk(data[0])){
-				System.out.println("Got incorrect operation from client");
-
-				return false;
-			}
-
 			switch(reqType){
 			
 				case TaskProtocol.REQ_ADDTASK:
+					if(!this.isOperationOk(data[0])){
+						System.out.println("Got incorrect operation from client");
+
+						return false;
+					}
+
 					if(data.length != 2)
 						return false;
 					
@@ -121,6 +123,7 @@ class TaskServer extends Thread{
 					break;
 
 				case TaskProtocol.REQ_GETTASKLIST:
+					this.sendTaskList(out);
 					break;
 
 				default:
@@ -172,6 +175,34 @@ class TaskServer extends Thread{
 			return;
 
 		this.tasks.add(task);
+
+		System.out.println(Arrays.toString(this.tasks.toArray()));
+	}
+
+	private void sendTaskList(DataOutputStream out) throws IOException{
+		// Get data to send
+		byte[] data = this.serializeTasks();
+
+		// Sending header
+		// packet type
+		out.writeInt(TaskProtocol.ANS_TASKLIST);
+
+		// data size
+		out.writeInt(data.length);
+
+		// Sending data
+		out.write(data, 0, data.length);
+	}
+
+	private byte[] serializeTasks() throws IOException{
+		ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
+
+		for(Task t : this.tasks){
+			dataStream.write(t.serialize());
+			dataStream.write(0);
+		}
+
+		return dataStream.toByteArray();
 	}
 }
 

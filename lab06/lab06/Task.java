@@ -26,8 +26,21 @@ class Task{
 		return this.operation.equals(other_t.operation) &&
 		       this.args.equals(other_t.args);
 	}
+	
+	public byte[] serialize(){
+		return (this.operation + "\0" + this.args + "\0" + this.result + "\0").getBytes();
+	}
+
+	public int getSerializedSize(){
+		// Length of all string and 3 null bytes
+		return this.operation.length() + this.args.length() + this.result.length() + 3;
+	}
 
 	public void setResult(String result){
 		this.result = result;
+	}
+
+	public String toString(){
+		return "Operation: " + this.operation + ", Args: " + this.args + ", Result: " + this.result;
 	}
 }

@@ -14,18 +14,25 @@ class MainWindow extends JFrame{
 	public ServerInfoForm serverInfoForm =
 		new ServerInfoForm(new ServerFormSubmitListener(this));
 	private MessageManager messageManager = new MessageManager();
-	private TaskList taskList = new TaskList(new AddTaskFormSubmitListener(this));
+	private TaskList taskList = new TaskList(new AddTaskFormSubmitListener(this),
+	                                         new GetTaskListListener(this));
 
 	FormSubmitListener connectFormSubmitListener = null;
 	FormSubmitListener addTaskSubmitListener = null;
+	FormSubmitListener getTaskListListener = null;
 	
 	MainWindow(){
 		this.initWindow();
 	}
 
-	MainWindow(FormSubmitListener connectFormListener, FormSubmitListener addTaskListener){
+	MainWindow(FormSubmitListener connectFormListener, FormSubmitListener addTaskListener,
+	           FormSubmitListener getTaskListListener){
+
+		// Register listeners for buttons
 		this.connectFormSubmitListener = connectFormListener;
 		this.addTaskSubmitListener = addTaskListener;
+		this.getTaskListListener = getTaskListListener;
+
 		this.initWindow();
 	}
 
@@ -37,8 +44,20 @@ class MainWindow extends JFrame{
 		this.addTaskSubmitListener = listener;
 	}
 
+	public void addGetTaskListListener(FormSubmitListener listener){
+		this.getTaskListListener = listener;
+	}
+
 	public MessageManager getMessageManager(){
 		return this.messageManager;
+	}
+
+	public void addTaskToList(String operation, String args){
+		this.taskList.addElement(new Task(operation, args).toString());
+	}
+
+	public void clearTaskList(){
+		this.taskList.clear();
 	}
 
 	private void initWindow(){
@@ -91,6 +110,24 @@ class MainWindow extends JFrame{
 			}
 		}
 	}
+
+	private class GetTaskListListener implements ActionListener{
+		MainWindow parent;
+
+		GetTaskListListener(MainWindow parent){
+			this.parent = parent;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e){
+			try{
+				if(this.parent.getTaskListListener != null)
+					this.parent.getTaskListListener.callback(null);
+			}catch(IOException excp){
+				excp.printStackTrace();
+			}
+		}
+	}
 }
 
 class TaskClientInterface{
@@ -132,5 +169,13 @@ class TaskClientInterface{
 			this.window.serverInfoForm.button.setText("Connect");
 			this.window.getMessageManager().addMessageForced("Disconnected from the server");
 		}
+	}
+
+	public void addTaskToList(String op, String args){
+		this.window.addTaskToList(op, args);
+	}
+
+	public void clearTaskList(){
+		this.window.clearTaskList();
 	}
 }
