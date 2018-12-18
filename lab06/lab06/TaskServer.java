@@ -122,7 +122,7 @@ class TaskServer extends Thread{
 		return false;
 	}
 
-	// Returns whether operation given in string is known go server
+	// Returns whether operation given in string is known to server
 	private boolean isOperationOk(String operation){
 		for(String op : this.operations){
 			if( op.equals(operation) ){
