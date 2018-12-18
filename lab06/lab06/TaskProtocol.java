@@ -48,12 +48,21 @@ import java.io.DataOutputStream;
  *	whole task (op and args) will be two null bytes separated. Like so:
  *	OPERATION \0 ARG1;ARG2;ARG3 \0\0 OPERATION \0 ARG1;ARG2 \0 etc.
  * 
+ * == REQ_RESULT ==
+ *	Message that is used by client to send result of given task to the server.
+ *	After req type data size should be sent indicating amount of data that client
+ *	will send. After header client should send task object with operation, args, and result
+ *	null separated and args semicolon separated. The amount of sent data should match
+ *	one given in header. After sending results server will answer with RES_OK if successfully
+ *	received and saved result.
+ *
  * */
 
 class TaskProtocol{
 	// Client -> Server packets
 	public static final int REQ_ADDTASK = 1;
 	public static final int REQ_GETTASKLIST = 2;
+	public static final int REQ_RESULT = 3;
 
 	// Server -> Client packets
 	public static final int RES_OK = 1;
