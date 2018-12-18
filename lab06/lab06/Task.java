@@ -6,7 +6,7 @@ class Task{
 	public String result;
 
 	Task(String operation, String args){
-		this.operation = operation;
+	this.operation = operation;
 		this.args = args;
 	}
 

@@ -16,7 +16,7 @@ class TaskServer extends Thread{
 	public static final String[] operations =
 		new String[]{"add","sub","mod","mul","div"};
 
-	private List<String> tasks = new ArrayList<String>();
+	private List<Task> tasks = new ArrayList<Task>();
 
 	ServerSocket listenSocket;
 
@@ -42,24 +42,36 @@ class TaskServer extends Thread{
 	}
 
 	private void handleConnection(Socket sock) throws IOException{
+		DataOutputStream sockOut = new DataOutputStream(sock.getOutputStream());
+		DataInputStream sockIn = new DataInputStream(sock.getInputStream());
+
 		while(true){
-			if(!this.handleRequest(sock)){
+			if(!this.handleRequest(sockIn, sockOut)){
+				this.sendERR(sockOut);
 				this.terminateConnection(sock);
 				break;
 			}
+			this.sendOK(sockOut);
 		}
 	}
 
 	private static boolean checkHeader(int reqType, int dataSize){
-		if(reqType != 1 && reqType != 2){
-			return false;
-		}
-
 		if(dataSize > 512){
 			return false;
 		}
 
-		return true;
+		switch(reqType){
+			case TaskProtocol.REQ_ADDTASK:
+				return true;
+
+			case TaskProtocol.REQ_GETTASKLIST:
+				if(dataSize != 0)
+					return false;
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 	private static void terminateConnection(Socket sock){
@@ -74,19 +86,16 @@ class TaskServer extends Thread{
 
 	// Returns false if request was invalid
 	// true otherwise
-	private boolean handleRequest(Socket sock) throws IOException{
+	private boolean handleRequest(DataInputStream in, DataOutputStream out) throws IOException{
 		int reqType = 0;
 		int dataSize = 0;
-		DataInputStream in = new DataInputStream(sock.getInputStream());
-		DataOutputStream out = new DataOutputStream(sock.getOutputStream());
 		String[] data;
 		try{
 			reqType = in.readInt();
 			dataSize = in.readInt();
 
 			if(!checkHeader(reqType, dataSize)){
-				this.terminateConnection(sock);
-				return false; // request incorrect
+				return false;
 			}
 
 			byte[] buff = new byte[dataSize];
@@ -100,19 +109,26 @@ class TaskServer extends Thread{
 			}
 
 			switch(reqType){
+			
 				case TaskProtocol.REQ_ADDTASK:
-					System.out.println("Got req addtask");
+					if(data.length != 2)
+						return false;
+					
+					String op = data[0];
+					String args = data[1];
+
+					this.addTask(op, args);
 					break;
+
 				case TaskProtocol.REQ_GETTASKLIST:
-					System.out.println("Got req get tasklist");
 					break;
+
 				default:
 					System.out.println("Got unknown req");
 					return false;
 			}
 
 			// Request was successfully handled
-			this.sendOK(out);
 			return true;
 			
 		}catch(NullPointerException e){
@@ -147,6 +163,15 @@ class TaskServer extends Thread{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+
+	private void addTask(String op, String args){
+		Task task = new Task(op, args);
+	
+		if(this.tasks.contains(task))
+			return;
+
+		this.tasks.add(task);
 	}
 }
 
