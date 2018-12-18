@@ -18,7 +18,7 @@ class TaskServer extends Thread{
 	public static final String[] operations =
 		new String[]{"add","sub","mod","mul","div"};
 
-	private List<Task> tasks = new ArrayList<Task>();
+	private volatile ArrayList<Task> tasks = new ArrayList<Task>();
 
 	ServerSocket listenSocket;
 
@@ -69,6 +69,9 @@ class TaskServer extends Thread{
 			case TaskProtocol.REQ_GETTASKLIST:
 				if(dataSize != 0)
 					return false;
+				return true;
+
+			case TaskProtocol.REQ_RESULT:
 				return true;
 
 			default:
@@ -126,6 +129,14 @@ class TaskServer extends Thread{
 					this.sendTaskList(out);
 					break;
 
+				case TaskProtocol.REQ_RESULT:
+					if(data.length != 3){
+						return false; // Wrongly alligned data
+					}
+
+					Task task = new Task(data[0], data[1], data[2]);
+					return this.handleResult(out, task);
+
 				default:
 					System.out.println("Got unknown req");
 					return false;
@@ -175,8 +186,6 @@ class TaskServer extends Thread{
 			return;
 
 		this.tasks.add(task);
-
-		System.out.println(Arrays.toString(this.tasks.toArray()));
 	}
 
 	private void sendTaskList(DataOutputStream out) throws IOException{
@@ -203,6 +212,16 @@ class TaskServer extends Thread{
 		}
 
 		return dataStream.toByteArray();
+	}
+
+	private boolean handleResult(DataOutputStream out, Task task){
+		for(int i = 0; i < this.tasks.size(); i++){
+			if(task.equals(this.tasks.get(i))){
+				this.tasks.get(i).result = task.result;
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

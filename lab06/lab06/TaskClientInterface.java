@@ -59,8 +59,8 @@ class MainWindow extends JFrame{
 		return this.messageManager;
 	}
 
-	public void addTaskToList(String operation, String args){
-		this.taskList.addElement(new Task(operation, args).toString());
+	public void addTaskToList(String operation, String args, String result){
+		this.taskList.addElement(new Task(operation, args, result).toString());
 	}
 
 	public void clearTaskList(){
@@ -200,8 +200,8 @@ class TaskClientInterface{
 		}
 	}
 
-	public void addTaskToList(String op, String args){
-		this.window.addTaskToList(op, args);
+	public void addTaskToList(String op, String args, String result){
+		this.window.addTaskToList(op, args, result);
 	}
 
 	public void clearTaskList(){

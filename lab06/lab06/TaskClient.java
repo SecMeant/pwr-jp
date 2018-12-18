@@ -33,7 +33,6 @@ class TaskClient{
 		this.iface.getWindow().addGetTaskListListener(new GetTaskListListener(this));
 		this.iface.getWindow().addSolveTaskListener(new SolveTaskListener(this));
 
-		this.iface.addTaskToList("add", "1;2");
 	}
 
 	private void test()throws IOException{
@@ -84,8 +83,6 @@ class TaskClient{
 
 		@Override
 		public void callback(String[] args) throws IOException{
-			System.out.println("Refresh list");
-
 			if(!this.parent.isConnected()){
 				this.parent.signalError("Error! Connect to server first.");
 				return;
@@ -105,8 +102,6 @@ class TaskClient{
 
 		@Override
 		public void callback(String[] args) throws IOException{
-			System.out.println("Solve task");
-			
 			Task task = new Task(args[0], args[1], args[2]);
 
 			if(!this.parent.solveTask(task))
@@ -268,7 +263,7 @@ class TaskClient{
 			String args = tmp[1];
 			String result = tmp[2];
 
-			this.iface.addTaskToList(op, args);
+			this.iface.addTaskToList(op, args, result);
 		}
 	}
 
@@ -331,8 +326,25 @@ class TaskClient{
 	}
 
 	// Returns whether server got task successfully
-	private boolean sendSolve(Task task){
-		System.out.println("Fake sending solved task " + task.toString());
-		return true;
+	private boolean sendSolve(Task task)throws IOException{
+
+		byte[] data = task.serialize();
+
+		// Send header
+		// send request type
+		this.sockOut.writeInt(TaskProtocol.REQ_RESULT);
+
+		// send length of data
+		this.sockOut.writeInt(data.length);
+
+		// send data
+		this.sockOut.write(data, 0, data.length);
+
+		// Wait for response from server
+		if(this.sockIn.readInt() == TaskProtocol.RES_OK){
+			return true;
+		}
+
+		return false;
 	}
 }
