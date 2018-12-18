@@ -255,10 +255,11 @@ class TaskClient{
 		}
 		
 		String data = new String(buff);
-		String[] tasks = data.split("\0\0");
 
-		if(tasks.length == 1)
+		if(!data.contains("\0\0"))
 			return;
+
+		String[] tasks = data.split("\0\0");
 
 		for(String task_ds : tasks){
 			String[] tmp = task_ds.split("\0");
