@@ -31,8 +31,6 @@ class MessageManager extends JPanel{
 	private MessageDisplayer messageDisplayer = new MessageDisplayer(this);
 
 	public MessageManager(){
-		this.label.setBackground(Color.red);
-		this.label.setPreferredSize(new Dimension(MainWindow.WINDOW_WIDTH/2, 12));
 		this.add(this.label);
 	}
 

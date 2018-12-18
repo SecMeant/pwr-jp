@@ -6,6 +6,20 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+class ActionPanel extends JPanel{
+	public AddTaskForm addTaskForm;
+	public JButton refreshButton;
+
+	ActionPanel(){
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+		this.addTaskForm = new AddTaskForm();
+		this.refreshButton = new JButton("Refresh");
+
+		this.add(this.refreshButton);
+		this.add(this.addTaskForm);
+	}
+}
 
 class	TaskList extends JPanel{
 	public static final int WIDTH = MainWindow.WINDOW_WIDTH;
@@ -15,10 +29,10 @@ class	TaskList extends JPanel{
 	private JList<String> list = new JList<String>(new DefaultListModel<String>());
 	private JScrollPane scrollPane = new JScrollPane(this.list);
 
-	private AddTaskForm addTaskForm = new AddTaskForm();
+	private ActionPanel actionPanel = new ActionPanel();
 
 	public TaskList(ActionListener buttonPressedListener){
-		this.addTaskForm.addButtonPressedListener(buttonPressedListener);
+		this.actionPanel.addTaskForm.addButtonPressedListener(buttonPressedListener);
 
 		this.list.setFixedCellWidth(TaskList.WIDTH-20);
 
@@ -26,7 +40,7 @@ class	TaskList extends JPanel{
 		this.scrollPane.getViewport().setViewSize(TaskList.SIZE);
 
 		this.add(this.scrollPane);
-		this.add(this.addTaskForm);
+		this.add(this.actionPanel);
 
 		this.setVisible(true);
 	}
@@ -44,6 +58,6 @@ class	TaskList extends JPanel{
 	}
 
 	public String[] getInput(){
-		return this.addTaskForm.getInput();
+		return this.actionPanel.addTaskForm.getInput();
 	}
 }
