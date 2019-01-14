@@ -11,9 +11,10 @@ public class Terminal{
 		System.out.println("Creating new Terminal");	
 	}
 
-	public void getTicket() throws NotBoundException, MalformedURLException, RemoteException {
+	public void getTicket(String category)
+	throws NotBoundException, MalformedURLException, RemoteException {
 		ICentral iface = (ICentral) Naming.lookup(Central.INTERFACE_URL);
-		Ticket ticket = iface.getTicket();
+		Ticket ticket = iface.getTicket(category);
 		
 		System.out.println("Got ticket: " + ticket.toString());
 

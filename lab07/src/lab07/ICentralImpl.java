@@ -20,9 +20,9 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 		return true;
 	}
 
-	public Ticket getTicket() throws RemoteException{
+	public Ticket getTicket(String category) throws RemoteException{
 		Ticket t = new Ticket();
-		t.category = "other";
+		t.category = category;
 		t.number = this.ticketNumber;
 		t.status = 'i';
 

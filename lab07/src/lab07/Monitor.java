@@ -11,8 +11,8 @@ import java.net.MalformedURLException;
 public class Monitor{
 	public static int REGISTRY_PORT = 5061;
 	
-	ICentral centralIFace;
-	IMonitor selfIFace; // Rmi interface to this monitor
+	private ICentral centralIFace;
+	private IMonitor selfIFace; // Rmi interface to this monitor
 
 	public Monitor(){
 		try{

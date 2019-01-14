@@ -11,10 +11,10 @@ public class Main{
 		Monitor monitor = new Monitor();
 
 		try{
-			terminal.getTicket();
-			terminal.getTicket();
-			terminal.getTicket();
-			terminal.getTicket();
+			terminal.getTicket("other");
+			terminal.getTicket("priority");
+			terminal.getTicket("different");
+			terminal.getTicket("i dont even know what im doing");
 		}catch(Exception e){
 			System.err.println("Error occured when tried to call Central remote interface.");
 		}
