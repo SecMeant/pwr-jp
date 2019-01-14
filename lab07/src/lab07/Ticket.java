@@ -9,4 +9,9 @@ public class Ticket implements Serializable{
 	// 'c' - called
 	// 's' - served
 	public char status;
+
+	@Override
+	public String toString(){
+		return this.category + " " + String.valueOf(this.number) + " " + this.status;
+	}
 }
