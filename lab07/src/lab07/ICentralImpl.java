@@ -33,6 +33,16 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 		return t;
 	}
 
+	public Ticket waitForTicket(String category) throws RemoteException{
+		Ticket t = new Ticket();
+
+		t.category = category;
+		t.number = 1337;
+		t.status = 's';
+
+		return t;
+	}
+
 	private void createAndShowGui(){
 
 	}

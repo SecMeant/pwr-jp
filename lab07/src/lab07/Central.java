@@ -14,7 +14,15 @@ public class Central{
 
 	ArrayList<IMonitor> monitors = new ArrayList<IMonitor>();
 
+	public static void main(final String... args){
+		Central self = new Central();
+	}
+
 	public Central(){
+		this.registerInterface();
+	}
+
+	private void registerInterface(){
 		try{
 			Registry registry = LocateRegistry.createRegistry(Central.REGISTRY_PORT);
 			registry.rebind("ICentral", new ICentralImpl(this));

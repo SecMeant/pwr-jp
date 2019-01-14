@@ -3,3 +3,12 @@ all:
 
 run:
 	java lab07.Main
+
+central:
+	java lab07.Central
+
+tickethandler:
+	java lab07.TicketHandler
+
+terminal:
+	java lab07.Terminal

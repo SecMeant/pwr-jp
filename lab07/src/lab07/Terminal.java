@@ -9,6 +9,19 @@ import java.rmi.NotBoundException;
 public class Terminal{
 	ICentral centralInterface;
 
+	public static void main(final String... args){
+		Terminal self = new Terminal();
+
+		try{
+			self.getTicket("other");
+			self.getTicket("priority");
+			self.getTicket("different");
+			self.getTicket("i dont even know what im doing");
+		}catch(Exception e){
+			System.err.println("Error occured when tried to call Central remote interface.");
+		}
+	}
+
 	Terminal(){
 		try{
 			this.loadCentralInterface();
