@@ -11,11 +11,12 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 
 	public ICentralImpl(Central parent) throws RemoteException{
 		this.parent = parent;
-		this.ticketNumber = 0;
+		this.ticketNumber = 1;
 	}
 
 	public boolean register(IMonitor m) throws RemoteException{
 		System.out.println("Registering new Monitor " + m.toString());
+		this.parent.monitors.add(m);
 		return true;
 	}
 
@@ -26,6 +27,13 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 		t.status = 'i';
 
 		this.ticketNumber++;
+
+		this.parent.updateMonitors();
+
 		return t;
+	}
+
+	private void createAndShowGui(){
+
 	}
 }

@@ -8,6 +8,7 @@ public class Main{
 	{
 		Central central = new Central();
 		Terminal terminal = new Terminal();
+		Monitor monitor = new Monitor();
 
 		try{
 			terminal.getTicket();
