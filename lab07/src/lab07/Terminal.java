@@ -7,14 +7,25 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 
 public class Terminal{
+	ICentral centralInterface;
+
 	Terminal(){
-		System.out.println("Creating new Terminal");	
+		try{
+			this.loadCentralInterface();
+			System.out.println("Creating new Terminal");	
+		}catch(Exception e){
+			System.err.println("Terminal failed to connect to central.");
+		}
+	}
+
+	private void loadCentralInterface()
+	throws NotBoundException, MalformedURLException, RemoteException {
+		this.centralInterface = (ICentral) Naming.lookup(Central.INTERFACE_URL);
 	}
 
 	public void getTicket(String category)
 	throws NotBoundException, MalformedURLException, RemoteException {
-		ICentral iface = (ICentral) Naming.lookup(Central.INTERFACE_URL);
-		Ticket ticket = iface.getTicket(category);
+		Ticket ticket = this.centralInterface.getTicket(category);
 		
 		System.out.println("Got ticket: " + ticket.toString());
 
