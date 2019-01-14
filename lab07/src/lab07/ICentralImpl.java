@@ -77,26 +77,25 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 	}
 
 	public void updateMonitors(){
+		Queue<Ticket> ticketQ = this.tickets.get("other");
+		Object[] ticketArray = ticketQ.toArray();
 
-		Info[] categoryList = new Info[2];
+		int[] tickets = new int[ticketArray.length];
 		
-		for (Map.Entry<String, BlockingQueue<Ticket>> e : this.tickets.entrySet()){
-		//	Info catInfo = new Info();
-		//	catInfo.categoryName = e.getKey();
-
-		//	Ticket[] tickarray = (Ticket[]) e.getValue().toArray();
-		//	catInfo.queue = new int[tickarray.length];
-
-		//	for(int i=0; i < tickarray.length; i++){
-		//		catInfo.queue[i] = tickarray[i].number;
-		//	}
-
-		//	categoryList.add(catInfo);
+		for(int i=0; i < ticketArray.length; i++){
+			tickets[i] = ((Ticket) ticketArray[i]).number;
 		}
+
+		Info info = new Info();
+		info.categoryName = "other";
+		info.queue = tickets;
+
+		Info[] infos = new Info[1];
+		infos[0] = info;
 
 		for(IMonitor monitor : this.parent.monitors){
 			try{
-					monitor.update((Info[]) categoryList.toArray());
+					monitor.update(infos);
 			}catch(Exception e){
 				System.err.println("Some monitor update failed.");
 				System.err.println(e.getMessage());

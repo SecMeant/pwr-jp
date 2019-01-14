@@ -14,11 +14,11 @@ public class Terminal{
 
 		try{
 			self.getTicket("other");
-			self.getTicket("priority");
+			self.getTicket("high priority");
 			self.getTicket("different");
-			self.getTicket("i dont even know what im doing");
 		}catch(Exception e){
 			System.err.println("Error occured when tried to call Central remote interface.");
+			System.err.println(e.getMessage());
 		}
 	}
 

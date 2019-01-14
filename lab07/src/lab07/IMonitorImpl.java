@@ -10,7 +10,10 @@ public class IMonitorImpl extends UnicastRemoteObject implements IMonitor{
 
 	}
 
-	public void update(Info[] i) throws RemoteException{
+	public void update(Info[] infos) throws RemoteException{
 		System.out.println("Update monitor called");
+		for(Info i : infos){
+			System.out.println(i);
+		}
 	}
 }
