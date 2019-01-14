@@ -43,7 +43,8 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 		return t;
 	}
 
-	private void createAndShowGui(){
-
+	public void reportTicketHandled(Ticket t) throws RemoteException{
+		this.parent.updateMonitors();
 	}
+
 }

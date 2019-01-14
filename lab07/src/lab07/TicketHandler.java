@@ -13,15 +13,8 @@ public class TicketHandler{
 
 	public static void main(final String... args){
 		TicketHandler self = new TicketHandler();
-
-		for(;;){
-			try{
-				self.getTicket("other");
-				TimeUnit.SECONDS.sleep(3); // hard work
-			}catch(Exception e){
-				System.err.println(e.getMessage());
-			}
-		}
+	
+		self.handleTickets();
 	}
 
 	public TicketHandler(){
@@ -30,6 +23,17 @@ public class TicketHandler{
 			System.out.println("Ticket handler connected to central.");
 		}catch(Exception e){
 			System.err.println("Ticket handler failed to connect to central.");
+		}
+	}
+
+	private void handleTickets(){
+		for(;;){
+			try{
+				this.getTicket("other");
+				TimeUnit.SECONDS.sleep(3); // hard work
+			}catch(Exception e){
+				System.err.println(e.getMessage());
+			}
 		}
 	}
 
