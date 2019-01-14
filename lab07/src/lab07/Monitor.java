@@ -14,6 +14,10 @@ public class Monitor{
 	private ICentral centralIFace;
 	private IMonitor selfIFace; // Rmi interface to this monitor
 
+	public static void main(final String... args){
+		Monitor self = new Monitor();
+	}
+
 	public Monitor(){
 		try{
 			this.registerRMIInterface();

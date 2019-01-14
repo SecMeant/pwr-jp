@@ -29,8 +29,9 @@ public class TicketHandler{
 	private void handleTickets(){
 		for(;;){
 			try{
-				this.getTicket("other");
+				Ticket t = this.getTicket("other");
 				TimeUnit.SECONDS.sleep(3); // hard work
+				this.centralInterface.reportTicketHandled(t);
 			}catch(Exception e){
 				System.err.println(e.getMessage());
 			}
@@ -42,9 +43,10 @@ public class TicketHandler{
 		this.centralInterface = (ICentral) Naming.lookup(Central.INTERFACE_URL);
 	}
 
-	public void getTicket(String category) throws RemoteException, InterruptedException{
+	public Ticket getTicket(String category) throws RemoteException, InterruptedException{
 		Ticket ticket = this.centralInterface.waitForTicket(category);
 
 		System.out.println("Got ticket: " + ticket.toString());
+		return ticket;
 	}
 }

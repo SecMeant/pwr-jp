@@ -12,3 +12,6 @@ tickethandler:
 
 terminal:
 	java lab07.Terminal
+
+monitor:
+	java lab07.Monitor
