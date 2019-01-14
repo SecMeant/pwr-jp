@@ -31,14 +31,4 @@ public class Central{
 			System.err.println("Interface registering failed!");
 		}
 	}
-
-	public void updateMonitors(){
-		for(IMonitor monitor : this.monitors){
-			try{
-				monitor.update(new Info[0]);
-			}catch(Exception e){
-				System.err.println("Some monitor update failed.");
-			}
-		}
-	}
 }

@@ -1,5 +1,5 @@
 all:
-	javac lab07/*.java
+	javac lab07/*.java -Xlint:unchecked
 
 run:
 	java lab07.Main

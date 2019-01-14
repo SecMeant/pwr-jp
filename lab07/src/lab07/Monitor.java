@@ -25,6 +25,7 @@ public class Monitor{
 			this.registerToCentral();
 		}catch(Exception e){
 			System.err.println("Failed to create monitor.");
+			System.err.println(e.getMessage());
 		}
 	}
 
