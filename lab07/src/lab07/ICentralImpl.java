@@ -31,6 +31,7 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 	public boolean register(IMonitor m) throws RemoteException{
 		System.out.println("Registering new Monitor " + m.toString());
 		this.parent.monitors.add(m);
+		this.updateMonitors();
 		return true;
 	}
 
