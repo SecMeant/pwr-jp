@@ -10,15 +10,17 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 class CategoryLabel extends JPanel{
-	public JLabel category = new JLabel();
+	public String category;
+	public JLabel categoryLabel = new JLabel();
 	public JLabel tickets = new JLabel();
 
 	CategoryLabel(String catName){
-		this.category.setText(catName);
+		this.category = catName;
+		this.categoryLabel.setText(catName + " queue: ");
 
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-		this.add(category);
+		this.add(categoryLabel);
 		this.add(tickets);
 	}
 
@@ -76,7 +78,7 @@ public class MonitorGui extends JFrame{
 
 	public void updateCategoryTickets(String category, int[] tickets){
 		for(CategoryLabel cl : this.categoryLabels){
-			if(cl.category.getText().equals(category)){
+			if(cl.category.equals(category)){
 				cl.setTicketNumbers(tickets);
 				return;
 			}

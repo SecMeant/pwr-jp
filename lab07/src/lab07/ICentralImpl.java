@@ -100,13 +100,15 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 			infos[j] = info;
 			j++;
 		}
-
-		for(IMonitor monitor : this.parent.monitors){
+		
+		for(int i = 0; i < this.parent.monitors.size(); i++){
 			try{
-					monitor.update(infos);
+					this.parent.monitors.get(i).update(infos);
 			}catch(Exception e){
 				System.err.println("Some monitor update failed.");
 				System.err.println(e.getMessage());
+				this.parent.monitors.remove(i);
+				i--;
 			}
 		}
 	}
