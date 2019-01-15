@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TerminalGui extends JFrame{
 	private static final int WINDOW_WIDTH = 500;
@@ -35,8 +37,9 @@ public class TerminalGui extends JFrame{
 
 	private void initWindow(){
 		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
-		
-		this.ticketNumberLabel.setAlignmentX(this.ticketNumberLabel.CENTER_ALIGNMENT);
+	
+		this.otherTicketButton.addActionListener(new TicketButtonListener(this.parent, "other"));
+		this.highPriorityButton.addActionListener(new TicketButtonListener(this.parent, "high priority"));
 
 		this.mainPanel.add(this.ticketNumberLabel);
 		this.mainPanel.add(this.otherTicketButton);
@@ -46,4 +49,21 @@ public class TerminalGui extends JFrame{
 
 	}
 
+	class TicketButtonListener implements ActionListener{
+			Terminal parent;
+			String ticketCategory;
+
+			TicketButtonListener(Terminal parent, String ticketCat){
+				this.parent = parent;
+				this.ticketCategory = ticketCat;
+			}
+
+			public void actionPerformed(ActionEvent e){
+				try{
+					this.parent.getTicket(this.ticketCategory);
+				}catch(Exception exp){
+					System.err.println(exp.getMessage());
+				}
+			}
+	}
 }
