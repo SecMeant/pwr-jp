@@ -14,15 +14,6 @@ public class Terminal{
 
 	public static void main(final String... args){
 		Terminal self = new Terminal();
-
-		try{
-			self.getTicket("other");
-			self.getTicket("high priority");
-			self.getTicket("different");
-		}catch(Exception e){
-			System.err.println("Error occured when tried to call Central remote interface.");
-			System.err.println(e.getMessage());
-		}
 	}
 
 	Terminal(){
@@ -44,6 +35,7 @@ public class Terminal{
 		Ticket ticket = this.centralInterface.getTicket(category);
 		
 		System.out.println("Got ticket: " + ticket.toString());
+		this.gui.setLabel("You ticket: " + String.valueOf(ticket.number));
 
 	}
 

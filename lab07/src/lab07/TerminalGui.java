@@ -14,7 +14,7 @@ public class TerminalGui extends JFrame{
 	private Terminal parent;
 
 	private JPanel mainPanel = new JPanel();
-	private JLabel ticketNumberLabel = new JLabel("0");
+	private JLabel ticketNumberLabel = new JLabel("Click on buttons to order ticket.");
 	private JButton otherTicketButton = new JButton("other");
 	private JButton highPriorityButton= new JButton("high priority");
 
@@ -47,6 +47,10 @@ public class TerminalGui extends JFrame{
 
 		this.add(this.mainPanel);
 
+	}
+
+	public void setLabel(String txt){
+		this.ticketNumberLabel.setText(txt);
 	}
 
 	class TicketButtonListener implements ActionListener{
