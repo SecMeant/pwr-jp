@@ -10,8 +10,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class TerminalGui extends JFrame{
-	private static final int WINDOW_WIDTH = 500;
-	private static final int WINDOW_HEIGHT = 400;
+	private static final int WINDOW_WIDTH = 300;
+	private static final int WINDOW_HEIGHT = 200;
 
 	private Terminal parent;
 
@@ -45,7 +45,9 @@ public class TerminalGui extends JFrame{
 			this.ticketButtons.add(new JButton(cat));
 			JButton lastButton = this.ticketButtons.get(this.ticketButtons.size()-1);
 			lastButton.addActionListener(new TicketButtonListener(this.parent, cat));
-			this.mainPanel.add(lastButton);
+			JPanel panel = new JPanel();
+			panel.add(lastButton);
+			this.mainPanel.add(panel);
 		}
 
 		this.add(this.mainPanel);
