@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -77,21 +78,28 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 	}
 
 	public void updateMonitors(){
-		Queue<Ticket> ticketQ = this.tickets.get("other");
-		Object[] ticketArray = ticketQ.toArray();
+		Set<String> keyset = this.tickets.keySet();
 
-		int[] tickets = new int[ticketArray.length];
-		
-		for(int i=0; i < ticketArray.length; i++){
-			tickets[i] = ((Ticket) ticketArray[i]).number;
+		Info[] infos = new Info[keyset.size()];
+
+		int j = 0;
+		for(String key : keyset){
+			Queue<Ticket> ticketQ = this.tickets.get(key);
+			Object[] ticketArray = ticketQ.toArray();
+
+			int[] tickets = new int[ticketArray.length];
+			
+			for(int i=0; i < ticketArray.length; i++){
+				tickets[i] = ((Ticket) ticketArray[i]).number;
+			}
+
+			Info info = new Info();
+			info.categoryName = key;
+			info.queue = tickets;
+
+			infos[j] = info;
+			j++;
 		}
-
-		Info info = new Info();
-		info.categoryName = "other";
-		info.queue = tickets;
-
-		Info[] infos = new Info[1];
-		infos[0] = info;
 
 		for(IMonitor monitor : this.parent.monitors){
 			try{

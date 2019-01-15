@@ -13,6 +13,7 @@ public class Monitor{
 	
 	private ICentral centralIFace;
 	private IMonitor selfIFace; // Rmi interface to this monitor
+	private MonitorGui gui = new MonitorGui(this);
 
 	public static void main(final String... args){
 		Monitor self = new Monitor();
@@ -30,7 +31,7 @@ public class Monitor{
 	}
 
 	private void registerRMIInterface() throws RemoteException{
-		this.selfIFace = new IMonitorImpl();
+			this.selfIFace = new IMonitorImpl(this);
 
 		Registry registry = LocateRegistry.createRegistry(Monitor.REGISTRY_PORT);
 		registry.rebind("IMonitor", this.selfIFace); 
@@ -45,5 +46,9 @@ public class Monitor{
 
 	private void registerToCentral() throws RemoteException{
 		this.centralIFace.register(this.selfIFace);
+	}
+
+	public void updateCategoryTickets(String category, int[] tickets){
+		this.gui.updateCategoryTickets(category, tickets);
 	}
 }
