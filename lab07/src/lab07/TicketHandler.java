@@ -7,17 +7,32 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 public class TicketHandler{
 	private ICentral centralInterface;
+	private String ticketCategory; // ticket category to handle
 
-	public static void main(final String... args){
-		TicketHandler self = new TicketHandler();
-	
+	public static void main(String[] args){
+		TicketHandler self;
+
+		if(args.length == 0){
+			self = new TicketHandler("other");
+		}else{
+			System.out.println("asdf");
+			self = new TicketHandler(args[0]);
+		}
+
+		if(!Central.ticketCategories.contains(self.ticketCategory)){
+			System.err.println("Warrning! Ticket handler initialized with category not known to Central.");
+		}
+
 		self.handleTickets();
 	}
 
-	public TicketHandler(){
+	public TicketHandler(String category){
+		this.ticketCategory = category;
+
 		try{
 			this.loadCentralInterface();
 			System.out.println("Ticket handler connected to central.");
@@ -29,7 +44,7 @@ public class TicketHandler{
 	private void handleTickets(){
 		for(;;){
 			try{
-				Ticket t = this.getTicket("other");
+				Ticket t = this.getTicket(ticketCategory);
 				TimeUnit.SECONDS.sleep(3); // hard work
 				this.centralInterface.reportTicketHandled(t);
 			}catch(Exception e){

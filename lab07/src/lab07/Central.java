@@ -7,8 +7,11 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Central{
+	public static final ArrayList<String> ticketCategories = 
+		new ArrayList<>(Arrays.asList("other","high priority"));
 	public static int REGISTRY_PORT = 5099;
 	public static String INTERFACE_URL = "rmi://localhost:5099/ICentral";
 
