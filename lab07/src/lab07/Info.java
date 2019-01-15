@@ -13,6 +13,7 @@ public class Info implements Serializable{
 		for(int i : this.queue){
 			ret += " " + String.valueOf(i);
 		}
+
 		return ret;
 	}
 }

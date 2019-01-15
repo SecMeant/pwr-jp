@@ -1,5 +1,7 @@
 package lab07;
 
+import javax.swing.*;
+
 import java.net.MalformedURLException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -8,6 +10,7 @@ import java.rmi.NotBoundException;
 
 public class Terminal{
 	ICentral centralInterface;
+	TerminalGui gui = new TerminalGui(this);
 
 	public static void main(final String... args){
 		Terminal self = new Terminal();
