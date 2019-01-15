@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import java.util.ArrayList;
+
 public class TerminalGui extends JFrame{
 	private static final int WINDOW_WIDTH = 500;
 	private static final int WINDOW_HEIGHT = 400;
@@ -15,8 +17,7 @@ public class TerminalGui extends JFrame{
 
 	private JPanel mainPanel = new JPanel();
 	private JLabel ticketNumberLabel = new JLabel("Click on buttons to order ticket.");
-	private JButton otherTicketButton = new JButton("other");
-	private JButton highPriorityButton= new JButton("high priority");
+	private ArrayList<JButton> ticketButtons = new ArrayList<>();
 
 	public TerminalGui(Terminal parent){
 		this.parent = parent;
@@ -38,15 +39,16 @@ public class TerminalGui extends JFrame{
 	private void initWindow(){
 		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 	
-		this.otherTicketButton.addActionListener(new TicketButtonListener(this.parent, "other"));
-		this.highPriorityButton.addActionListener(new TicketButtonListener(this.parent, "high priority"));
-
 		this.mainPanel.add(this.ticketNumberLabel);
-		this.mainPanel.add(this.otherTicketButton);
-		this.mainPanel.add(this.highPriorityButton);
+
+		for(String cat : Central.ticketCategories){
+			this.ticketButtons.add(new JButton(cat));
+			JButton lastButton = this.ticketButtons.get(this.ticketButtons.size()-1);
+			lastButton.addActionListener(new TicketButtonListener(this.parent, cat));
+			this.mainPanel.add(lastButton);
+		}
 
 		this.add(this.mainPanel);
-
 	}
 
 	public void setLabel(String txt){

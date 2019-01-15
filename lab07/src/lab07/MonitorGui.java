@@ -67,8 +67,9 @@ public class MonitorGui extends JFrame{
 	private void initWindow(){
 		this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 		
-		this.categoryLabels.add(new CategoryLabel("other"));
-		this.categoryLabels.add(new CategoryLabel("high priority"));
+		for(String cat : Central.ticketCategories){
+			this.categoryLabels.add(new CategoryLabel(cat));
+		}
 
 		this.categoryLabels.forEach(this.mainPanel::add);
 

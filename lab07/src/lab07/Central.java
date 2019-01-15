@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class Central{
 	public static final ArrayList<String> ticketCategories = 
-		new ArrayList<>(Arrays.asList("other","high priority"));
+		new ArrayList<>(Arrays.asList("cat1","cat2"));
 	public static int REGISTRY_PORT = 5099;
 	public static String INTERFACE_URL = "rmi://localhost:5099/ICentral";
 

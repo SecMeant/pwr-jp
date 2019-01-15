@@ -17,9 +17,8 @@ public class TicketHandler{
 		TicketHandler self;
 
 		if(args.length == 0){
-			self = new TicketHandler("other");
+			self = new TicketHandler(Central.ticketCategories.get(0));
 		}else{
-			System.out.println("asdf");
 			self = new TicketHandler(args[0]);
 		}
 

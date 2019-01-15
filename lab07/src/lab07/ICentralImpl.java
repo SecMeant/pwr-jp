@@ -23,9 +23,9 @@ public class ICentralImpl extends UnicastRemoteObject implements ICentral {
 		this.parent = parent;
 		this.ticketNumber = 1;
 
-		this.tickets.put("other", new LinkedBlockingQueue<Ticket>());
-		this.tickets.put("high priority", new LinkedBlockingQueue<Ticket>());
-		this.tickets.put("different", new LinkedBlockingQueue<Ticket>());
+		for(String cat : Central.ticketCategories){
+			this.tickets.put(cat, new LinkedBlockingQueue<Ticket>());
+		}
 	}
 
 	public boolean register(IMonitor m) throws RemoteException{
